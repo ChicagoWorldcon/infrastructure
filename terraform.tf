@@ -138,3 +138,26 @@ resource "aws_network_acl" "acl-7d611305" {
     }
 }
 
+resource "aws_db_instance" "chicago-worldcon" {
+    identifier                = "chicago-worldcon"
+    allocated_storage         = 20
+    storage_type              = "gp2"
+    engine                    = "postgres"
+    engine_version            = "9.6.6"
+    instance_class            = "db.t2.micro"
+    name                      = ""
+    username                  = "chicagomaster"
+    password                  = "xxxxxxxx"
+    port                      = 5432
+    publicly_accessible       = false
+    availability_zone         = "us-west-2a"
+    security_group_names      = []
+    vpc_security_group_ids    = ["sg-efd8229f"]
+    db_subnet_group_name      = "default-vpc-6a628612"
+    parameter_group_name      = "default.postgres9.6"
+    multi_az                  = false
+    backup_retention_period   = 7
+    backup_window             = "11:40-12:10"
+    maintenance_window        = "sat:09:46-sat:10:16"
+    final_snapshot_identifier = "chicago-worldcon-final"
+}
