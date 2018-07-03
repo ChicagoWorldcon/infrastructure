@@ -110,3 +110,27 @@ resource "aws_subnet" "subnet-fbb6ca82-subnet-fbb6ca82" {
     }
 }
 
+resource "aws_route_table" "rtb-ac31ced7" {
+    vpc_id     = "vpc-6a628612"
+
+    route {
+        cidr_block = "0.0.0.0/0"
+        gateway_id = "igw-a5f1adc3"
+    }
+
+    tags {
+    }
+}
+
+resource "aws_route_table" "rtb-b7756ed5" {
+    vpc_id     = "vpc-b0bca7d2"
+
+    route {
+        cidr_block = "0.0.0.0/0"
+        gateway_id = "igw-7d4e521f"
+    }
+
+    tags {
+    }
+}
+
