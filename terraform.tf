@@ -1657,3 +1657,9 @@ resource "aws_db_parameter_group" "default-postgres9-6" {
 }
 
 
+resource "aws_db_subnet_group" "default-vpc-6a628612" {
+    name        = "default-vpc-6a628612"
+    description = "Created from the RDS Management Console"
+    subnet_ids  = ["subnet-11dc455a", "subnet-57632b0d", "subnet-fbb6ca82"]
+}
+
