@@ -70,16 +70,6 @@ resource "aws_security_group" "vpc-6a628612-default" {
 
 }
 
-resource "aws_subnet" "subnet-8717f6e2-subnet-8717f6e2" {
-    vpc_id                  = "vpc-b0bca7d2"
-    cidr_block              = "10.0.0.0/24"
-    availability_zone       = "us-west-2a"
-    map_public_ip_on_launch = false
-
-    tags {
-    }
-}
-
 resource "aws_subnet" "subnet-11dc455a-subnet-11dc455a" {
     vpc_id                  = "vpc-6a628612"
     cidr_block              = "172.30.1.0/24"
@@ -122,49 +112,9 @@ resource "aws_route_table" "rtb-ac31ced7" {
     }
 }
 
-resource "aws_route_table" "rtb-b7756ed5" {
-    vpc_id     = "vpc-b0bca7d2"
-
-    route {
-        cidr_block = "0.0.0.0/0"
-        gateway_id = "igw-7d4e521f"
-    }
-
-    tags {
-    }
-}
-
-
-
 resource "aws_network_acl" "acl-7d611305" {
     vpc_id     = "vpc-6a628612"
     subnet_ids = ["subnet-57632b0d", "subnet-11dc455a", "subnet-fbb6ca82"]
-
-    ingress {
-        from_port  = 0
-        to_port    = 0
-        rule_no    = 100
-        action     = "allow"
-        protocol   = "-1"
-        cidr_block = "0.0.0.0/0"
-    }
-
-    egress {
-        from_port  = 0
-        to_port    = 0
-        rule_no    = 100
-        action     = "allow"
-        protocol   = "-1"
-        cidr_block = "0.0.0.0/0"
-    }
-
-    tags {
-    }
-}
-
-resource "aws_network_acl" "acl-44e0f826" {
-    vpc_id     = "vpc-b0bca7d2"
-    subnet_ids = ["subnet-8717f6e2"]
 
     ingress {
         from_port  = 0
