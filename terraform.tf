@@ -136,3 +136,55 @@ resource "aws_route_table" "rtb-b7756ed5" {
 
 
 
+resource "aws_network_acl" "acl-7d611305" {
+    vpc_id     = "vpc-6a628612"
+    subnet_ids = ["subnet-57632b0d", "subnet-11dc455a", "subnet-fbb6ca82"]
+
+    ingress {
+        from_port  = 0
+        to_port    = 0
+        rule_no    = 100
+        action     = "allow"
+        protocol   = "-1"
+        cidr_block = "0.0.0.0/0"
+    }
+
+    egress {
+        from_port  = 0
+        to_port    = 0
+        rule_no    = 100
+        action     = "allow"
+        protocol   = "-1"
+        cidr_block = "0.0.0.0/0"
+    }
+
+    tags {
+    }
+}
+
+resource "aws_network_acl" "acl-44e0f826" {
+    vpc_id     = "vpc-b0bca7d2"
+    subnet_ids = ["subnet-8717f6e2"]
+
+    ingress {
+        from_port  = 0
+        to_port    = 0
+        rule_no    = 100
+        action     = "allow"
+        protocol   = "-1"
+        cidr_block = "0.0.0.0/0"
+    }
+
+    egress {
+        from_port  = 0
+        to_port    = 0
+        rule_no    = 100
+        action     = "allow"
+        protocol   = "-1"
+        cidr_block = "0.0.0.0/0"
+    }
+
+    tags {
+    }
+}
+
