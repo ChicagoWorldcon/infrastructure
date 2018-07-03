@@ -1,0 +1,5 @@
+.env
+aws_creds.tf
+terraform/
+.terraform/
+*.tfstate
