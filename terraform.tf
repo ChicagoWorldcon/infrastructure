@@ -1,20 +1,51 @@
 resource "aws_vpc" "chicagovpc" {
-  cidr_block           = "172.30.0.0/16"
+  cidr_block           = "${var.vpc_cidr_block}"
   enable_dns_hostnames = true
   enable_dns_support   = true
   instance_tenancy     = "default"
 
   tags {
+    Name    = "Chicago 2022"
     Project = "${var.project}"
   }
 }
 
-resource "aws_route_table" "chicago-routes" {
+resource "aws_vpc_endpoint" "s3" {
+  vpc_id = "${aws_vpc.chicagovpc.id}"
+  service_name = "com.amazonaws.us-west-2.s3"
+}
+
+resource "aws_route_table" "chicago-public" {
+  vpc_id                  = "${aws_vpc.chicagovpc.id}"
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = "${aws_internet_gateway.chicago-gateway.id}"
+  }
+
+  tags {
+    Project = "${var.project}"
+    Name = "Public Subnet"
+  }
+}
+
+resource "aws_route_table" "chicago-main" {
   vpc_id                  = "${aws_vpc.chicagovpc.id}"
 
   tags {
     Project = "${var.project}"
-  }
+    Name = "Main Routes"
+  } 
+}
+
+resource "aws_main_route_table_association" "chicago-vpc" {
+  vpc_id                  = "${aws_vpc.chicagovpc.id}"
+  route_table_id          = "${aws_route_table.chicago-main.id}"
+}
+
+resource "aws_route_table_association" "chicago-public" {
+  subnet_id               = "${aws_subnet.public.id}"
+  route_table_id          = "${aws_route_table.chicago-public.id}"
 }
 
 resource "aws_internet_gateway" "chicago-gateway" {
@@ -25,16 +56,16 @@ resource "aws_internet_gateway" "chicago-gateway" {
   }
 }
 
-resource "aws_route" "chicago-routes" {
-  route_table_id          = "${aws_route_table.chicago-routes.id}"
+resource "aws_subnet" "public" {
+  vpc_id = "${aws_vpc.chicagovpc.id}"
 
-  destination_cidr_block  = "0.0.0.0/0"
-  gateway_id              = "${aws_internet_gateway.chicago-gateway.id}"
-}
+  cidr_block = "${var.public_subnet_cidr}"
+  availability_zone = "${var.region}a"
 
-resource "aws_main_route_table_association" "chicago-routes" {
-  vpc_id                  = "${aws_vpc.chicagovpc.id}"
-  route_table_id          = "${aws_route_table.chicago-routes.id}"
+  tags {
+    Project = "${var.project}"
+    Name = "Public Subnet"
+  }
 }
 
 resource "aws_subnet" "subnet-az-b" {
@@ -44,6 +75,7 @@ resource "aws_subnet" "subnet-az-b" {
     map_public_ip_on_launch = true
 
     tags {
+      Name = "DB Subnet B"
       Project = "${var.project}"
     }
 }
@@ -55,6 +87,7 @@ resource "aws_subnet" "subnet-az-c" {
     map_public_ip_on_launch = true
 
     tags {
+      Name = "DB Subnet C"
       Project = "${var.project}"
     }
 }
@@ -66,50 +99,22 @@ resource "aws_subnet" "subnet-az-a" {
     map_public_ip_on_launch = true
 
     tags {
+      Name = "DB Subnet A"
       Project = "${var.project}"
     }
 }
 
-## Bastion configuration
-resource "aws_instance" "bastion" {
-  ami           = "${data.aws_ami.alinux.id}"
-  instance_type               = "t2.micro"
-  associate_public_ip_address = true
-  subnet_id = "${aws_subnet.subnet-az-a.id}"
 
-  vpc_security_group_ids = [
-    "${aws_security_group.bastion-sg.id}"
-  ]
+module "bastion_host" {
+  source = "./bastion"
 
-  key_name = "${aws_key_pair.bastion_key.key_name}"
+  bastion_enabled = "${var.bastion_enabled}"
 
-  tags {
-    Name = "bastion"
-    Project = "${var.project}"
-  }
-}
+  vpc_id = "${aws_vpc.chicagovpc.id}"
+  vpc_cidr_block = "${var.vpc_cidr_block}"
+  bastion_subnet_id = "${aws_subnet.public.id}"
 
-resource "aws_key_pair" "bastion_key" {
-  key_name   = "void"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDPFVzh209FernGTIhQ23FweaV5dC1rIekwSDiWIsO2AOq3SVpmthvkbnsW4WpbJw0AEa92h9iItCvdw+qvEJ0M3UNyti8FO/wfdQafb4oXS9J3uyqZXfZ+uiWeTrszv3CmFFy9i+vVYhOIMM8T0PtXJF+ewUa9DRppTI5c+Ujiw/jjL73Z+0697Bg2J+raee/wJXZWHhMcvA5/A7kehXhyDR17apX2xhHtdey+bW/LEWki1vMCh7g2Jl+6u9BcvPJsQUe42XRTmK9qK/kkwNmEmaosGyZlJNaksutSpqRbKshbg6pyZwMDM9oB5j8aZdmX2BYQ28O3rOgZA+u8pB39 offby1@Chriss-MacBook-Pro.local"
+  public_key = "${var.public_key}"
 
-}
-
-resource "aws_security_group" "bastion-sg" {
-  name   = "bastion-security-group"
-  vpc_id      = "${aws_vpc.chicagovpc.id}"
-
-  ingress {
-    protocol    = "tcp"
-    from_port   = 22
-    to_port     = 22
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  tags {
-    Project = "${var.project}"
-  }
-}
-
-output "bastion_public_ip" {
-  value = "${aws_instance.bastion.public_ip}"
+  project = "${var.project}"
 }

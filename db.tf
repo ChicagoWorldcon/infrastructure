@@ -41,12 +41,12 @@ resource "aws_security_group_rule" "db-ingress" {
   to_port                  = 5432
   protocol                 = "tcp"
   description = "Security group allowing access from the reg server"
-  source_security_group_id = "${module.web_server_sg.this_security_group_id}"
+  source_security_group_id = "${aws_security_group.web_server_sg.id}"
 }
 
 resource "aws_db_subnet_group" "rds-subnets" {
   name        = "default-vpc-6a628612"
-  description = "Created from the RDS Management Console"
+  description = "${var.project} RDS subnets"
   subnet_ids  = [
     "${aws_subnet.subnet-az-a.id}",
     "${aws_subnet.subnet-az-b.id}",
@@ -54,7 +54,6 @@ resource "aws_db_subnet_group" "rds-subnets" {
   ]
 
   tags {
-    Project = "${var.project}"    
+    Project = "${var.project}"
   }
 }
-

@@ -8,13 +8,31 @@ variable "domain_name" {
   default = "chicagoworldcon.org"
 }
 
+variable "reg-api-fqdn" {
+  default = "registration-api.chicagoworldcon.org"
+}
+
+variable "reg-www-fqdn" {
+  default = "registration.chicagoworldcon.org"
+}
+
 variable "region" {
   default = "us-west-2"
+}
+
+variable "vpc_cidr_block" {
+  default = "172.30.0.0/16"
+}
+
+variable "public_subnet_cidr" {
+  default = "172.30.100.0/24"
 }
 
 variable "project" {
   default = "Chicago2022"
 }
+
+variable "public_key" {}
 
 data "aws_ami" "alinux" {
   most_recent = true
@@ -26,7 +44,7 @@ data "aws_ami" "alinux" {
 
   filter {
     name   = "name"
-    values = ["amzn-ami-hvm-*-gp2"]
+    values = ["amzn2-ami-hvm-*-gp2"]
   }
 
   filter {
@@ -36,3 +54,7 @@ data "aws_ami" "alinux" {
 
 }
 
+# Enable the bastion for troubleshooting and build
+variable "bastion_enabled" {
+  default = true
+}
