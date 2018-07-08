@@ -24,11 +24,26 @@ resource "aws_instance" "web" {
   instance_type = "t2.medium"
 
   subnet_id = "${aws_subnet.public.id}"
+  associate_public_ip_address = true
   vpc_security_group_ids = ["${aws_security_group.web_server_sg.id}"]
 
   key_name = "${aws_key_pair.reg_system_key.key_name}"
 
   user_data = "${data.template_cloudinit_config.config.rendered}"
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo mkdir -p /postgres/init.d",
+      "sudo chown -R ec2-user /postgres/init.d",
+    ]
+
+    connection {
+      type = "ssh"
+      user = "ec2-user"
+      host = "${aws_instance.web.public_dns}"
+      agent_identity = "${var.ssh_key_id}"
+    }
+  }
 
   provisioner "file" {
     source = "../registration-api/postgres/init/"
@@ -37,6 +52,8 @@ resource "aws_instance" "web" {
     connection {
       type = "ssh"
       user = "ec2-user"
+      host = "${aws_instance.web.public_dns}"
+      agent_identity = "${var.ssh_key_id}"
     }
   }
 
@@ -131,7 +148,7 @@ resource "aws_security_group_rule" "bastion-ingress" {
 
 resource "aws_key_pair" "reg_system_key" {
   key_name   = "${var.project}-registration-key"
-  public_key = "${var.public_key}"
+  public_key = "${data.local_file.public_key.content}"
 }
 
 # Public DNS

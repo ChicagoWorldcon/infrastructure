@@ -32,10 +32,14 @@ variable "project" {
   default = "Chicago2022"
 }
 
-variable "public_key" {}
+variable "ssh_key_id" {}
+
+data "local_file" "public_key" {
+  filename = "${var.ssh_key_id}.pub"
+}
 
 variable "db_username" {
-  default = "admin"
+  default = "chicagoadmin"
 }
 
 variable "db_name" {

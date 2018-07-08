@@ -4,3 +4,4 @@ terraform/
 .terraform/
 *.tfstate
 /db.auto.tfvars
+/ssh.auto.tfvars

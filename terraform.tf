@@ -114,7 +114,7 @@ module "bastion_host" {
   vpc_cidr_block = "${var.vpc_cidr_block}"
   bastion_subnet_id = "${aws_subnet.public.id}"
 
-  public_key = "${var.public_key}"
+  public_key = "${data.local_file.public_key.content}"
 
   project = "${var.project}"
 }
