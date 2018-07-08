@@ -66,5 +66,5 @@ data "aws_ami" "alinux" {
 
 # Enable the bastion for troubleshooting and build
 variable "bastion_enabled" {
-  default = true
+  default = false
 }
