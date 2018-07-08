@@ -3,3 +3,4 @@ aws_creds.tf
 terraform/
 .terraform/
 *.tfstate
+/db.auto.tfvars

@@ -34,6 +34,16 @@ variable "project" {
 
 variable "public_key" {}
 
+variable "db_username" {
+  default = "admin"
+}
+
+variable "db_name" {
+  default = "api"
+}
+
+variable "db_password" {}
+
 data "aws_ami" "alinux" {
   most_recent = true
 

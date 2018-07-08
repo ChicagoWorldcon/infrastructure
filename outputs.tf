@@ -3,11 +3,11 @@ output "bastion_public_ip" {
 }
 
 output "db_endpoint" {
-  value = "${module.postgresql_rds.endpoint}"
+  value = "${aws_db_instance.postgresql.endpoint}"
 }
 
 output "db_hostname" {
-  value = "${module.postgresql_rds.hostname}"
+  value = "${aws_db_instance.postgresql.address}"
 }
 
 output "reg_hostname" {

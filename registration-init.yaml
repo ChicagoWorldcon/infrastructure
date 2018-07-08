@@ -1,20 +1,36 @@
 #cloud-config
-repo_update: true
-repo_upgrade: all
+package_update: true
+package_upgrade: true
 
 packages:
- - httpd
- - mariadb-server
+  - docker
+  - python3
+  - python3-devel
+  - tmux
+  - postgresql
 
 runcmd:
- - [ sh, -c, "amazon-linux-extras install -y lamp-mariadb10.2-php7.2 php7.2" ]
- - systemctl start httpd
- - sudo systemctl enable httpd
- - [ sh, -c, "usermod -a -G apache ec2-user" ]
- - [ sh, -c, "chown -R ec2-user:apache /var/www" ]
- - chmod 2775 /var/www
- - [ find, /var/www, -type, d, -exec, chmod, 2775, {}, \; ]
- - [ find, /var/www, -type, f, -exec, chmod, 0664, {}, \; ]
- - [ sh, -c, 'echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php' ]
+ - systemctl start docker
+ - systemctl enable docker
+ - curl -L https://github.com/docker/compose/releases/download/1.20.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+ - chmod +x /usr/local/bin/docker-compose
+ - usermod -a -G docker ec2-user
+ - "yum -y groupinstall \"Development Tools\""
+ - pip3 install pgcli psycopg2-binary
+
+
+write_files:
+  - content: |
+        #!/bin/bash
+        export PGPASSWORD='${db_password}'
+        exec pgcli -h ${db_hostname} -U ${db_username} ${db_name} "$@"
+    path: /usr/local/bin/db
+    permissions: '0755'
+
+  - content: |
+        set-option -g prefix C-o
+        bind-key C-o send-key C-o
+    path: /etc/tmux.conf
+    permissions: '0644'
 
 output : { all : '| tee -a /var/log/cloud-init-output.log' }
