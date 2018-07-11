@@ -19,6 +19,15 @@ data "template_cloudinit_config" "config" {
   }
 }
 
+data "template_file" "db_init" {
+  template = "${file("db_init/00-setup-rds.sql")}"
+
+  vars = {
+    db_admin_password = "${var.db_password}"
+    db_name           = "${var.db_name}"
+  }
+}
+
 resource "aws_instance" "web" {
   ami           = "${data.aws_ami.alinux.id}"
   instance_type = "t2.medium"
@@ -33,7 +42,8 @@ resource "aws_instance" "web" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo mkdir -p /postgres/init.d",
+      "sudo mkdir -p /postgres/init.d/${var.db_username}",
+      "sudo mkdir -p /postgres/init.d/admin",
       "sudo chown -R ec2-user /postgres/init.d",
     ]
 
@@ -46,8 +56,20 @@ resource "aws_instance" "web" {
   }
 
   provisioner "file" {
+    content = "${data.template_file.db_init.rendered}"
+    destination = "/postgres/init.d/${var.db_username}/00-setup-rds.sql"
+
+    connection {
+      type = "ssh"
+      user = "ec2-user"
+      host = "${aws_instance.web.public_dns}"
+      agent_identity = "${var.ssh_key_id}"
+    }
+  }
+
+  provisioner "file" {
     source = "../registration-api/postgres/init/"
-    destination = "/postgres/init.d"
+    destination = "/postgres/init.d/admin"
 
     connection {
       type = "ssh"
