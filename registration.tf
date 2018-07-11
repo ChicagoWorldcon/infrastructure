@@ -2,7 +2,7 @@ data "template_file" "script" {
   template = "${file("registration-init.yaml")}"
 
   vars = {
-    db_hostname = "${aws_db_instance.postgresql.address}"
+    db_hostname = "${aws_db_instance.reg-db.address}"
     db_username = "${var.db_username}"
     db_password = "${var.db_password}"
     db_name     = "${var.db_name}"

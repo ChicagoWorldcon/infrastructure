@@ -7,7 +7,7 @@ resource "aws_security_group" "postgresql" {
   }
 }
 
-resource "aws_db_instance" "postgresql" {
+resource "aws_db_instance" "reg-db" {
   allocated_storage          = "20"
   engine                     = "postgres"
   engine_version             = "9.6.6"
