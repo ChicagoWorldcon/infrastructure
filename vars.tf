@@ -1,41 +1,35 @@
 provider "aws" {
-  access_key = "${var.aws_access_key}"
-  secret_key = "${var.aws_secret_key}"
+  profile = "chicago"
   region = "us-west-2"
+}
+
+data "terraform_remote_state" "global" {
+  backend = "s3"
+  config {
+    bucket = "terraform.offby1.net"
+    key    = "chicago/global.tfstate"
+    region = "us-west-2"
+  }
 }
 
 variable "domain_name" {
   default = "chicagoworldcon.org"
 }
 
-variable "reg-api-fqdn" {
-  default = "registration-api.chicagoworldcon.org"
-}
+variable "reg-api-fqdn" {}
 
-variable "reg-www-fqdn" {
-  default = "registration.chicagoworldcon.org"
-}
+variable "reg-www-fqdn" {}
 
 variable "region" {
   default = "us-west-2"
 }
 
-variable "vpc_cidr_block" {
-  default = "172.30.0.0/16"
-}
+variable "vpc_cidr_block" {}
 
-variable "public_subnet_cidr" {
-  default = "172.30.100.0/24"
-}
+variable "public_subnet_cidr" {}
 
 variable "project" {
   default = "Chicago2022"
-}
-
-variable "ssh_key_id" {}
-
-data "local_file" "public_key" {
-  filename = "${var.ssh_key_id}.pub"
 }
 
 variable "db_username" {
@@ -46,7 +40,7 @@ variable "db_name" {
   default = "api"
 }
 
-variable "db_password" {}
+variable "db_superuser_password" {}
 
 data "aws_ami" "alinux" {
   most_recent = true
@@ -68,7 +62,3 @@ data "aws_ami" "alinux" {
 
 }
 
-# Enable the bastion for troubleshooting and build
-variable "bastion_enabled" {
-  default = false
-}

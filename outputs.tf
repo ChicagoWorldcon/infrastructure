@@ -1,7 +1,3 @@
-output "bastion_public_ip" {
-  value = "${module.bastion_host.bastion_ip}"
-}
-
 output "db_endpoint" {
   value = "${aws_db_instance.reg-db.endpoint}"
 }
@@ -24,4 +20,8 @@ output "reg_public_ip" {
 
 output "reg_public_dns" {
   value = "${aws_instance.web.public_dns}"
+}
+
+output "global_ns" {
+  value = "${data.terraform_remote_state.global.name_servers}"
 }

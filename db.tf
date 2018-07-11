@@ -4,6 +4,7 @@ resource "aws_security_group" "postgresql" {
   tags {
     Name        = "sgDatabaseServer"
     Project     = "${var.project}"
+    Environment = "${terraform.workspace}"
   }
 }
 
@@ -16,7 +17,7 @@ resource "aws_db_instance" "reg-db" {
   instance_class             = "db.t2.micro"
   storage_type               = "gp2"
   name                       = "${var.db_name}"
-  password                   = "${var.db_password}"
+  password                   = "${var.db_superuser_password}"
   username                   = "${var.db_username}"
   backup_retention_period    = "30"
   backup_window              = "04:00-04:30"
@@ -35,6 +36,7 @@ resource "aws_db_instance" "reg-db" {
   tags {
     Name        = "DatabaseServer"
     Project     = "${var.project}"
+    Environment = "${terraform.workspace}"
   }
 }
 
@@ -59,6 +61,7 @@ resource "aws_db_subnet_group" "rds-subnets" {
 
   tags {
     Project = "${var.project}"
+    Environment = "${terraform.workspace}"
   }
 }
 

@@ -7,6 +7,7 @@ resource "aws_vpc" "chicagovpc" {
   tags {
     Name    = "Chicago 2022"
     Project = "${var.project}"
+    Environment = "${terraform.workspace}"
   }
 }
 
@@ -26,6 +27,7 @@ resource "aws_route_table" "chicago-public" {
   tags {
     Project = "${var.project}"
     Name = "Public Subnet"
+    Environment = "${terraform.workspace}"
   }
 }
 
@@ -35,6 +37,7 @@ resource "aws_route_table" "chicago-main" {
   tags {
     Project = "${var.project}"
     Name = "Main Routes"
+    Environment = "${terraform.workspace}"
   } 
 }
 
@@ -53,6 +56,7 @@ resource "aws_internet_gateway" "chicago-gateway" {
 
   tags {
     Project = "${var.project}"
+    Environment = "${terraform.workspace}"
   }
 }
 
@@ -65,6 +69,7 @@ resource "aws_subnet" "public" {
   tags {
     Project = "${var.project}"
     Name = "Public Subnet"
+    Environment = "${terraform.workspace}"
   }
 }
 
@@ -77,6 +82,7 @@ resource "aws_subnet" "subnet-az-b" {
     tags {
       Name = "DB Subnet B"
       Project = "${var.project}"
+      Environment = "${terraform.workspace}"
     }
 }
 
@@ -89,6 +95,7 @@ resource "aws_subnet" "subnet-az-c" {
     tags {
       Name = "DB Subnet C"
       Project = "${var.project}"
+      Environment = "${terraform.workspace}"
     }
 }
 
@@ -101,20 +108,8 @@ resource "aws_subnet" "subnet-az-a" {
     tags {
       Name = "DB Subnet A"
       Project = "${var.project}"
+      Environment = "${terraform.workspace}"
     }
 }
 
 
-module "bastion_host" {
-  source = "./bastion"
-
-  bastion_enabled = "${var.bastion_enabled}"
-
-  vpc_id = "${aws_vpc.chicagovpc.id}"
-  vpc_cidr_block = "${var.vpc_cidr_block}"
-  bastion_subnet_id = "${aws_subnet.public.id}"
-
-  public_key = "${data.local_file.public_key.content}"
-
-  project = "${var.project}"
-}

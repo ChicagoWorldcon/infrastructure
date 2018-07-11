@@ -1,10 +1,12 @@
+variable "ssh_key_id" {}
+
 data "template_file" "script" {
   template = "${file("registration-init.yaml")}"
 
   vars = {
     db_hostname = "${aws_db_instance.reg-db.address}"
     db_username = "${var.db_username}"
-    db_password = "${var.db_password}"
+    db_password = "${var.db_superuser_password}"
     db_name     = "${var.db_name}"
   }
 }
@@ -23,7 +25,7 @@ data "template_file" "db_init" {
   template = "${file("db_init/00-setup-rds.sql")}"
 
   vars = {
-    db_admin_password = "${var.db_password}"
+    db_admin_password = "${var.db_superuser_password}"
     db_name           = "${var.db_name}"
   }
 }
@@ -82,6 +84,7 @@ resource "aws_instance" "web" {
   tags {
     Project = "${var.project}"
     Name = "registration"
+    Environment = "${terraform.workspace}"
   }
 }
 
@@ -97,6 +100,7 @@ resource "aws_security_group" "web_server_sg" {
     Project = "${var.project}"
     Name = "web-server"
     Description = "Security group for web-server with HTTP ports open within VPC"
+    Environment = "${terraform.workspace}"
   }
 }
 
@@ -154,40 +158,12 @@ resource "aws_security_group_rule" "web-outbound-https" {
   cidr_blocks = ["0.0.0.0/0"]
 }
 
-resource "aws_security_group_rule" "bastion-ingress" {
-
-  count                    = "${var.bastion_enabled}"
-
-  type                     = "ingress"
-  security_group_id        = "${aws_security_group.web_server_sg.id}"
-  from_port                = 22
-  to_port                  = 22
-  protocol                 = "tcp"
-  description              = "Security group allowing access from the bastion server"
-  source_security_group_id = "${module.bastion_host.bastion_security_group_id}"
+data "local_file" "public_key" {
+  filename = "${var.ssh_key_id}.pub"
 }
-
 
 resource "aws_key_pair" "reg_system_key" {
   key_name   = "${var.project}-registration-key"
   public_key = "${data.local_file.public_key.content}"
 }
 
-# Public DNS
-resource "aws_route53_zone" "main" {
-  name = "${var.domain_name}"
-}
-
-output "name_servers" {
-  value = "${aws_route53_zone.main.name_servers}"
-}
-
-resource "aws_acm_certificate" "certificate" {
-  // We want a wildcard cert so we can host subdomains later.
-  domain_name       = "*.${var.domain_name}"
-  validation_method = "EMAIL"
-
-  // We also want the cert to be valid for the root domain even though we'll be
-  // redirecting to the www. domain immediately.
-  subject_alternative_names = ["${var.domain_name}"]
-}
