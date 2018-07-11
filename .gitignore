@@ -2,6 +2,8 @@
 aws_creds.tf
 terraform/
 .terraform/
+*.tfstate.d/
 *.tfstate
 /db.auto.tfvars
 /ssh.auto.tfvars
+
