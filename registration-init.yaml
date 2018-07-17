@@ -16,7 +16,7 @@ runcmd:
  - chmod +x /usr/local/bin/docker-compose
  - usermod -a -G docker ec2-user
  - "yum -y groupinstall \"Development Tools\""
- - pip3 install pgcli psycopg2-binary
+ - pip3 install pgcli psycopg2-binary keyrings.alt
 
 
 write_files:
