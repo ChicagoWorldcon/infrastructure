@@ -28,6 +28,23 @@ write_files:
     permissions: '0755'
 
   - content: |
+        #!/bin/bash
+        export PGPASSWORD='${db_password}'
+        exec psql -h ${db_hostname} -U ${db_username} ${db_name} "$@"
+    path: /usr/local/bin/psql.reg
+    permissions: '0755'
+
+  - content: |
+        #!/bin/bash
+        export KANSA_PG_PASSWORD=${db_kansa_password}
+        export HUGO_PG_PASSWORD=${db_hugo_password}
+        export RAAMI_PG_PASSWORD=${db_raami_password}
+        export PGPASSWORD='${db_admin_password}'
+        exec psql -h ${db_hostname} -U ${db_admin_username} ${db_name} "$@"
+    path: /usr/local/bin/psql.admin
+    permissions: '0755'
+
+  - content: |
         set-option -g prefix C-o
         bind-key C-o send-key C-o
     path: /etc/tmux.conf

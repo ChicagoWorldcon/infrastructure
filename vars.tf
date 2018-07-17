@@ -41,6 +41,11 @@ variable "db_name" {
 }
 
 variable "db_superuser_password" {}
+variable "db_admin_username" { default = "admin" }
+variable "db_admin_password" {}
+variable "db_kansa_password" {}
+variable "db_hugo_password" {}
+variable "db_raami_password" {}
 
 data "aws_ami" "alinux" {
   most_recent = true

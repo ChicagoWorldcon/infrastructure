@@ -8,6 +8,12 @@ data "template_file" "script" {
     db_username = "${var.db_username}"
     db_password = "${var.db_superuser_password}"
     db_name     = "${var.db_name}"
+
+    db_admin_username = "${var.db_admin_username}"
+    db_admin_password = "${var.db_admin_password}"
+    db_kansa_password = "${var.db_kansa_password}"
+    db_hugo_password  = "${var.db_hugo_password}"
+    db_raami_password = "${var.db_raami_password}"
   }
 }
 
