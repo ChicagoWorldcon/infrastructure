@@ -48,6 +48,8 @@ resource "aws_instance" "web" {
 
   user_data = "${data.template_cloudinit_config.config.rendered}"
 
+  iam_instance_profile = "${module.creds.registration_iam_instance_profile_id}"
+
   provisioner "remote-exec" {
     inline = [
       "sudo mkdir -p /postgres/init.d/${var.db_username}",
