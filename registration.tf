@@ -23,12 +23,15 @@ data "template_file" "letsencrypt_service" {
 }
 
 data "template_file" "env_vars_script" {
+  template = "${file("scripts/env-vars.sh")}"
 
+  vars = {
+    project     = "${var.project}"
+    db_hostname = "${aws_db_instance.reg-db.address}"
+    db_username = "${var.db_username}"
     db_admin_username = "${var.db_admin_username}"
-    db_admin_password = "${var.db_admin_password}"
-    db_kansa_password = "${var.db_kansa_password}"
-    db_hugo_password  = "${var.db_hugo_password}"
-    db_raami_password = "${var.db_raami_password}"
+    db_name     = "${var.db_name}"
+    stage       = "${terraform.workspace}"
   }
 }
 
@@ -99,6 +102,18 @@ resource "aws_instance" "web" {
       "sudo systemctl start letsencrypt.timer",
       "sudo systemctl enable letsencrypt.timer",
     ]
+
+    connection {
+      type = "ssh"
+      user = "ec2-user"
+      host = "${aws_instance.web.public_dns}"
+      agent_identity = "${var.ssh_key_id}"
+    }
+  }
+
+  provisioner "file" {
+    content = "${data.template_file.env_vars_script.rendered}"
+    destination = "/etc/chicago/service-env.sh"
 
     connection {
       type = "ssh"
