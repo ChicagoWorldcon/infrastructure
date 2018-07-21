@@ -43,6 +43,25 @@ resource "aws_iam_role_policy" "registration" {
                 "secretsmanager:ListSecrets"
             ],
             "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "route53:ListHostedZones",
+                "route53:GetChange"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Effect" : "Allow",
+            "Action" : [
+                "route53:ChangeResourceRecordSets"
+            ],
+            "Resource" : [
+                "arn:aws:route53:::hostedzone/${var.route53_zone_id}"
+            ]
         }
     ]
 }

@@ -8,6 +8,16 @@ data "template_file" "script" {
     db_username = "${var.db_username}"
     db_password = "${var.db_superuser_password}"
     db_name     = "${var.db_name}"
+data "template_file" "letsencrypt_service" {
+  template = "${file("scripts/letsencrypt.service")}"
+
+  vars = {
+    domain_name = "${var.domain_name}"
+    admin_email = "chicago@offby1.net"
+  }
+}
+
+data "template_file" "env_vars_script" {
 
     db_admin_username = "${var.db_admin_username}"
     db_admin_password = "${var.db_admin_password}"
@@ -50,11 +60,39 @@ resource "aws_instance" "web" {
 
   iam_instance_profile = "${module.creds.registration_iam_instance_profile_id}"
 
+  provisioner "file" {
+    content = "${data.template_file.letsencrypt_service.rendered}"
+    destination = "/etc/systemd/system/letsencrypt.service"
+
+    connection {
+      type = "ssh"
+      user = "ec2-user"
+      host = "${aws_instance.web.public_dns}"
+      agent_identity = "${var.ssh_key_id}"
+    }
+  }
+
+  provisioner "file" {
+    source = "./scripts/letsencrypt.timer"
+    destination = "/etc/systemd/system/letsencrypt.timer"
+
+    connection {
+      type = "ssh"
+      user = "ec2-user"
+      host = "${aws_instance.web.public_dns}"
+      agent_identity = "${var.ssh_key_id}"
+    }
+  }
+
   provisioner "remote-exec" {
     inline = [
       "sudo mkdir -p /postgres/init.d/${var.db_username}",
       "sudo mkdir -p /postgres/init.d/admin",
-      "sudo chown -R ec2-user /postgres/init.d",
+      "sudo mkdir -p /opt/letsencrypt/etc /opt/letsencrypt/lib",
+      "sudo chown -R ec2-user /postgres/init.d /opt/letsencrypt",
+
+      "sudo systemctl start letsencrypt.timer",
+      "sudo systemctl enable letsencrypt.timer",
     ]
 
     connection {

@@ -1,0 +1,10 @@
+[Unit]
+Description=Run letsencrypt on boot and twice daily
+
+[Timer]
+OnBootSec=1min
+OnCalendar=*-*-* 04:23,16:42
+Unit=letsencrypt.service
+
+[Install]
+WantedBy=timers.target
