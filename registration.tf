@@ -27,6 +27,7 @@ data "template_file" "env_vars_script" {
 
   vars = {
     project     = "${var.project}"
+    registration_domain_name = "${var.reg-www}.${var.domain_name}"
     db_hostname = "${aws_db_instance.reg-db.address}"
     db_username = "${var.db_username}"
     db_admin_username = "${var.db_admin_username}"
