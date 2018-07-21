@@ -6,4 +6,4 @@ terraform/
 *.tfstate
 /db.auto.tfvars
 /ssh.auto.tfvars
-
+plan
