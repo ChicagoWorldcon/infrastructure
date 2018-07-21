@@ -25,3 +25,7 @@ output "reg_public_dns" {
 output "global_ns" {
   value = "${data.terraform_remote_state.global.name_servers}"
 }
+
+output "site" {
+  value = "${var.reg-www}.${var.domain_name}"
+}
