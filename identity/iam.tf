@@ -1,5 +1,5 @@
 resource "aws_iam_role" "registration" {
-  name = "registration"
+  name = "${var.project}-registration-${var.stage}"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -18,12 +18,12 @@ EOF
 }
 
 resource "aws_iam_instance_profile" "registration" {
-  name = "registration_instance_profile"
+  name = "${var.project}-registration-instance-profile-${var.stage}"
   role = "${aws_iam_role.registration.name}"
 }
 
 resource "aws_iam_role_policy" "registration" {
-  name = "reg_iam_role_policy"
+  name = "${var.project}-registration-policy-${var.stage}"
   role = "${aws_iam_role.registration.name}"
   policy = <<EOF
 {
