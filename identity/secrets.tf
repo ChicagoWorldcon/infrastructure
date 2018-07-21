@@ -53,3 +53,13 @@ resource "aws_secretsmanager_secret" "db_raami_password" {
   } 
 }
 
+resource "aws_secretsmanager_secret" "stripe_api_key" {
+  name = "${var.project}/stripe_api_key/${var.stage}"
+  
+  tags {
+    Project = "${var.project}"
+    Name = "Stripe API Key"
+    Environment = "${terraform.workspace}"
+    ServiceName = "ChicagoRegistration"
+  } 
+}
