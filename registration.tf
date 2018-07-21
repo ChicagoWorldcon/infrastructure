@@ -233,3 +233,10 @@ resource "aws_key_pair" "reg_system_key" {
   public_key = "${data.local_file.public_key.content}"
 }
 
+resource "aws_route53_record" "a_record_org" {
+  zone_id = "${data.terraform_remote_state.global.dns_zone_id}"
+  name    = "${var.reg-www}.${var.domain_name}"
+  type    = "A"
+  ttl     = 300
+  records = ["${aws_eip.web.public_ip}"]
+}
