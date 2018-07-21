@@ -8,6 +8,7 @@ packages:
   - python3-devel
   - tmux
   - postgresql
+  - jq
 
 runcmd:
  - systemctl start docker
@@ -16,30 +17,30 @@ runcmd:
  - chmod +x /usr/local/bin/docker-compose
  - usermod -a -G docker ec2-user
  - "yum -y groupinstall \"Development Tools\""
- - pip3 install pgcli psycopg2-binary keyrings.alt
+ - pip3 install pgcli psycopg2-binary keyrings.alt boto3 'awscli>=1.15'
 
 
 write_files:
   - content: |
         #!/bin/bash
-        export PGPASSWORD='${db_password}'
+        export PGPASSWORD=$(aws secretsmanager get-secret-value --secret-id ${project}/db/${db_name}/${db_username}/${stage} | jq -r .SecretString)
         exec pgcli -h ${db_hostname} -U ${db_username} ${db_name} "$@"
     path: /usr/local/bin/db
     permissions: '0755'
 
   - content: |
         #!/bin/bash
-        export PGPASSWORD='${db_password}'
+        export PGPASSWORD=$(aws secretsmanager get-secret-value --secret-id ${project}/db/${db_name}/${db_username}/${stage} | jq -r .SecretString)
         exec psql -h ${db_hostname} -U ${db_username} ${db_name} "$@"
     path: /usr/local/bin/psql.reg
     permissions: '0755'
 
   - content: |
         #!/bin/bash
-        export KANSA_PG_PASSWORD=${db_kansa_password}
-        export HUGO_PG_PASSWORD=${db_hugo_password}
-        export RAAMI_PG_PASSWORD=${db_raami_password}
-        export PGPASSWORD='${db_admin_password}'
+        export KANSA_PG_PASSWORD=$(aws secretsmanager get-secret-value --secret-id ${project}/db/${db_name}/kansa/${stage} | jq -r .SecretString)
+        export HUGO_PG_PASSWORD=$(aws secretsmanager get-secret-value --secret-id ${project}/db/${db_name}/hugo/${stage} | jq -r .SecretString)
+        export RAAMI_PG_PASSWORD=$(aws secretsmanager get-secret-value --secret-id ${project}/db/${db_name}/raami/${stage} | jq -r .SecretString)
+        export PGPASSWORD=$(aws secretsmanager get-secret-value --secret-id ${project}/db/${db_name}/${db_admin_username}/${stage} | jq -r .SecretString)
         exec psql -h ${db_hostname} -U ${db_admin_username} ${db_name} "$@"
     path: /usr/local/bin/psql.admin
     permissions: '0755'
@@ -48,6 +49,11 @@ write_files:
         set-option -g prefix C-o
         bind-key C-o send-key C-o
     path: /etc/tmux.conf
+    permissions: '0644'
+
+  - content: |
+        export AWS_DEFAULT_REGION=us-west-2
+    path: /etc/profile.d/set-aws-region.sh
     permissions: '0644'
 
 output : { all : '| tee -a /var/log/cloud-init-output.log' }

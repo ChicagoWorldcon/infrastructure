@@ -4,10 +4,15 @@ data "template_file" "script" {
   template = "${file("registration-init.yaml")}"
 
   vars = {
+    project     = "${var.project}"
     db_hostname = "${aws_db_instance.reg-db.address}"
     db_username = "${var.db_username}"
-    db_password = "${var.db_superuser_password}"
+    db_admin_username = "${var.db_admin_username}"
     db_name     = "${var.db_name}"
+    stage       = "${terraform.workspace}"
+  }
+}
+
 data "template_file" "letsencrypt_service" {
   template = "${file("scripts/letsencrypt.service")}"
 
