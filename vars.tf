@@ -16,9 +16,11 @@ variable "domain_name" {
   default = "chicagoworldcon.org"
 }
 
-variable "reg-api-fqdn" {}
+variable "secondary_domain_name" {
+  default = "chicagoworldcon.com"
+}
 
-variable "reg-www-fqdn" {}
+variable "reg-www" {}
 
 variable "region" {
   default = "us-west-2"
