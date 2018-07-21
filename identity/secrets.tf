@@ -1,5 +1,5 @@
 resource "aws_secretsmanager_secret" "db_superuser_password" {
-  name = "${var.project}/db/${var.db_name}/${var.db_username}/${terraform.workspace}"
+  name = "${var.project}/db/${var.db_name}/${var.db_username}/${var.stage}"
 
   tags {
     Project = "${var.project}"
@@ -10,7 +10,7 @@ resource "aws_secretsmanager_secret" "db_superuser_password" {
 }
 
 resource "aws_secretsmanager_secret" "db_admin_password" {
-  name = "${var.project}/db/${var.db_name}/${var.db_admin_username}/${terraform.workspace}"
+  name = "${var.project}/db/${var.db_name}/${var.db_admin_username}/${var.stage}"
 
   tags {
     Project = "${var.project}"
@@ -21,7 +21,7 @@ resource "aws_secretsmanager_secret" "db_admin_password" {
 }
 
 resource "aws_secretsmanager_secret" "db_kansa_password" {
-  name = "${var.project}/db/${var.db_name}/kansa/${terraform.workspace}"
+  name = "${var.project}/db/${var.db_name}/kansa/${var.stage}"
 
   tags {
     Project = "${var.project}"
@@ -32,7 +32,7 @@ resource "aws_secretsmanager_secret" "db_kansa_password" {
 }
 
 resource "aws_secretsmanager_secret" "db_hugo_password" {
-  name = "${var.project}/db/${var.db_name}/hugo/${terraform.workspace}"
+  name = "${var.project}/db/${var.db_name}/hugo/${var.stage}"
 
   tags {
     Project = "${var.project}"
@@ -43,7 +43,7 @@ resource "aws_secretsmanager_secret" "db_hugo_password" {
 }
 
 resource "aws_secretsmanager_secret" "db_raami_password" {
-  name = "${var.project}/db/${var.db_name}/raami/${terraform.workspace}"
+  name = "${var.project}/db/${var.db_name}/raami/${var.stage}"
 
   tags {
     Project = "${var.project}"
