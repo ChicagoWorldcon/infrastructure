@@ -10,6 +10,12 @@ data "template_file" "script" {
     db_admin_username = "${var.db_admin_username}"
     db_name     = "${var.db_name}"
     stage       = "${terraform.workspace}"
+
+    # base64-encoded file blobs for system files
+    letsencrypt_service = "${base64encode("${data.template_file.letsencrypt_service.rendered}")}"
+    letsencrypt_timer   = "${base64encode(file("scripts/letsencrypt.timer"))}"
+    service_env_vars    = "${base64encode("${data.template_file.service_env_vars_script.rendered}")}"
+    db_env_vars         = "${base64encode("${data.template_file.db_env_vars_script.rendered}")}"
   }
 }
 
@@ -22,12 +28,25 @@ data "template_file" "letsencrypt_service" {
   }
 }
 
-data "template_file" "env_vars_script" {
-  template = "${file("scripts/env-vars.sh")}"
+data "template_file" "service_env_vars_script" {
+  template = "${file("scripts/service-env-vars.sh")}"
 
   vars = {
     project     = "${var.project}"
     registration_domain_name = "${var.reg-www}.${var.domain_name}"
+    db_hostname = "${aws_db_instance.reg-db.address}"
+    db_username = "${var.db_username}"
+    db_admin_username = "${var.db_admin_username}"
+    db_name     = "${var.db_name}"
+    stage       = "${terraform.workspace}"
+  }
+}
+
+data "template_file" "db_env_vars_script" {
+  template = "${file("scripts/db-env-vars.sh")}"
+
+  vars = {
+    project     = "${var.project}"
     db_hostname = "${aws_db_instance.reg-db.address}"
     db_username = "${var.db_username}"
     db_admin_username = "${var.db_admin_username}"
@@ -69,30 +88,6 @@ resource "aws_instance" "web" {
 
   iam_instance_profile = "${module.creds.registration_iam_instance_profile_id}"
 
-  provisioner "file" {
-    content = "${data.template_file.letsencrypt_service.rendered}"
-    destination = "/etc/systemd/system/letsencrypt.service"
-
-    connection {
-      type = "ssh"
-      user = "ec2-user"
-      host = "${aws_instance.web.public_dns}"
-      agent_identity = "${var.ssh_key_id}"
-    }
-  }
-
-  provisioner "file" {
-    source = "./scripts/letsencrypt.timer"
-    destination = "/etc/systemd/system/letsencrypt.timer"
-
-    connection {
-      type = "ssh"
-      user = "ec2-user"
-      host = "${aws_instance.web.public_dns}"
-      agent_identity = "${var.ssh_key_id}"
-    }
-  }
-
   provisioner "remote-exec" {
     inline = [
       "sudo mkdir -p /postgres/init.d/${var.db_username}",
@@ -107,19 +102,7 @@ resource "aws_instance" "web" {
     connection {
       type = "ssh"
       user = "ec2-user"
-      host = "${aws_instance.web.public_dns}"
-      agent_identity = "${var.ssh_key_id}"
-    }
-  }
-
-  provisioner "file" {
-    content = "${data.template_file.env_vars_script.rendered}"
-    destination = "/etc/chicago/service-env.sh"
-
-    connection {
-      type = "ssh"
-      user = "ec2-user"
-      host = "${aws_instance.web.public_dns}"
+      host = "${self.public_dns}"
       agent_identity = "${var.ssh_key_id}"
     }
   }
@@ -131,7 +114,7 @@ resource "aws_instance" "web" {
     connection {
       type = "ssh"
       user = "ec2-user"
-      host = "${aws_instance.web.public_dns}"
+      host = "${self.public_dns}"
       agent_identity = "${var.ssh_key_id}"
     }
   }
@@ -143,7 +126,7 @@ resource "aws_instance" "web" {
     connection {
       type = "ssh"
       user = "ec2-user"
-      host = "${aws_instance.web.public_dns}"
+      host = "${self.public_dns}"
       agent_identity = "${var.ssh_key_id}"
     }
   }

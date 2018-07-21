@@ -21,6 +21,26 @@ runcmd:
 
 
 write_files:
+  - encoding: b64
+    content: "${letsencrypt_service}"
+    path: /etc/systemd/system/letsencrypt.service
+    permissions: '0644'
+
+  - encoding: b64
+    content: "${letsencrypt_timer}"
+    path: /etc/systemd/system/letsencrypt.timer
+    permissions: '0644'
+
+  - encoding: b64
+    content: "${service_env_vars}"
+    path: /etc/chicago/service-env.sh
+    permissions: '0644'
+
+  - encoding: b64
+    content: "${db_env_vars}"
+    path: /etc/chicago/db-env.sh
+    permissions: '0644'
+
   - content: |
         #!/bin/bash
         export PGPASSWORD=$(aws secretsmanager get-secret-value --secret-id ${project}/db/${db_name}/${db_username}/${stage} | jq -r .SecretString)
@@ -37,10 +57,7 @@ write_files:
 
   - content: |
         #!/bin/bash
-        export KANSA_PG_PASSWORD=$(aws secretsmanager get-secret-value --secret-id ${project}/db/${db_name}/kansa/${stage} | jq -r .SecretString)
-        export HUGO_PG_PASSWORD=$(aws secretsmanager get-secret-value --secret-id ${project}/db/${db_name}/hugo/${stage} | jq -r .SecretString)
-        export RAAMI_PG_PASSWORD=$(aws secretsmanager get-secret-value --secret-id ${project}/db/${db_name}/raami/${stage} | jq -r .SecretString)
-        export PGPASSWORD=$(aws secretsmanager get-secret-value --secret-id ${project}/db/${db_name}/${db_admin_username}/${stage} | jq -r .SecretString)
+        . /etc/chicago/db-env.sh
         exec psql -h ${db_hostname} -U ${db_admin_username} ${db_name} "$@"
     path: /usr/local/bin/psql.admin
     permissions: '0755'
