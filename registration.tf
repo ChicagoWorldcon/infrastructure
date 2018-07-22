@@ -97,6 +97,7 @@ resource "aws_instance" "web" {
 
       "sudo systemctl start letsencrypt.timer",
       "sudo systemctl enable letsencrypt.timer",
+      "sudo systemctl start letsencrypt.service",
     ]
 
     connection {
