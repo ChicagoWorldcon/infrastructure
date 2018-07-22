@@ -69,7 +69,7 @@ data "template_file" "db_init" {
   template = "${file("db_init/00-setup-rds.sql")}"
 
   vars = {
-    db_admin_password = "${var.db_superuser_password}"
+    db_admin_password = "${data.aws_secretsmanager_secret_version.db_superuser_password.secret_string}"
     db_name           = "${var.db_name}"
   }
 }

@@ -17,7 +17,7 @@ resource "aws_db_instance" "reg-db" {
   instance_class             = "db.t2.micro"
   storage_type               = "gp2"
   name                       = "${var.db_name}"
-  password                   = "${var.db_superuser_password}"
+  password                   = "${data.aws_secretsmanager_secret_version.db_superuser_password.secret_string}"
   username                   = "${var.db_username}"
   backup_retention_period    = "30"
   backup_window              = "04:00-04:30"
