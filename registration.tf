@@ -33,7 +33,7 @@ data "template_file" "service_env_vars_script" {
 
   vars = {
     project     = "${var.project}"
-    registration_domain_name = "${var.reg-www}.${var.domain_name}"
+    registration_domain_name = "${local.workspace["reg-www"]}.${var.domain_name}"
     db_hostname = "${aws_db_instance.reg-db.address}"
     db_username = "${var.db_username}"
     db_admin_username = "${var.db_admin_username}"
@@ -219,7 +219,7 @@ resource "aws_key_pair" "reg_system_key" {
 
 resource "aws_route53_record" "a_record_org" {
   zone_id = "${data.terraform_remote_state.global.dns_zone_id}"
-  name    = "${var.reg-www}.${var.domain_name}"
+  name    = "${local.workspace["reg-www"]}.${var.domain_name}"
   type    = "A"
   ttl     = 300
   records = ["${aws_eip.web.public_ip}"]

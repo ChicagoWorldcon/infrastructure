@@ -15,6 +15,11 @@ data "terraform_remote_state" "global" {
   }
 }
 
+locals {
+  workspaces = "${merge(local.dev, local.prod)}"
+  workspace  = "${local.workspaces[terraform.workspace]}"
+}
+
 variable "domain_name" {
   default = "chicagoworldcon.org"
 }
@@ -23,15 +28,9 @@ variable "secondary_domain_name" {
   default = "chicagoworldcon.com"
 }
 
-variable "reg-www" {}
-
 variable "region" {
   default = "us-west-2"
 }
-
-variable "vpc_cidr_block" {}
-
-variable "public_subnet_cidr" {}
 
 variable "project" {
   default = "Chicago2022"

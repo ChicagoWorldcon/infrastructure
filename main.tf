@@ -1,5 +1,5 @@
 resource "aws_vpc" "chicagovpc" {
-  cidr_block           = "${var.vpc_cidr_block}"
+  cidr_block           = "${local.workspace["vpc_cidr_block"]}"
   enable_dns_hostnames = true
   enable_dns_support   = true
   instance_tenancy     = "default"
@@ -63,7 +63,7 @@ resource "aws_internet_gateway" "chicago-gateway" {
 resource "aws_subnet" "public" {
   vpc_id = "${aws_vpc.chicagovpc.id}"
 
-  cidr_block = "${var.public_subnet_cidr}"
+  cidr_block = "${local.workspace["public_subnet_cidr"]}"
   availability_zone = "${var.region}a"
 
   tags {
@@ -75,7 +75,7 @@ resource "aws_subnet" "public" {
 
 resource "aws_subnet" "subnet-az-b" {
     vpc_id                  = "${aws_vpc.chicagovpc.id}"
-    cidr_block              = "172.30.1.0/24"
+    cidr_block              = "${cidrsubnet("${aws_vpc.chicagovpc.cidr_block}", 8, 1)}"
     availability_zone       = "${var.region}b"
     map_public_ip_on_launch = true
 
@@ -88,7 +88,7 @@ resource "aws_subnet" "subnet-az-b" {
 
 resource "aws_subnet" "subnet-az-c" {
     vpc_id                  = "${aws_vpc.chicagovpc.id}"
-    cidr_block              = "172.30.2.0/24"
+    cidr_block              = "${cidrsubnet("${aws_vpc.chicagovpc.cidr_block}", 8, 2)}"
     availability_zone       = "${var.region}c"
     map_public_ip_on_launch = true
 
@@ -101,7 +101,7 @@ resource "aws_subnet" "subnet-az-c" {
 
 resource "aws_subnet" "subnet-az-a" {
     vpc_id                  = "${aws_vpc.chicagovpc.id}"
-    cidr_block              = "172.30.0.0/24"
+    cidr_block              = "${cidrsubnet("${aws_vpc.chicagovpc.cidr_block}", 8, 0)}"
     availability_zone       = "${var.region}a"
     map_public_ip_on_launch = true
 

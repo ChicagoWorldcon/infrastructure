@@ -27,5 +27,5 @@ output "global_ns" {
 }
 
 output "site" {
-  value = "${var.reg-www}.${var.domain_name}"
+  value = "${local.workspace["reg-www"]}.${var.domain_name}"
 }
