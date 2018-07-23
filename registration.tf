@@ -4,18 +4,20 @@ data "template_file" "script" {
   template = "${file("registration-init.yaml")}"
 
   vars = {
-    project     = "${var.project}"
-    db_hostname = "${aws_db_instance.reg-db.address}"
-    db_username = "${var.db_username}"
-    db_admin_username = "${var.db_admin_username}"
-    db_name     = "${var.db_name}"
-    stage       = "${terraform.workspace}"
+    project              = "${var.project}"
+    db_hostname          = "${aws_db_instance.reg-db.address}"
+    db_username          = "${var.db_username}"
+    db_admin_username    = "${var.db_admin_username}"
+    db_name              = "${var.db_name}"
+    stage                = "${terraform.workspace}"
 
     # base64-encoded file blobs for system files
-    letsencrypt_service = "${base64encode("${data.template_file.letsencrypt_service.rendered}")}"
-    letsencrypt_timer   = "${base64encode(file("scripts/letsencrypt.timer"))}"
-    service_env_vars    = "${base64encode("${data.template_file.service_env_vars_script.rendered}")}"
-    db_env_vars         = "${base64encode("${data.template_file.db_env_vars_script.rendered}")}"
+    letsencrypt_service  = "${base64encode("${data.template_file.letsencrypt_service.rendered}")}"
+    letsencrypt_timer    = "${base64encode(file("scripts/letsencrypt.timer"))}"
+    registration_service = "${base64encode(file("scripts/registration.service"))}"
+    service_env_vars     = "${base64encode("${data.template_file.service_env_vars_script.rendered}")}"
+    service_env_file     = "${base64encode("${data.template_file.service_env_vars_file.rendered}")}"
+    db_env_vars          = "${base64encode("${data.template_file.db_env_vars_script.rendered}")}"
   }
 }
 
@@ -32,13 +34,39 @@ data "template_file" "service_env_vars_script" {
   template = "${file("scripts/service-env-vars.sh")}"
 
   vars = {
-    project     = "${var.project}"
-    registration_domain_name = "${local.workspace["reg-www"]}.${var.domain_name}"
-    db_hostname = "${aws_db_instance.reg-db.address}"
-    db_username = "${var.db_username}"
-    db_admin_username = "${var.db_admin_username}"
-    db_name     = "${var.db_name}"
-    stage       = "${terraform.workspace}"
+    export                       = "export "
+    project                      = "${var.project}"
+    registration_api_domain_name = "${local.workspace["reg-api"]}.${var.domain_name}"
+    registration_www_domain_name = "${local.workspace["reg-api"]}.${var.domain_name}"
+    db_hostname                  = "${aws_db_instance.reg-db.address}"
+    db_username                  = "${var.db_username}"
+    db_admin_username            = "${var.db_admin_username}"
+    db_name                      = "${var.db_name}"
+    stage                        = "${terraform.workspace}"
+
+    session_secret               = "${data.aws_secretsmanager_secret.session_secret.name}"
+    jwt_secret                   = "${data.aws_secretsmanager_secret.jwt_secret.name}"
+    sendgrid_api_key             = "${data.aws_secretsmanager_secret.sendgrid_api_key_secret.name}"
+  }
+}
+
+data "template_file" "service_env_vars_file" {
+  template = "${file("scripts/service-env-vars.sh")}"
+
+  vars = {
+    export                       = ""
+    project                      = "${var.project}"
+    registration_api_domain_name = "${local.workspace["reg-api"]}.${var.domain_name}"
+    registration_www_domain_name = "${local.workspace["reg-api"]}.${var.domain_name}"
+    db_hostname                  = "${aws_db_instance.reg-db.address}"
+    db_username                  = "${var.db_username}"
+    db_admin_username            = "${var.db_admin_username}"
+    db_name                      = "${var.db_name}"
+    stage                        = "${terraform.workspace}"
+
+    session_secret               = "${data.aws_secretsmanager_secret.session_secret.name}"
+    jwt_secret                   = "${data.aws_secretsmanager_secret.jwt_secret.name}"
+    sendgrid_api_key             = "${data.aws_secretsmanager_secret.sendgrid_api_key_secret.name}"
   }
 }
 
@@ -46,12 +74,12 @@ data "template_file" "db_env_vars_script" {
   template = "${file("scripts/db-env-vars.sh")}"
 
   vars = {
-    project     = "${var.project}"
-    db_hostname = "${aws_db_instance.reg-db.address}"
-    db_username = "${var.db_username}"
+    project           = "${var.project}"
+    db_hostname       = "${aws_db_instance.reg-db.address}"
+    db_username       = "${var.db_username}"
     db_admin_username = "${var.db_admin_username}"
-    db_name     = "${var.db_name}"
-    stage       = "${terraform.workspace}"
+    db_name           = "${var.db_name}"
+    stage             = "${terraform.workspace}"
   }
 }
 

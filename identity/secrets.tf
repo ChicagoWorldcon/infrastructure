@@ -63,3 +63,36 @@ resource "aws_secretsmanager_secret" "stripe_api_key" {
     ServiceName = "ChicagoRegistration"
   } 
 }
+
+resource "aws_secretsmanager_secret" "session_secret" {
+  name = "${var.project}/tokens/session/${var.stage}"
+  
+  tags {
+    Project = "${var.project}"
+    Name = "API session secret"
+    Environment = "${terraform.workspace}"
+    ServiceName = "ChicagoRegistration"
+  } 
+}
+
+resource "aws_secretsmanager_secret" "jwt_secret" {
+  name = "${var.project}/tokens/jwt/${var.stage}"
+  
+  tags {
+    Project = "${var.project}"
+    Name = "API JWT secret"
+    Environment = "${terraform.workspace}"
+    ServiceName = "ChicagoRegistration"
+  } 
+}
+
+resource "aws_secretsmanager_secret" "sendgrid_api_key" {
+  name = "${var.project}/sendgrid_api_key/${var.stage}"
+  
+  tags {
+    Project = "${var.project}"
+    Name = "API email system key for sendgrid"
+    Environment = "${terraform.workspace}"
+    ServiceName = "ChicagoRegistration"
+  } 
+}

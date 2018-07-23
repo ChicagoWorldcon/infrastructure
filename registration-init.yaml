@@ -11,13 +11,27 @@ packages:
   - jq
 
 runcmd:
- - systemctl start docker
- - systemctl enable docker
- - curl -L https://github.com/docker/compose/releases/download/1.20.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
- - chmod +x /usr/local/bin/docker-compose
- - usermod -a -G docker ec2-user
- - "yum -y groupinstall \"Development Tools\""
- - pip3 install pgcli psycopg2-binary keyrings.alt boto3 'awscli>=1.15'
+  # Install docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/1.20.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+  - chmod +x /usr/local/bin/docker-compose
+  - usermod -a -G docker ec2-user
+  - "yum -y groupinstall \"Development Tools\""
+  - pip3 install pgcli psycopg2-binary keyrings.alt boto3 'awscli>=1.15'
+  
+  # Pull the registration API
+  - git clone https://github.com/ChicagoWorldcon/registration-api /opt/registration/registration-api
+  - chown -R ec2-user /opt/registration/registration-api
+  
+  # Bring up docker last
+  - systemctl enable docker
+  - systemctl start docker
+  
+  # ensure we have certificates
+  - systemctl start letsencrypt
+  
+  # bring up the reg API
+  - systemctl enable registration
+  - systemctl start registration
 
 
 write_files:
@@ -32,8 +46,18 @@ write_files:
     permissions: '0644'
 
   - encoding: b64
+    content: "${registration_service}"
+    path: /etc/systemd/system/registration.service
+    permissions: '0644'
+
+  - encoding: b64
     content: "${service_env_vars}"
     path: /etc/chicago/service-env.sh
+    permissions: '0644'
+
+  - encoding: b64
+    content: "${service_env_file}"
+    path: /etc/chicago/service-env-file
     permissions: '0644'
 
   - encoding: b64

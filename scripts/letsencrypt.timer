@@ -2,7 +2,7 @@
 Description=Run letsencrypt on boot and twice daily
 
 [Timer]
-OnBootSec=1min
+OnBootSec=30sec
 OnCalendar=*-*-* 04:23,16:42
 Unit=letsencrypt.service
 

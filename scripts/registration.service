@@ -1,0 +1,28 @@
+[Unit]
+Description=Registration API service
+Requires=docker.service
+Requires=letsencrypt.timer
+After=docker.service
+
+[Service]
+Restart=always
+
+WorkingDirectory=/opt/registration/registration-api
+EnvironmentFile=/etc/chicago/service-env-file
+User=ec2-user
+
+# Remove old containers, images and volumes
+ExecStartPre=/usr/local/bin/docker-compose -f docker-compose.yml -f docker-compose.aws.yml down -v
+ExecStartPre=/usr/local/bin/docker-compose -f docker-compose.yml -f docker-compose.aws.yml rm -fv
+ExecStartPre=-/bin/bash -c 'docker volume ls -qf "name=registrationapi_" | xargs docker volume rm'
+ExecStartPre=-/bin/bash -c 'docker network ls -qf "name=registrationapi_" | xargs docker network rm'
+ExecStartPre=-/bin/bash -c 'docker ps -aqf "name=registrationapi_*" | xargs docker rm'
+
+# Compose up
+ExecStart=/usr/local/bin/docker-compose -f docker-compose.yml -f docker-compose.aws.yml up
+
+# Compose down, remove containers and volumes
+ExecStop=/usr/local/bin/docker-compose -f docker-compose.yml -f docker-compose.aws.yml down -v
+
+[Install]
+WantedBy=multi-user.target
