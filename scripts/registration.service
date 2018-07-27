@@ -8,7 +8,18 @@ After=docker.service
 Restart=always
 
 WorkingDirectory=/opt/registration/registration-api
-EnvironmentFile=/etc/chicago/service-env-file
+Environment=DB_HOSTNAME=${db_hostname}
+Environment=DB_NAME=${db_name}
+Environment=REGISTRATION_API_DOMAIN_NAME=${registration_api_domain_name}
+Environment=REGISTRATION_WWW_DOMAIN_NAME=${registration_www_domain_name}
+Environment=JWT_SECRET=${jwt_secret}
+Environment=SESSION_SECRET=${session_secret}
+Environment=HUGO_PG_PASSWORD=${hugo_pg_password}
+Environment=KANSA_PG_PASSWORD=${kansa_pg_password}
+Environment=RAAMI_PG_PASSWORD=${raami_pg_password}
+Environment=STRIPE_SECRET_API_KEY=${stripe_secret_api_key}
+Environment=SENDGRID_API_KEY=${sendgrid_api_key}
+
 User=ec2-user
 
 # Remove old containers, images and volumes

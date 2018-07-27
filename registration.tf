@@ -14,7 +14,7 @@ data "template_file" "script" {
     # base64-encoded file blobs for system files
     letsencrypt_service  = "${base64encode("${data.template_file.letsencrypt_service.rendered}")}"
     letsencrypt_timer    = "${base64encode(file("scripts/letsencrypt.timer"))}"
-    registration_service = "${base64encode(file("scripts/registration.service"))}"
+    registration_service = "${base64encode("${data.template_file.registration_service.rendered}")}"
     service_env_vars     = "${base64encode("${data.template_file.service_env_vars_script.rendered}")}"
     service_env_file     = "${base64encode("${data.template_file.service_env_vars_file.rendered}")}"
     db_env_vars          = "${base64encode("${data.template_file.db_env_vars_script.rendered}")}"
@@ -27,6 +27,27 @@ data "template_file" "letsencrypt_service" {
   vars = {
     domain_name = "${var.domain_name}"
     admin_email = "chicago@offby1.net"
+    test_cert   = "${terraform.workspace == "prod" ? "" : "--test-cert"}"
+  }
+}
+
+data "template_file" "registration_service" {
+  template = "${file("scripts/registration.service")}"
+
+  vars = {
+    db_hostname = "${aws_db_instance.reg-db.address}"
+    db_name              = "${var.db_name}"
+    registration_api_domain_name = "${local.workspace["reg-api"]}.${var.domain_name}"
+    registration_www_domain_name = "${local.workspace["reg-www"]}.${var.domain_name}"
+
+    jwt_secret = "${data.aws_secretsmanager_secret_version.jwt_secret.secret_string}"
+    session_secret = "${data.aws_secretsmanager_secret_version.session_secret.secret_string}"
+    hugo_pg_password = "${data.aws_secretsmanager_secret_version.db_hugo_password.secret_string}"
+    kansa_pg_password = "${data.aws_secretsmanager_secret_version.db_kansa_password.secret_string}"
+    raami_pg_password = "${data.aws_secretsmanager_secret_version.db_raami_password.secret_string}"
+
+    stripe_secret_api_key = "${data.aws_secretsmanager_secret_version.stripe_api_key.secret_string}"
+    sendgrid_api_key = "${data.aws_secretsmanager_secret_version.sendgrid_api_key.secret_string}"
   }
 }
 
