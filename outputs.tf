@@ -29,3 +29,16 @@ output "global_ns" {
 output "site" {
   value = "${local.workspace["reg-www"]}.${var.domain_name}"
 }
+
+output "api-address" {
+  value = "${local.workspace["reg-api"]}.${var.domain_name}"
+}
+
+output "api-port" {
+  value = "443"
+}
+
+output "www-bucket" {
+  value = "${module.site.s3_bucket_name}"
+}
+
