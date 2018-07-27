@@ -22,31 +22,63 @@ data "aws_secretsmanager_secret" "db_admin_password_secret" {
   arn = "${module.creds.db_admin_password_arn}"
 }
 
+data "aws_secretsmanager_secret_version" "db_admin_password" {
+  secret_id = "${data.aws_secretsmanager_secret.db_admin_password_secret.id}"
+}
+
 data "aws_secretsmanager_secret" "db_kansa_password_secret" {
   arn = "${module.creds.db_kansa_password_arn}"
+}
+
+data "aws_secretsmanager_secret_version" "db_kansa_password" {
+  secret_id = "${data.aws_secretsmanager_secret.db_kansa_password_secret.id}"
 }
 
 data "aws_secretsmanager_secret" "db_hugo_password_secret" {
   arn = "${module.creds.db_hugo_password_arn}"
 }
 
+data "aws_secretsmanager_secret_version" "db_hugo_password" {
+  secret_id = "${data.aws_secretsmanager_secret.db_hugo_password_secret.id}"
+}
+
 data "aws_secretsmanager_secret" "db_raami_password_secret" {
   arn = "${module.creds.db_raami_password_arn}"
+}
+
+data "aws_secretsmanager_secret_version" "db_raami_password" {
+  secret_id = "${data.aws_secretsmanager_secret.db_raami_password_secret.id}"
 }
 
 data "aws_secretsmanager_secret" "stripe_api_key_secret" {
   arn = "${module.creds.stripe_api_key_arn}"
 }
 
+data "aws_secretsmanager_secret_version" "stripe_api_key" {
+  secret_id = "${data.aws_secretsmanager_secret.stripe_api_key_secret.id}"
+}
+
 data "aws_secretsmanager_secret" "session_secret" {
   arn = "${module.creds.session_secret_arn}"
+}
+
+data "aws_secretsmanager_secret_version" "session_secret" {
+  secret_id = "${data.aws_secretsmanager_secret.session_secret.id}"
 }
 
 data "aws_secretsmanager_secret" "jwt_secret" {
   arn = "${module.creds.jwt_secret_arn}"
 }
 
+data "aws_secretsmanager_secret_version" "jwt_secret" {
+  secret_id = "${data.aws_secretsmanager_secret.jwt_secret.id}"
+}
+
 data "aws_secretsmanager_secret" "sendgrid_api_key_secret" {
   arn = "${module.creds.sendgrid_api_key_arn}"
+}
+
+data "aws_secretsmanager_secret_version" "sendgrid_api_key" {
+  secret_id = "${data.aws_secretsmanager_secret.sendgrid_api_key_secret.id}"
 }
 
