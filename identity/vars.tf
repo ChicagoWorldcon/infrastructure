@@ -4,3 +4,7 @@ variable "stage" {}
 variable "db_username" {}
 variable "db_admin_username" {}
 variable "route53_zone_id" {}
+
+variable "common_tags" {
+  default = {}
+}

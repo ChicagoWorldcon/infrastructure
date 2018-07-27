@@ -1,11 +1,10 @@
 resource "aws_security_group" "postgresql" {
   vpc_id = "${aws_vpc.chicagovpc.id}"
 
-  tags {
-    Name        = "sgDatabaseServer"
-    Project     = "${var.project}"
-    Environment = "${terraform.workspace}"
-  }
+  tags = "${merge(
+    local.common_tags,
+    map("Name", "dgDatabaseServer")
+  )}"
 }
 
 resource "aws_db_instance" "reg-db" {
@@ -33,11 +32,10 @@ resource "aws_db_instance" "reg-db" {
   parameter_group_name       = "default.postgres9.6"
   storage_encrypted          = false
 
-  tags {
-    Name        = "DatabaseServer"
-    Project     = "${var.project}"
-    Environment = "${terraform.workspace}"
-  }
+  tags = "${merge(
+    local.common_tags,
+    map("Name", "DatabaseServer")
+  )}"
 }
 
 resource "aws_security_group_rule" "db-ingress" {
@@ -59,9 +57,10 @@ resource "aws_db_subnet_group" "rds-subnets" {
     "${aws_subnet.subnet-az-c.id}",
   ]
 
-  tags {
-    Project = "${var.project}"
-    Environment = "${terraform.workspace}"
-  }
+  tags = "${merge(
+    local.common_tags,
+    map("Name", "RDS Subnet Group")
+  )}"
+
 }
 

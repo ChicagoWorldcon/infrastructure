@@ -18,6 +18,11 @@ data "terraform_remote_state" "global" {
 locals {
   workspaces = "${merge(local.dev, local.prod)}"
   workspace  = "${local.workspaces[terraform.workspace]}"
+
+  common_tags = {
+    Project = "${var.project}"
+    Environment = "${terraform.workspace}"
+  }
 }
 
 variable "domain_name" {

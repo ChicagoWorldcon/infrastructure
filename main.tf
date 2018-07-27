@@ -4,11 +4,11 @@ resource "aws_vpc" "chicagovpc" {
   enable_dns_support   = true
   instance_tenancy     = "default"
 
-  tags {
-    Name    = "Chicago 2022"
-    Project = "${var.project}"
-    Environment = "${terraform.workspace}"
-  }
+
+  tags = "${merge(
+    local.common_tags,
+    map("Name", "Chicago 2022")
+  )}"
 }
 
 resource "aws_vpc_endpoint" "s3" {
@@ -24,21 +24,19 @@ resource "aws_route_table" "chicago-public" {
     gateway_id = "${aws_internet_gateway.chicago-gateway.id}"
   }
 
-  tags {
-    Project = "${var.project}"
-    Name = "Public Subnet"
-    Environment = "${terraform.workspace}"
-  }
+  tags = "${merge(
+    local.common_tags,
+    map("Name", "Public Subnet")
+  )}"
 }
 
 resource "aws_route_table" "chicago-main" {
   vpc_id                  = "${aws_vpc.chicagovpc.id}"
 
-  tags {
-    Project = "${var.project}"
-    Name = "Main Routes"
-    Environment = "${terraform.workspace}"
-  } 
+  tags = "${merge(
+    local.common_tags,
+    map("Name", "Main Routes")
+  )}"
 }
 
 resource "aws_main_route_table_association" "chicago-vpc" {
@@ -54,10 +52,7 @@ resource "aws_route_table_association" "chicago-public" {
 resource "aws_internet_gateway" "chicago-gateway" {
   vpc_id                  = "${aws_vpc.chicagovpc.id}"
 
-  tags {
-    Project = "${var.project}"
-    Environment = "${terraform.workspace}"
-  }
+  tags = "${local.common_tags}"
 }
 
 resource "aws_subnet" "public" {
@@ -66,50 +61,47 @@ resource "aws_subnet" "public" {
   cidr_block = "${local.workspace["public_subnet_cidr"]}"
   availability_zone = "${var.region}a"
 
-  tags {
-    Project = "${var.project}"
-    Name = "Public Subnet"
-    Environment = "${terraform.workspace}"
-  }
+  tags = "${merge(
+    local.common_tags,
+    map("Name", "Public Subnet")
+  )}"
 }
 
 resource "aws_subnet" "subnet-az-b" {
-    vpc_id                  = "${aws_vpc.chicagovpc.id}"
-    cidr_block              = "${cidrsubnet("${aws_vpc.chicagovpc.cidr_block}", 8, 1)}"
-    availability_zone       = "${var.region}b"
-    map_public_ip_on_launch = true
+  vpc_id                  = "${aws_vpc.chicagovpc.id}"
+  cidr_block              = "${cidrsubnet("${aws_vpc.chicagovpc.cidr_block}", 8, 1)}"
+  availability_zone       = "${var.region}b"
+  map_public_ip_on_launch = true
 
-    tags {
-      Name = "DB Subnet B"
-      Project = "${var.project}"
-      Environment = "${terraform.workspace}"
-    }
+  tags = "${merge(
+    local.common_tags,
+    map("Name", "DB Subnet B")
+  )}"
 }
 
 resource "aws_subnet" "subnet-az-c" {
-    vpc_id                  = "${aws_vpc.chicagovpc.id}"
-    cidr_block              = "${cidrsubnet("${aws_vpc.chicagovpc.cidr_block}", 8, 2)}"
-    availability_zone       = "${var.region}c"
-    map_public_ip_on_launch = true
+  vpc_id                  = "${aws_vpc.chicagovpc.id}"
+  cidr_block              = "${cidrsubnet("${aws_vpc.chicagovpc.cidr_block}", 8, 2)}"
+  availability_zone       = "${var.region}c"
+  map_public_ip_on_launch = true
 
-    tags {
-      Name = "DB Subnet C"
-      Project = "${var.project}"
-      Environment = "${terraform.workspace}"
-    }
+  tags = "${merge(
+    local.common_tags,
+    map("Name", "DB Subnet C")
+  )}"
+
 }
 
 resource "aws_subnet" "subnet-az-a" {
-    vpc_id                  = "${aws_vpc.chicagovpc.id}"
-    cidr_block              = "${cidrsubnet("${aws_vpc.chicagovpc.cidr_block}", 8, 0)}"
-    availability_zone       = "${var.region}a"
-    map_public_ip_on_launch = true
+  vpc_id                  = "${aws_vpc.chicagovpc.id}"
+  cidr_block              = "${cidrsubnet("${aws_vpc.chicagovpc.cidr_block}", 8, 0)}"
+  availability_zone       = "${var.region}a"
+  map_public_ip_on_launch = true
 
-    tags {
-      Name = "DB Subnet A"
-      Project = "${var.project}"
-      Environment = "${terraform.workspace}"
-    }
+  tags = "${merge(
+    local.common_tags,
+    map("Name", "DB Subnet A")
+  )}"
 }
 
 

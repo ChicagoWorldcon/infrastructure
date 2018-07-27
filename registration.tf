@@ -182,11 +182,11 @@ resource "aws_instance" "web" {
     }
   }
 
-  tags {
-    Project = "${var.project}"
-    Name = "registration"
-    Environment = "${terraform.workspace}"
-  }
+  tags = "${merge(
+    local.common_tags,
+    map("Name", "registration")
+  )}"
+
 }
 
 resource "aws_eip" "web" {
@@ -197,12 +197,13 @@ resource "aws_eip" "web" {
 resource "aws_security_group" "web_server_sg" {
   vpc_id      = "${aws_vpc.chicagovpc.id}"
 
-  tags {
-    Project = "${var.project}"
-    Name = "web-server"
-    Description = "Security group for web-server with HTTP ports open within VPC"
-    Environment = "${terraform.workspace}"
-  }
+  tags = "${merge(
+    local.common_tags,
+    map(
+      "Name", "web-server",
+      "Description", "Security group for web-server with HTTP ports open within VPC",
+    )
+  )}"
 }
 
 resource "aws_security_group_rule" "web-inbound-http" {

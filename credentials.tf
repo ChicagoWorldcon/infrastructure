@@ -8,6 +8,8 @@ module "creds" {
   db_username       = "${var.db_username}"
 
   route53_zone_id   = "${data.terraform_remote_state.global.dns_zone_id}"
+
+  common_tags = "${local.common_tags}"
 }
 
 data "aws_secretsmanager_secret" "db_superuser_password_secret" {
