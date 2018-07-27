@@ -17,7 +17,7 @@ resource "aws_acm_certificate" "certificate" {
   tags {
     Project = "${var.project}"
     Name = "chicagoworldcon.org"
-    Environment = "${terraform.workspace}"
+    Environment = "global"
   } 
   
   lifecycle {
