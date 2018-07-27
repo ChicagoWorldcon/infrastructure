@@ -1,6 +1,8 @@
 [Unit]
 Description=Update certificates from letsencrypt
+Requires=docker.service
+After=docker.service
 
 [Service]
-ExecStart=/usr/bin/docker run --rm -v /opt/letsencrypt/etc:/etc/letsencrypt -v /opt/letsencrypt/lib:/var/lib/letsencrypt certbot/dns-route53 certonly -n --agree-tos --email "${admin_email}" --dns-route53 -d "*.${domain_name}"
+ExecStart=/usr/bin/docker run --rm -v /opt/letsencrypt/etc:/etc/letsencrypt -v /opt/letsencrypt/lib:/var/lib/letsencrypt certbot/dns-route53 certonly -n --agree-tos ${test_cert} --email "${admin_email}" --dns-route53 -d "*.${domain_name}"
 

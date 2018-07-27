@@ -139,6 +139,7 @@ resource "aws_instance" "web" {
 
   provisioner "remote-exec" {
     inline = [
+      "set -x",
       "sudo mkdir -p /postgres/init.d/${var.db_username}",
       "sudo mkdir -p /postgres/init.d/admin",
       "sudo mkdir -p /opt/letsencrypt/etc /opt/letsencrypt/lib",
@@ -146,7 +147,7 @@ resource "aws_instance" "web" {
 
       "sudo systemctl start letsencrypt.timer",
       "sudo systemctl enable letsencrypt.timer",
-      "sudo systemctl start letsencrypt.service",
+      "sudo systemctl enable registration.service",
     ]
 
     connection {

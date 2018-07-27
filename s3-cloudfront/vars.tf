@@ -27,7 +27,7 @@ variable "acm_certificate_arn" {
 variable "cf_default_ttl" {
   description = "CloudFront default TTL for cachine"
   type        = "string"
-  default     = "86400"
+  default     = "0"
 }
 
 variable "cf_min_ttl" {
