@@ -5,8 +5,6 @@ provider "aws" {
 }
 
 // Use the AWS Certificate Manager to create an SSL cert for our domain.
-// This resource won't be created until you receive the email verifying you
-// own the domain and you click on the confirmation link.
 resource "aws_acm_certificate" "certificate" {
   provider = "aws.us-east-1"
 
@@ -18,8 +16,8 @@ resource "aws_acm_certificate" "certificate" {
     Project = "${var.project}"
     Name = "chicagoworldcon.org"
     Environment = "global"
-  } 
-  
+  }
+
   lifecycle {
     create_before_destroy = true
   }
