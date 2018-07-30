@@ -5,23 +5,13 @@ provider "aws" {
 
 data "terraform_remote_state" "global" {
   backend = "s3"
-  workspace = "${terraform.workspace}"
+  workspace = "default"
 
   config {
     bucket = "terraform.offby1.net"
     key    = "chicago/global.tfstate"
     region = "us-west-2"
     
-  }
-}
-
-locals {
-  workspaces = "${merge(local.dev, local.prod)}"
-  workspace  = "${local.workspaces[terraform.workspace]}"
-
-  common_tags = {
-    Project = "${var.project}"
-    Environment = "${terraform.workspace}"
   }
 }
 
