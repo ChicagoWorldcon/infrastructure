@@ -51,6 +51,11 @@ write_files:
     permissions: '0644'
 
   - encoding: b64
+    content: "${docker_daemon_json}"
+    path: /etc/docker/daemon.json
+    permissions: 0644
+
+  - encoding: b64
     content: "${service_env_vars}"
     path: /etc/chicago/service-env.sh
     permissions: '0644'

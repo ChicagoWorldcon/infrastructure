@@ -61,3 +61,10 @@ data "aws_ami" "alinux" {
 
 }
 
+data "aws_iam_policy" "AmazonEC2RoleforSSM" {
+  arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
+}
+
+data "aws_iam_policy" "CloudWatchAgentServerPolicy" {
+  arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+}

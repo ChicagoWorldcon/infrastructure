@@ -18,6 +18,7 @@ data "template_file" "script" {
     service_env_vars     = "${base64encode("${data.template_file.service_env_vars_script.rendered}")}"
     service_env_file     = "${base64encode("${data.template_file.service_env_vars_file.rendered}")}"
     db_env_vars          = "${base64encode("${data.template_file.db_env_vars_script.rendered}")}"
+    docker_daemon_json   = "${base64encode("${data.template_file.docker_daemon_json.rendered}")}"
   }
 }
 
@@ -120,6 +121,14 @@ data "template_file" "db_init" {
   vars = {
     db_admin_password = "${data.aws_secretsmanager_secret_version.db_superuser_password.secret_string}"
     db_name           = "${var.db_name}"
+  }
+}
+
+data "template_file" "docker_daemon_json" {
+  template = "${file("scripts/daemon.json")}"
+
+  vars = {
+    log_group = "${aws_cloudwatch_log_group.registration_group.name}"
   }
 }
 
@@ -276,3 +285,23 @@ resource "aws_route53_record" "a_record_org" {
   ttl     = 300
   records = ["${aws_eip.web.public_ip}"]
 }
+
+resource "aws_cloudwatch_log_group" "registration_group" {
+  name = "Registration/${local.stage}"
+
+  tags = "${merge(
+    local.common_tags,
+    map(
+      "Name", "registration-logs",
+      "Description", "Registration API logs",
+    )
+  )}"
+}
+
+## Resource policies for cloudwatch logs
+resource "aws_iam_role_policy_attachment" "registration-cloudwatch" {
+  role = "${module.creds.registration_iam_role_name}"
+
+  policy_arn = "${data.aws_iam_policy.CloudWatchAgentServerPolicy.arn}"
+}
+

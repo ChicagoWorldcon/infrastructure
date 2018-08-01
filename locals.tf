@@ -6,5 +6,7 @@ locals {
     Project = "${var.project}"
     Environment = "${terraform.workspace}"
   }
+
+  stage      = "${terraform.workspace}"
 }
 

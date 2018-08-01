@@ -2,6 +2,10 @@ output "registration_iam_instance_profile_id" {
   value = "${aws_iam_instance_profile.registration.id}"
 }
 
+output "registration_iam_role_name" {
+  value = "${aws_iam_role.registration.name}"
+}
+
 output "db_superuser_password_arn" {
   value = "${aws_secretsmanager_secret.db_superuser_password.arn}"
 }
