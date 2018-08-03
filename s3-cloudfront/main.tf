@@ -17,7 +17,7 @@ resource "aws_s3_bucket" "hugo" {
 
   website {
     index_document = "index.html"
-    error_document = "404.html"
+    error_document = "index.html"
   }
 }
 
@@ -43,6 +43,13 @@ resource "aws_cloudfront_distribution" "hugo" {
 
     origin_id   = "${var.s3_origin_id}"
     origin_path = ""
+  }
+
+  custom_error_response {
+    error_caching_min_ttl = 0
+    error_code = 404
+    response_code = 200
+    response_page_path = "/index.html"
   }
 
   enabled             = true
