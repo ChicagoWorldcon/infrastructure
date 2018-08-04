@@ -10,6 +10,7 @@ data "template_file" "script" {
     db_admin_username    = "${var.db_admin_username}"
     db_name              = "${var.db_name}"
     stage                = "${local.stage}"
+    aws_region           = "${var.region}"
 
     # base64-encoded file blobs for system files
     letsencrypt_service  = "${base64encode("${data.template_file.letsencrypt_service.rendered}")}"
@@ -56,6 +57,7 @@ data "template_file" "service_env_vars_script" {
     db_admin_username            = "${var.db_admin_username}"
     db_name                      = "${var.db_name}"
     stage                        = "${local.stage}"
+    aws_region                   = "${var.region}"
 
     session_secret               = "${data.aws_secretsmanager_secret.session_secret.name}"
     jwt_secret                   = "${data.aws_secretsmanager_secret.jwt_secret.name}"
@@ -76,6 +78,7 @@ data "template_file" "service_env_vars_file" {
     db_admin_username            = "${var.db_admin_username}"
     db_name                      = "${var.db_name}"
     stage                        = "${local.stage}"
+    aws_region                   = "${var.region}"
 
     session_secret               = "${data.aws_secretsmanager_secret.session_secret.name}"
     jwt_secret                   = "${data.aws_secretsmanager_secret.jwt_secret.name}"

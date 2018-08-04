@@ -98,7 +98,7 @@ write_files:
     permissions: '0644'
 
   - content: |
-        export AWS_DEFAULT_REGION=us-west-2
+        export AWS_DEFAULT_REGION=${aws_region}
     path: /etc/profile.d/set-aws-region.sh
     permissions: '0644'
 
