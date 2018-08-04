@@ -254,7 +254,7 @@ data "local_file" "public_key" {
 }
 
 resource "aws_key_pair" "reg_system_key" {
-  key_name   = "${var.project}-registration-key"
+  key_name   = "${var.project}-${local.stage}-registration-key"
   public_key = "${data.local_file.public_key.content}"
 }
 

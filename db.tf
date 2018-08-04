@@ -11,7 +11,7 @@ resource "aws_db_instance" "reg-db" {
   allocated_storage          = "20"
   engine                     = "postgres"
   engine_version             = "9.6.6"
-  identifier                 = "chicago-worldcon"
+  identifier                 = "chicago-worldcon-${local.stage}"
   snapshot_identifier        = ""
   instance_class             = "db.t2.micro"
   storage_type               = "gp2"
@@ -49,7 +49,7 @@ resource "aws_security_group_rule" "db-ingress" {
 }
 
 resource "aws_db_subnet_group" "rds-subnets" {
-  name        = "default-vpc-6a628612"
+  name        = "default-rds-${aws_vpc.chicagovpc.id}"
   description = "${var.project} RDS subnets"
   subnet_ids  = [
     "${aws_subnet.subnet-az-a.id}",
