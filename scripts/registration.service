@@ -30,7 +30,7 @@ ExecStartPre=-/bin/bash -c 'docker network ls -qf "name=registrationapi_" | xarg
 ExecStartPre=-/bin/bash -c 'docker ps -aqf "name=registrationapi_*" | xargs docker rm'
 
 # Compose up
-ExecStart=/usr/local/bin/docker-compose -f docker-compose.yml -f docker-compose.aws.yml up
+ExecStart=/usr/local/bin/docker-compose -f docker-compose.yml -f docker-compose.aws.yml up --build
 
 # Compose down, remove containers and volumes
 ExecStop=/usr/local/bin/docker-compose -f docker-compose.yml -f docker-compose.aws.yml down -v
