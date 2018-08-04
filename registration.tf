@@ -9,7 +9,7 @@ data "template_file" "script" {
     db_username          = "${var.db_username}"
     db_admin_username    = "${var.db_admin_username}"
     db_name              = "${var.db_name}"
-    stage                = "${terraform.workspace}"
+    stage                = "${local.stage}"
 
     # base64-encoded file blobs for system files
     letsencrypt_service  = "${base64encode("${data.template_file.letsencrypt_service.rendered}")}"
@@ -64,7 +64,7 @@ data "template_file" "service_env_vars_script" {
     db_username                  = "${var.db_username}"
     db_admin_username            = "${var.db_admin_username}"
     db_name                      = "${var.db_name}"
-    stage                        = "${terraform.workspace}"
+    stage                        = "${local.stage}"
 
     session_secret               = "${data.aws_secretsmanager_secret.session_secret.name}"
     jwt_secret                   = "${data.aws_secretsmanager_secret.jwt_secret.name}"
@@ -84,7 +84,7 @@ data "template_file" "service_env_vars_file" {
     db_username                  = "${var.db_username}"
     db_admin_username            = "${var.db_admin_username}"
     db_name                      = "${var.db_name}"
-    stage                        = "${terraform.workspace}"
+    stage                        = "${local.stage}"
 
     session_secret               = "${data.aws_secretsmanager_secret.session_secret.name}"
     jwt_secret                   = "${data.aws_secretsmanager_secret.jwt_secret.name}"
@@ -101,7 +101,7 @@ data "template_file" "db_env_vars_script" {
     db_username       = "${var.db_username}"
     db_admin_username = "${var.db_admin_username}"
     db_name           = "${var.db_name}"
-    stage             = "${terraform.workspace}"
+    stage             = "${local.stage}"
   }
 }
 
