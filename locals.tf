@@ -9,7 +9,7 @@ locals {
 
   stage      = "${terraform.workspace}"
 
-  # test_cert_flag = "${terraform.workspace == "prod" ? "" : "--test-cert"}"
-  test_cert_flag = "${terraform.workspace == "prod" ? "" : ""}"
+  test_cert_flag = "${terraform.workspace == "prod" ? "" : "--test-cert"}"
+  # test_cert_flag = "${terraform.workspace == "prod" ? "" : ""}"
 }
 
