@@ -1,7 +1,7 @@
 variable "ssh_key_id" {}
 
 data "template_file" "script" {
-  template = "${file("registration-init.yaml")}"
+  template = "${file("scripts/registration-init.yaml")}"
 
   vars = {
     project              = "${var.project}"
