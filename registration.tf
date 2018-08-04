@@ -28,7 +28,7 @@ data "template_file" "letsencrypt_service" {
   vars = {
     domain_name = "${var.domain_name}"
     admin_email = "chicago@offby1.net"
-    test_cert   = "${terraform.workspace == "prod" ? "" : "--test-cert"}"
+    test_cert   = "${local.test_cert_flag}"
   }
 }
 
