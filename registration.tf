@@ -146,6 +146,13 @@ resource "aws_instance" "web" {
 
   iam_instance_profile = "${module.creds.registration_iam_instance_profile_id}"
 
+  connection {
+    type = "ssh"
+    user = "ec2-user"
+    host = "${self.public_dns}"
+    agent_identity = "${var.ssh_key_id}"
+  }
+
   provisioner "remote-exec" {
     inline = [
       "set -x",
@@ -159,36 +166,18 @@ resource "aws_instance" "web" {
       "sudo systemctl enable registration.service",
     ]
 
-    connection {
-      type = "ssh"
-      user = "ec2-user"
-      host = "${self.public_dns}"
-      agent_identity = "${var.ssh_key_id}"
-    }
   }
 
   provisioner "file" {
     content = "${data.template_file.db_init.rendered}"
     destination = "/postgres/init.d/${var.db_username}/00-setup-rds.sql"
 
-    connection {
-      type = "ssh"
-      user = "ec2-user"
-      host = "${self.public_dns}"
-      agent_identity = "${var.ssh_key_id}"
-    }
   }
 
   provisioner "file" {
     source = "../registration-api/postgres/init/"
     destination = "/postgres/init.d/admin"
 
-    connection {
-      type = "ssh"
-      user = "ec2-user"
-      host = "${self.public_dns}"
-      agent_identity = "${var.ssh_key_id}"
-    }
   }
 
   tags = "${merge(
