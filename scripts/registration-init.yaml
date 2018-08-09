@@ -106,4 +106,9 @@ write_files:
     path: /etc/profile.d/set-aws-region.sh
     permissions: '0644'
 
+  - encoding: b64
+    content: "${prompt_file}"
+    path: /etc/profile.d/set-instance-prompt.sh
+    permissions: '0644'
+
 output : { all : '| tee -a /var/log/cloud-init-output.log' }

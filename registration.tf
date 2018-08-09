@@ -20,6 +20,7 @@ data "template_file" "script" {
     service_env_file     = "${base64encode("${data.template_file.service_env_vars_file.rendered}")}"
     db_env_vars          = "${base64encode("${data.template_file.db_env_vars_script.rendered}")}"
     docker_daemon_json   = "${base64encode("${data.template_file.docker_daemon_json.rendered}")}"
+    prompt_file          = "${base64encode("${data.template_file.shell_prompt.rendered}")}"
   }
 }
 
@@ -123,6 +124,14 @@ data "template_file" "docker_daemon_json" {
 
   vars = {
     log_group = "${aws_cloudwatch_log_group.registration_group.name}"
+  }
+}
+
+data "template_file" "shell_prompt" {
+  template = "${file("scripts/set-instance-prompt.sh")}"
+
+  vars = {
+    colour_code = "${local.instance_prompt_colour}"
   }
 }
 
