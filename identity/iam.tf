@@ -62,6 +62,17 @@ resource "aws_iam_role_policy" "registration" {
             "Resource" : [
                 "arn:aws:route53:::hostedzone/${var.route53_zone_id}"
             ]
+        },
+        {
+          "Effect": "Allow",
+          "Action": [
+            "s3:Get*",
+            "s3:List*"
+          ],
+          "Resource": [
+            "arn:aws:s3:::${var.codepipeline_bucket}/*",
+            "arn:aws:s3:::${var.codedeploy_bucket}/*"
+          ]
         }
     ]
 }

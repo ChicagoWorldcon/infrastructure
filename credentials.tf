@@ -9,6 +9,9 @@ module "creds" {
 
   route53_zone_id   = "${data.terraform_remote_state.global.dns_zone_id}"
 
+  codedeploy_bucket = "${local.codedeploy_bucket}"
+  codepipeline_bucket = "codepipeline-us-west-2-337692669657"
+
   common_tags = "${local.common_tags}"
 }
 

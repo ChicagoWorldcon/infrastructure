@@ -11,5 +11,8 @@ locals {
 
   test_cert_flag = "${terraform.workspace == "prod" ? "" : "--test-cert"}"
   # test_cert_flag = "${terraform.workspace == "prod" ? "" : ""}"
+
+  codedeploy_bucket ="aws-codedeploy-us-west-2"
+
 }
 

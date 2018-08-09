@@ -5,6 +5,9 @@ variable "db_username" {}
 variable "db_admin_username" {}
 variable "route53_zone_id" {}
 
+variable "codedeploy_bucket" {}
+variable "codepipeline_bucket" {}
+
 variable "common_tags" {
   default = {}
 }

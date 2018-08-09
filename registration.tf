@@ -174,11 +174,28 @@ resource "aws_instance" "web" {
 
   }
 
+  provisioner "remote-exec" {
+    script = "${local_file.codedeploy_script.filename}"
+  }
+
   tags = "${merge(
     local.common_tags,
     map("Name", "registration")
   )}"
 
+}
+
+data "template_file" "codedeploy_script" {
+  template = "${file("scripts/install-codedeploy.sh")}"
+
+  vars = {
+    codedeploy_agent_s3_bucket = "${local.codedeploy_bucket}.s3.amazonaws.com"
+  }
+}
+
+resource "local_file" "codedeploy_script" {
+  content = "${data.template_file.codedeploy_script.rendered}"
+  filename = "${path.module}/tmp-install-codedeploy.sh"
 }
 
 resource "aws_eip" "web" {

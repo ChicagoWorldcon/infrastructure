@@ -11,6 +11,10 @@ packages:
   - jq
 
 runcmd:
+  - yum update
+  # Juuust in case, try re-install all of those packages above
+  - yum -y install docker python3 python3-devel tmux postgresql jq ruby wget
+
   # Install docker-compose
   - curl -L https://github.com/docker/compose/releases/download/1.20.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
   - chmod +x /usr/local/bin/docker-compose
