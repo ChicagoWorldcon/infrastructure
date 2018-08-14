@@ -11,6 +11,7 @@ ${export}DB_HOSTNAME=${db_hostname}
 ${export}DB_NAME=${db_name}
 ${export}REGISTRATION_API_DOMAIN_NAME=${registration_api_domain_name}
 ${export}REGISTRATION_WWW_DOMAIN_NAME=${registration_www_domain_name}
+${export}ADMIN_WWW_DOMAIN_NAME=${admin_www_domain_name}
 
 # Web Secrets
 ${export}SESSION_SECRET=$(aws secretsmanager get-secret-value --secret-id ${session_secret} | jq -r .SecretString)

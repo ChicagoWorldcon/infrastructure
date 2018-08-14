@@ -42,6 +42,7 @@ data "template_file" "registration_service" {
     db_name              = "${var.db_name}"
     registration_api_domain_name = "${local.workspace["reg-api"]}.${var.domain_name}"
     registration_www_domain_name = "${local.workspace["reg-www"]}.${var.domain_name}"
+    admin_www_domain_name        = "${local.workspace["admin-www"]}.${var.domain_name}"
   }
 }
 
@@ -53,6 +54,8 @@ data "template_file" "service_env_vars_script" {
     project                      = "${var.project}"
     registration_api_domain_name = "${local.workspace["reg-api"]}.${var.domain_name}"
     registration_www_domain_name = "${local.workspace["reg-www"]}.${var.domain_name}"
+    admin_www_domain_name        = "${local.workspace["admin-www"]}.${var.domain_name}"
+
     db_hostname                  = "${aws_db_instance.reg-db.address}"
     db_username                  = "${var.db_username}"
     db_admin_username            = "${var.db_admin_username}"
@@ -74,6 +77,8 @@ data "template_file" "service_env_vars_file" {
     project                      = "${var.project}"
     registration_api_domain_name = "${local.workspace["reg-api"]}.${var.domain_name}"
     registration_www_domain_name = "${local.workspace["reg-www"]}.${var.domain_name}"
+    admin_www_domain_name        = "${local.workspace["admin-www"]}.${var.domain_name}"
+
     db_hostname                  = "${aws_db_instance.reg-db.address}"
     db_username                  = "${var.db_username}"
     db_admin_username            = "${var.db_admin_username}"

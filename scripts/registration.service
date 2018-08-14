@@ -12,6 +12,7 @@ Environment=DB_HOSTNAME=${db_hostname}
 Environment=DB_NAME=${db_name}
 Environment=REGISTRATION_API_DOMAIN_NAME=${registration_api_domain_name}
 Environment=REGISTRATION_WWW_DOMAIN_NAME=${registration_www_domain_name}
+Environment=ADMIN_WWW_DOMAIN_NAME=${admin_www_domain_name}
 
 User=ec2-user
 

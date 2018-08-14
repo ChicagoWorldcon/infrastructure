@@ -24,6 +24,12 @@ variable "acm_certificate_arn" {
   type        = "string"
 }
 
+variable "cf_distribution_comment" {
+  description = "Display comment for the CF distribution"
+  type        = "string"
+  default     = ""
+}
+
 variable "cf_default_ttl" {
   description = "CloudFront default TTL for cachine"
   type        = "string"
@@ -51,11 +57,11 @@ variable "cf_price_class" {
 variable "origin_path" {
   description = "Path in S3 bucket for hosted files, without slashes"
   type        = "string"
-  default     = "public"
+  default     = "/public"
 }
 
 variable "s3_origin_id" {
   description = "Origin ID used in CloudFront"
   type        = "string"
-  default     = "hugo-s3-origin"
+  default     = "site-s3-origin"
 }

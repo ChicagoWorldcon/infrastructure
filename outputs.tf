@@ -39,6 +39,6 @@ output "api-port" {
 }
 
 output "www-bucket" {
-  value = "${module.site.s3_bucket_name}"
+  value = "${module.client.s3_bucket_name}"
 }
 

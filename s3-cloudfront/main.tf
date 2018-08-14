@@ -27,6 +27,7 @@ resource "aws_s3_bucket" "hugo" {
 resource "aws_cloudfront_distribution" "hugo" {
   count      = 1
   depends_on = ["aws_s3_bucket.hugo"]
+  comment    = "${var.cf_distribution_comment}"
 
   origin {
     custom_origin_config {
@@ -42,7 +43,7 @@ resource "aws_cloudfront_distribution" "hugo" {
     // domain_name = "${var.bucket_name}.s3-website-${var.aws_region}.amazonaws.com"
 
     origin_id   = "${var.s3_origin_id}"
-    origin_path = ""
+    origin_path = "${var.origin_path}"
   }
 
   custom_error_response {
