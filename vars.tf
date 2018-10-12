@@ -59,6 +59,12 @@ data "aws_ami" "alinux" {
     values = ["hvm"]
   }
 
+  # Only allow a subset of image IDs here, so that we don't see churn as we update
+  filter {
+    name = "image-id"
+    values = ["ami-a9d09ed1"]
+  }
+
 }
 
 data "aws_iam_policy" "AmazonEC2RoleforSSM" {
