@@ -142,7 +142,7 @@ data "template_file" "shell_prompt" {
 
 resource "aws_instance" "web" {
   ami           = "${data.aws_ami.alinux.id}"
-  instance_type = "t2.medium"
+  instance_type = "${local.api_instance_type}"
 
   subnet_id = "${aws_subnet.public.id}"
   associate_public_ip_address = true

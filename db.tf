@@ -13,7 +13,7 @@ resource "aws_db_instance" "reg-db" {
   engine_version             = "9.6.6"
   identifier                 = "chicago-worldcon-${local.stage}"
   snapshot_identifier        = ""
-  instance_class             = "db.t2.micro"
+  instance_class             = "${local.db_instance_type}"
   storage_type               = "gp2"
   name                       = "${var.db_name}"
   password                   = "${data.aws_secretsmanager_secret_version.db_superuser_password.secret_string}"

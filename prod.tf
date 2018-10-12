@@ -9,6 +9,10 @@ locals {
 
       # instance distinguishers
       instance_prompt_colour = "31"
+
+      # instance types
+      api_instance_type = "t2.small"
+      db_instance_type = "db.t2.micro"
     }
   }
 }

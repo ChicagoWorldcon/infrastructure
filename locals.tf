@@ -15,5 +15,8 @@ locals {
   codedeploy_bucket ="aws-codedeploy-us-west-2"
 
   instance_prompt_colour = "${local.workspace["instance_prompt_colour"]}"
+
+  api_instance_type = "${local.workspace["api_instance_type"]}"
+  db_instance_type = "${local.workspace["db_instance_type"]}"
 }
 
