@@ -7,13 +7,16 @@ packages:
   - python3
   - python3-devel
   - tmux
-  - postgresql
   - jq
 
 runcmd:
   - yum update
   # Juuust in case, try re-install all of those packages above
-  - yum -y install docker python3 python3-devel tmux postgresql jq ruby wget
+  - yum -y install docker python3 python3-devel jq ruby wget
+
+  # set up the 9.6 RPM source
+  - rpm -i https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-6-x86_64/pgdg-ami201503-96-9.6-2.noarch.rpm
+  - yum -y install postgresql96 postgresql96-libs
 
   # Install docker-compose
   - curl -L https://github.com/docker/compose/releases/download/1.20.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
@@ -109,6 +112,11 @@ write_files:
   - encoding: b64
     content: "${prompt_file}"
     path: /etc/profile.d/set-instance-prompt.sh
+    permissions: '0644'
+
+  - content: |
+        export PATH=/usr/pgsql-9.6/bin:$PATH
+    path: /etc/profile.d/psql-9.6.sh
     permissions: '0644'
 
 output : { all : '| tee -a /var/log/cloud-init-output.log' }
