@@ -1,7 +1,7 @@
 provider "aws" {
   profile = "chicago"
-  region = "us-east-1"
-  alias = "us-east-1"
+  region  = "us-east-1"
+  alias   = "us-east-1"
 }
 
 // Use the AWS Certificate Manager to create an SSL cert for our domain.
@@ -13,8 +13,8 @@ resource "aws_acm_certificate" "certificate" {
   validation_method = "DNS"
 
   tags {
-    Project = "${var.project}"
-    Name = "chicagoworldcon.org"
+    Project     = "${var.project}"
+    Name        = "chicagoworldcon.org"
     Environment = "global"
   }
 

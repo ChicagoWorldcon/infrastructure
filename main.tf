@@ -12,12 +12,12 @@ resource "aws_vpc" "chicagovpc" {
 }
 
 resource "aws_vpc_endpoint" "s3" {
-  vpc_id = "${aws_vpc.chicagovpc.id}"
+  vpc_id       = "${aws_vpc.chicagovpc.id}"
   service_name = "com.amazonaws.us-west-2.s3"
 }
 
 resource "aws_route_table" "chicago-public" {
-  vpc_id                  = "${aws_vpc.chicagovpc.id}"
+  vpc_id = "${aws_vpc.chicagovpc.id}"
 
   route {
     cidr_block = "0.0.0.0/0"
@@ -31,7 +31,7 @@ resource "aws_route_table" "chicago-public" {
 }
 
 resource "aws_route_table" "chicago-main" {
-  vpc_id                  = "${aws_vpc.chicagovpc.id}"
+  vpc_id = "${aws_vpc.chicagovpc.id}"
 
   tags = "${merge(
     local.common_tags,
@@ -40,17 +40,17 @@ resource "aws_route_table" "chicago-main" {
 }
 
 resource "aws_main_route_table_association" "chicago-vpc" {
-  vpc_id                  = "${aws_vpc.chicagovpc.id}"
-  route_table_id          = "${aws_route_table.chicago-main.id}"
+  vpc_id         = "${aws_vpc.chicagovpc.id}"
+  route_table_id = "${aws_route_table.chicago-main.id}"
 }
 
 resource "aws_route_table_association" "chicago-public" {
-  subnet_id               = "${aws_subnet.public.id}"
-  route_table_id          = "${aws_route_table.chicago-public.id}"
+  subnet_id      = "${aws_subnet.public.id}"
+  route_table_id = "${aws_route_table.chicago-public.id}"
 }
 
 resource "aws_internet_gateway" "chicago-gateway" {
-  vpc_id                  = "${aws_vpc.chicagovpc.id}"
+  vpc_id = "${aws_vpc.chicagovpc.id}"
 
   tags = "${local.common_tags}"
 }
@@ -58,7 +58,7 @@ resource "aws_internet_gateway" "chicago-gateway" {
 resource "aws_subnet" "public" {
   vpc_id = "${aws_vpc.chicagovpc.id}"
 
-  cidr_block = "${local.workspace["public_subnet_cidr"]}"
+  cidr_block        = "${local.workspace["public_subnet_cidr"]}"
   availability_zone = "${var.region}a"
 
   tags = "${merge(

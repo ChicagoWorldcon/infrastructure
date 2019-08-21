@@ -44,14 +44,14 @@ resource "aws_security_group_rule" "db-ingress" {
   from_port                = 5432
   to_port                  = 5432
   protocol                 = "tcp"
-  description = "Security group allowing access from the reg server"
+  description              = "Security group allowing access from the reg server"
   source_security_group_id = "${aws_security_group.web_server_sg.id}"
 }
 
 resource "aws_db_subnet_group" "rds-subnets" {
   name        = "default-rds-${aws_vpc.chicagovpc.id}"
   description = "${var.project} RDS subnets"
-  subnet_ids  = [
+  subnet_ids = [
     "${aws_subnet.subnet-az-a.id}",
     "${aws_subnet.subnet-az-b.id}",
     "${aws_subnet.subnet-az-c.id}",

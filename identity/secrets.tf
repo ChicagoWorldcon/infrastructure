@@ -60,7 +60,7 @@ resource "aws_secretsmanager_secret" "db_raami_password" {
 
 resource "aws_secretsmanager_secret" "stripe_api_key" {
   name = "${var.project}/stripe_api_key/${var.stage}"
-  
+
   tags = "${merge(
     var.common_tags,
     map(
@@ -72,7 +72,7 @@ resource "aws_secretsmanager_secret" "stripe_api_key" {
 
 resource "aws_secretsmanager_secret" "session_secret" {
   name = "${var.project}/tokens/session/${var.stage}"
-  
+
   tags = "${merge(
     var.common_tags,
     map(
@@ -84,7 +84,7 @@ resource "aws_secretsmanager_secret" "session_secret" {
 
 resource "aws_secretsmanager_secret" "jwt_secret" {
   name = "${var.project}/tokens/jwt/${var.stage}"
-  
+
   tags = "${merge(
     var.common_tags,
     map(
@@ -96,7 +96,7 @@ resource "aws_secretsmanager_secret" "jwt_secret" {
 
 resource "aws_secretsmanager_secret" "sendgrid_api_key" {
   name = "${var.project}/sendgrid_api_key/${var.stage}"
-  
+
   tags = "${merge(
     var.common_tags,
     map(

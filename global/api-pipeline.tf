@@ -14,7 +14,7 @@ variable "app_name" {
 
 variable "deployment_groups" {
   default = {
-    dev = "ChicagoRegistration-Dev"
+    dev  = "ChicagoRegistration-Dev"
     prod = "ChicagoRegistration-Prod"
   }
 }
@@ -65,28 +65,28 @@ resource "aws_codepipeline" "codepipeline" {
     name = "Staging"
 
     action {
-      name = "ChicagoRegistration-Dev"
-      category = "Deploy"
-      provider = "CodeDeploy"
-      owner = "AWS"
-      version = "1"
+      name            = "ChicagoRegistration-Dev"
+      category        = "Deploy"
+      provider        = "CodeDeploy"
+      owner           = "AWS"
+      version         = "1"
       input_artifacts = ["${local.reg_api_code}"]
 
       configuration = {
-        ApplicationName = "${var.app_name}"
+        ApplicationName     = "${var.app_name}"
         DeploymentGroupName = "${var.deployment_groups["dev"]}"
       }
     }
 
     action {
-      name = "ApproveAPIToProd"
+      name     = "ApproveAPIToProd"
       category = "Approval"
       provider = "Manual"
-      owner = "AWS"
-      version = "1"
+      owner    = "AWS"
+      version  = "1"
 
       configuration = {
-        NotificationArn = "${aws_sns_topic.pipeline_approval.arn}"
+        NotificationArn    = "${aws_sns_topic.pipeline_approval.arn}"
         ExternalEntityLink = "https://${var.region}.console.aws.amazon.com/codepipeline/home?region=${var.region}#/edit/${var.api_pipeline_name}"
       }
     }
@@ -96,15 +96,15 @@ resource "aws_codepipeline" "codepipeline" {
     name = "Production"
 
     action {
-      name = "ChicagoRegistration-Prod"
-      category = "Deploy"
-      provider = "CodeDeploy"
-      owner = "AWS"
-      version = "1"
+      name            = "ChicagoRegistration-Prod"
+      category        = "Deploy"
+      provider        = "CodeDeploy"
+      owner           = "AWS"
+      version         = "1"
       input_artifacts = ["${local.reg_api_code}"]
-      
+
       configuration = {
-        ApplicationName = "${var.app_name}"
+        ApplicationName     = "${var.app_name}"
         DeploymentGroupName = "${var.deployment_groups["prod"]}"
       }
     }

@@ -1,17 +1,17 @@
 provider "aws" {
   profile = "chicago"
-  region = "us-west-2"
+  region  = "us-west-2"
 }
 
 data "terraform_remote_state" "global" {
-  backend = "s3"
+  backend   = "s3"
   workspace = "default"
 
   config {
     bucket = "terraform.offby1.net"
     key    = "chicago/global.tfstate"
     region = "us-west-2"
-    
+
   }
 }
 
@@ -45,7 +45,7 @@ data "aws_ami" "alinux" {
   most_recent = true
 
   filter {
-    name = "owner-alias"
+    name   = "owner-alias"
     values = ["amazon"]
   }
 
@@ -61,7 +61,7 @@ data "aws_ami" "alinux" {
 
   # Only allow a subset of image IDs here, so that we don't see churn as we update
   filter {
-    name = "image-id"
+    name   = "image-id"
     values = ["ami-a9d09ed1"]
   }
 

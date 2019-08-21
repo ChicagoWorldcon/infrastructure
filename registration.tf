@@ -4,13 +4,13 @@ data "template_file" "script" {
   template = "${file("scripts/registration-init.yaml")}"
 
   vars = {
-    project              = "${var.project}"
-    db_hostname          = "${aws_db_instance.reg-db.address}"
-    db_username          = "${var.db_username}"
-    db_admin_username    = "${var.db_admin_username}"
-    db_name              = "${var.db_name}"
-    stage                = "${local.stage}"
-    aws_region           = "${var.region}"
+    project           = "${var.project}"
+    db_hostname       = "${aws_db_instance.reg-db.address}"
+    db_username       = "${var.db_username}"
+    db_admin_username = "${var.db_admin_username}"
+    db_name           = "${var.db_name}"
+    stage             = "${local.stage}"
+    aws_region        = "${var.region}"
 
     # base64-encoded file blobs for system files
     letsencrypt_service  = "${base64encode("${data.template_file.letsencrypt_service.rendered}")}"
@@ -38,8 +38,8 @@ data "template_file" "registration_service" {
   template = "${file("scripts/registration.service")}"
 
   vars = {
-    db_hostname = "${aws_db_instance.reg-db.address}"
-    db_name              = "${var.db_name}"
+    db_hostname                  = "${aws_db_instance.reg-db.address}"
+    db_name                      = "${var.db_name}"
     registration_api_domain_name = "${local.workspace["reg-api"]}.${var.domain_name}"
     registration_www_domain_name = "${local.workspace["reg-www"]}.${var.domain_name}"
     admin_www_domain_name        = "${local.workspace["admin-www"]}.${var.domain_name}"
@@ -56,16 +56,16 @@ data "template_file" "service_env_vars_script" {
     registration_www_domain_name = "${local.workspace["reg-www"]}.${var.domain_name}"
     admin_www_domain_name        = "${local.workspace["admin-www"]}.${var.domain_name}"
 
-    db_hostname                  = "${aws_db_instance.reg-db.address}"
-    db_username                  = "${var.db_username}"
-    db_admin_username            = "${var.db_admin_username}"
-    db_name                      = "${var.db_name}"
-    stage                        = "${local.stage}"
-    aws_region                   = "${var.region}"
+    db_hostname       = "${aws_db_instance.reg-db.address}"
+    db_username       = "${var.db_username}"
+    db_admin_username = "${var.db_admin_username}"
+    db_name           = "${var.db_name}"
+    stage             = "${local.stage}"
+    aws_region        = "${var.region}"
 
-    session_secret               = "${data.aws_secretsmanager_secret.session_secret.name}"
-    jwt_secret                   = "${data.aws_secretsmanager_secret.jwt_secret.name}"
-    sendgrid_api_key             = "${data.aws_secretsmanager_secret.sendgrid_api_key_secret.name}"
+    session_secret   = "${data.aws_secretsmanager_secret.session_secret.name}"
+    jwt_secret       = "${data.aws_secretsmanager_secret.jwt_secret.name}"
+    sendgrid_api_key = "${data.aws_secretsmanager_secret.sendgrid_api_key_secret.name}"
   }
 }
 
@@ -79,16 +79,16 @@ data "template_file" "service_env_vars_file" {
     registration_www_domain_name = "${local.workspace["reg-www"]}.${var.domain_name}"
     admin_www_domain_name        = "${local.workspace["admin-www"]}.${var.domain_name}"
 
-    db_hostname                  = "${aws_db_instance.reg-db.address}"
-    db_username                  = "${var.db_username}"
-    db_admin_username            = "${var.db_admin_username}"
-    db_name                      = "${var.db_name}"
-    stage                        = "${local.stage}"
-    aws_region                   = "${var.region}"
+    db_hostname       = "${aws_db_instance.reg-db.address}"
+    db_username       = "${var.db_username}"
+    db_admin_username = "${var.db_admin_username}"
+    db_name           = "${var.db_name}"
+    stage             = "${local.stage}"
+    aws_region        = "${var.region}"
 
-    session_secret               = "${data.aws_secretsmanager_secret.session_secret.name}"
-    jwt_secret                   = "${data.aws_secretsmanager_secret.jwt_secret.name}"
-    sendgrid_api_key             = "${data.aws_secretsmanager_secret.sendgrid_api_key_secret.name}"
+    session_secret   = "${data.aws_secretsmanager_secret.session_secret.name}"
+    jwt_secret       = "${data.aws_secretsmanager_secret.jwt_secret.name}"
+    sendgrid_api_key = "${data.aws_secretsmanager_secret.sendgrid_api_key_secret.name}"
   }
 }
 
@@ -106,12 +106,12 @@ data "template_file" "db_env_vars_script" {
 }
 
 data "template_cloudinit_config" "config" {
-  gzip = true
+  gzip          = true
   base64_encode = true
 
   part {
     content_type = "text/cloud-config"
-    content = "${data.template_file.script.rendered}"
+    content      = "${data.template_file.script.rendered}"
   }
 }
 
@@ -144,9 +144,9 @@ resource "aws_instance" "web" {
   ami           = "${data.aws_ami.alinux.id}"
   instance_type = "${local.api_instance_type}"
 
-  subnet_id = "${aws_subnet.public.id}"
+  subnet_id                   = "${aws_subnet.public.id}"
   associate_public_ip_address = true
-  vpc_security_group_ids = ["${aws_security_group.web_server_sg.id}"]
+  vpc_security_group_ids      = ["${aws_security_group.web_server_sg.id}"]
 
   key_name = "${aws_key_pair.reg_system_key.key_name}"
 
@@ -155,9 +155,9 @@ resource "aws_instance" "web" {
   iam_instance_profile = "${module.creds.registration_iam_instance_profile_id}"
 
   connection {
-    type = "ssh"
-    user = "ec2-user"
-    host = "${self.public_dns}"
+    type           = "ssh"
+    user           = "ec2-user"
+    host           = "${self.public_dns}"
     agent_identity = "${var.ssh_key_id}"
   }
 
@@ -177,13 +177,13 @@ resource "aws_instance" "web" {
   }
 
   provisioner "file" {
-    content = "${data.template_file.db_init.rendered}"
+    content     = "${data.template_file.db_init.rendered}"
     destination = "/postgres/init.d/${var.db_username}/00-setup-rds.sql"
 
   }
 
   provisioner "file" {
-    source = "../registration-api/postgres/init/"
+    source      = "../registration-api/postgres/init/"
     destination = "/postgres/init.d/admin"
 
   }
@@ -208,17 +208,17 @@ data "template_file" "codedeploy_script" {
 }
 
 resource "local_file" "codedeploy_script" {
-  content = "${data.template_file.codedeploy_script.rendered}"
+  content  = "${data.template_file.codedeploy_script.rendered}"
   filename = "${path.module}/tmp-install-codedeploy.sh"
 }
 
 resource "aws_eip" "web" {
   instance = "${aws_instance.web.id}"
-  vpc = true
+  vpc      = true
 }
 
 resource "aws_security_group" "web_server_sg" {
-  vpc_id      = "${aws_vpc.chicagovpc.id}"
+  vpc_id = "${aws_vpc.chicagovpc.id}"
 
   tags = "${merge(
     local.common_tags,
@@ -231,56 +231,56 @@ resource "aws_security_group" "web_server_sg" {
 
 resource "aws_security_group_rule" "web-inbound-http" {
   security_group_id = "${aws_security_group.web_server_sg.id}"
-  type = "ingress"
-  from_port = 80
-  to_port = 80
-  protocol = "tcp"
-  cidr_blocks = ["0.0.0.0/0"]
+  type              = "ingress"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group_rule" "web-inbound-https" {
   security_group_id = "${aws_security_group.web_server_sg.id}"
-  type = "ingress"
-  from_port = 443
-  to_port = 443
-  protocol = "tcp"
-  cidr_blocks = ["0.0.0.0/0"]
+  type              = "ingress"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group_rule" "web-inbound-ssh" {
   security_group_id = "${aws_security_group.web_server_sg.id}"
-  type = "ingress"
-  from_port = 22
-  to_port = 22
-  protocol = "tcp"
-  cidr_blocks = ["0.0.0.0/0"]
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group_rule" "web-outbound-db" {
-  security_group_id = "${aws_security_group.web_server_sg.id}"
-  type = "egress"
-  from_port = 5432
-  to_port = 5432
-  protocol = "tcp"
+  security_group_id        = "${aws_security_group.web_server_sg.id}"
+  type                     = "egress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
   source_security_group_id = "${aws_security_group.postgresql.id}"
 }
 
 resource "aws_security_group_rule" "web-outbound-http" {
   security_group_id = "${aws_security_group.web_server_sg.id}"
-  type = "egress"
-  from_port = 80
-  to_port = 80
-  protocol = "tcp"
-  cidr_blocks = ["0.0.0.0/0"]
+  type              = "egress"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group_rule" "web-outbound-https" {
   security_group_id = "${aws_security_group.web_server_sg.id}"
-  type = "egress"
-  from_port = 443
-  to_port = 443
-  protocol = "tcp"
-  cidr_blocks = ["0.0.0.0/0"]
+  type              = "egress"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
 }
 
 data "local_file" "public_key" {

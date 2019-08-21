@@ -1,5 +1,5 @@
 module "creds" {
-  source = "identity/"
+  source  = "identity/"
   db_name = "${var.db_name}"
   project = "${var.project}"
   stage   = "${local.stage}"
@@ -7,9 +7,9 @@ module "creds" {
   db_admin_username = "${var.db_admin_username}"
   db_username       = "${var.db_username}"
 
-  route53_zone_id   = "${data.terraform_remote_state.global.dns_zone_id}"
+  route53_zone_id = "${data.terraform_remote_state.global.dns_zone_id}"
 
-  codedeploy_bucket = "${local.codedeploy_bucket}"
+  codedeploy_bucket   = "${local.codedeploy_bucket}"
   codepipeline_bucket = "codepipeline-us-west-2-chicago2022"
 
   common_tags = "${local.common_tags}"
