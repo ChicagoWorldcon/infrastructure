@@ -33,23 +33,23 @@ resource "aws_codebuild_project" "client-build" {
     type         = "LINUX_CONTAINER"
 
     environment_variable {
-      "name"  = "CLIENT_SRC_DIR"
-      "value" = "${var.client_src}"
+      name    = "CLIENT_SRC_DIR"
+      value   = "${var.client_src}"
     }
 
     environment_variable {
-      "name"  = "BUCKET_NAME"
-      "value" = "${var.bucket_name}"
+      name    = "BUCKET_NAME"
+      value   = "${var.bucket_name}"
     }
 
     environment_variable {
-      "name"  = "API_HOST"
-      "value" = "${var.api_host}"
+      name    = "API_HOST"
+      value   = "${var.api_host}"
     }
 
     environment_variable {
-      "name"  = "NODE_ENV"
-      "value" = "production"
+      name    = "NODE_ENV"
+      value   = "production"
     }
 
     environment_variable {
@@ -70,7 +70,7 @@ resource "aws_codebuild_project" "client-build" {
     }
   }
 
-  tags {
+  tags = {
     Project = "${var.project}"
     Environment = "global"
   }

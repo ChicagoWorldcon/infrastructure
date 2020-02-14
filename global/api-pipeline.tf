@@ -1,6 +1,6 @@
 # Input variables
 variable "api_pipeline_name" {
-  type    = "string"
+  type    = string
   default = "chicago-registration-api"
 }
 
@@ -24,7 +24,7 @@ data "aws_secretsmanager_secret" "github_token" {
 }
 
 data "aws_secretsmanager_secret_version" "github_token" {
-  secret_id = "${data.aws_secretsmanager_secret.github_token.id}"
+  secret_id = data.aws_secretsmanager_secret.github_token.id
 }
 
 locals {
@@ -33,11 +33,11 @@ locals {
 
 # Full CodePipeline
 resource "aws_codepipeline" "codepipeline" {
-  name     = "${var.api_pipeline_name}"
-  role_arn = "${aws_iam_role.codepipeline_role.arn}"
+  name     = var.api_pipeline_name
+  role_arn = aws_iam_role.codepipeline_role.arn
 
-  artifact_store = {
-    location = "${aws_s3_bucket.build_artifact_bucket.bucket}"
+  artifact_store {
+    location = aws_s3_bucket.build_artifact_bucket.bucket
     type     = "S3"
   }
 
@@ -50,11 +50,11 @@ resource "aws_codepipeline" "codepipeline" {
       owner            = "ThirdParty"
       provider         = "GitHub"
       version          = "1"
-      output_artifacts = ["${local.reg_api_code}"]
+      output_artifacts = [local.reg_api_code]
 
-      configuration {
-        Owner                = "${var.github_username}"
-        Repo                 = "${var.api_github_repo}"
+      configuration = {
+        Owner                = var.github_username
+        Repo                 = var.api_github_repo
         Branch               = "master"
         PollForSourceChanges = "false"
       }
@@ -70,11 +70,11 @@ resource "aws_codepipeline" "codepipeline" {
       provider        = "CodeDeploy"
       owner           = "AWS"
       version         = "1"
-      input_artifacts = ["${local.reg_api_code}"]
+      input_artifacts = [local.reg_api_code]
 
       configuration = {
-        ApplicationName     = "${var.app_name}"
-        DeploymentGroupName = "${var.deployment_groups["dev"]}"
+        ApplicationName     = var.app_name
+        DeploymentGroupName = var.deployment_groups["dev"]
       }
     }
 
@@ -86,7 +86,7 @@ resource "aws_codepipeline" "codepipeline" {
       version  = "1"
 
       configuration = {
-        NotificationArn    = "${aws_sns_topic.pipeline_approval.arn}"
+        NotificationArn    = aws_sns_topic.pipeline_approval.arn
         ExternalEntityLink = "https://${var.region}.console.aws.amazon.com/codepipeline/home?region=${var.region}#/edit/${var.api_pipeline_name}"
       }
     }
@@ -101,11 +101,11 @@ resource "aws_codepipeline" "codepipeline" {
       provider        = "CodeDeploy"
       owner           = "AWS"
       version         = "1"
-      input_artifacts = ["${local.reg_api_code}"]
+      input_artifacts = [local.reg_api_code]
 
       configuration = {
-        ApplicationName     = "${var.app_name}"
-        DeploymentGroupName = "${var.deployment_groups["prod"]}"
+        ApplicationName     = var.app_name
+        DeploymentGroupName = var.deployment_groups["prod"]
       }
     }
   }

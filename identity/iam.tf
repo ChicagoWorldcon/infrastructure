@@ -19,12 +19,12 @@ EOF
 
 resource "aws_iam_instance_profile" "registration" {
   name = "${var.project}-registration-instance-profile-${var.stage}"
-  role = "${aws_iam_role.registration.name}"
+  role = aws_iam_role.registration.name
 }
 
 resource "aws_iam_role_policy" "registration" {
   name = "${var.project}-registration-policy-${var.stage}"
-  role = "${aws_iam_role.registration.name}"
+  role = aws_iam_role.registration.name
   policy = <<EOF
 {
     "Version": "2012-10-17",

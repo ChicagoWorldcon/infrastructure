@@ -7,7 +7,7 @@ data "terraform_remote_state" "global" {
   backend   = "s3"
   workspace = "default"
 
-  config {
+  config = {
     bucket = "terraform.offby1.net"
     key    = "chicago/global.tfstate"
     region = "us-west-2"
@@ -39,9 +39,14 @@ variable "db_name" {
   default = "api"
 }
 
+variable "db_password" {
+  type = string
+}
+
 variable "db_admin_username" { default = "admin" }
 
 data "aws_ami" "alinux" {
+  owners = ["self", "aws-marketplace", "amazon"]
   most_recent = true
 
   filter {
