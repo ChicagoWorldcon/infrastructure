@@ -16,7 +16,7 @@ data "terraform_remote_state" "global" {
 }
 
 variable "ssh_key_id" {
-  type = string
+  type        = string
   description = "Provide this via auto vars"
 }
 

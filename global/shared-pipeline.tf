@@ -71,8 +71,8 @@ data "aws_iam_policy_document" "codebuild_logging_policy" {
 
 data "aws_iam_policy_document" "codebuild_output_policy" {
   statement {
-    effect   =  "Allow"
-    actions  = [
+    effect = "Allow"
+    actions = [
       "s3:ListAllMyBuckets",
       "s3:HeadBucket"
     ]
@@ -81,8 +81,8 @@ data "aws_iam_policy_document" "codebuild_output_policy" {
   }
 
   statement {
-    effect   = "Allow"
-    actions  = ["s3:*"]
+    effect  = "Allow"
+    actions = ["s3:*"]
 
     # This is somewhat hardcoded, regrettably
     resources = [
@@ -96,9 +96,9 @@ data "aws_iam_policy_document" "codebuild_output_policy" {
       "arn:aws:s3:::${local.dev_client_bucket}",
       "arn:aws:s3:::${local.prod_client_bucket}",
       "arn:aws:s3:::${local.dev_admin_bucket}",
-      "arn:aws:s3:::${local.prod_admin_bucket}", 
+      "arn:aws:s3:::${local.prod_admin_bucket}",
       aws_s3_bucket.cache_bucket.arn,
-   ]
+    ]
   }
 }
 
@@ -153,34 +153,34 @@ resource "aws_iam_role" "codebuild_role" {
   assume_role_policy = data.aws_iam_policy_document.codebuild_assume_policy.json
   path               = "/service-role/"
 
-  
+
 }
 
 resource "aws_iam_role_policy_attachment" "codebuild_logging_policy" {
-  role = aws_iam_role.codebuild_role.name
+  role       = aws_iam_role.codebuild_role.name
   policy_arn = aws_iam_policy.codebuild_logging_policy.arn
 }
 
 resource "aws_iam_role_policy_attachment" "codebuild_deploy_policy" {
-  role = aws_iam_role.codebuild_role.name
+  role       = aws_iam_role.codebuild_role.name
   policy_arn = aws_iam_policy.codebuild_deploy_policy.arn
 }
 
 resource "aws_iam_policy" "codebuild_logging_policy" {
-  name = "CodeBuild-${var.project}-client-${var.region}"
+  name        = "CodeBuild-${var.project}-client-${var.region}"
   description = "Policy used in trust relationship with CodeBuild"
-  path = "/service-role/"
-  policy = data.aws_iam_policy_document.codebuild_logging_policy.json
+  path        = "/service-role/"
+  policy      = data.aws_iam_policy_document.codebuild_logging_policy.json
 }
 
 resource "aws_iam_policy" "codebuild_deploy_policy" {
   name = "CodeBuild-${var.project}-deploy-access-policy-${var.region}"
   # role = aws_iam_role.codebuild_role.name
-  path = "/service-role/"
+  path   = "/service-role/"
   policy = data.aws_iam_policy_document.codebuild_output_policy.json
 }
 
 resource "aws_sns_topic" "pipeline_approval" {
-  name = "Chicago2022-pipeline-notifications"
+  name         = "Chicago2022-pipeline-notifications"
   display_name = "C22Pipe"
 }

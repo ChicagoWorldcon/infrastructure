@@ -1,5 +1,5 @@
 data "aws_ami" "alinux" {
-  owners = ["self", "aws-marketplace", "amazon"]
+  owners      = ["self", "aws-marketplace", "amazon"]
   most_recent = true
 
   filter {

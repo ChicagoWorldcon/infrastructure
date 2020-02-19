@@ -17,7 +17,7 @@ resource "aws_s3_bucket" "cache_bucket" {
 
   lifecycle_rule {
     enabled = true
-    prefix = "dev-client/"
+    prefix  = "dev-client/"
     expiration {
       days = 1
     }
@@ -25,7 +25,7 @@ resource "aws_s3_bucket" "cache_bucket" {
 
   lifecycle_rule {
     enabled = true
-    prefix = "dev-admin/"
+    prefix  = "dev-admin/"
     expiration {
       days = 1
     }
@@ -33,7 +33,7 @@ resource "aws_s3_bucket" "cache_bucket" {
 
   lifecycle_rule {
     enabled = true
-    prefix = "prod-client/"
+    prefix  = "prod-client/"
     expiration {
       days = 1
     }
@@ -41,68 +41,68 @@ resource "aws_s3_bucket" "cache_bucket" {
 
   lifecycle_rule {
     enabled = true
-    prefix = "prod-admin/"
+    prefix  = "prod-admin/"
     expiration {
       days = 1
     }
   }
 
   tags = {
-    Project = var.project
+    Project     = var.project
     Environment = "global"
   }
 }
 
 module "dev-client" {
-  source = "./codebuild"
-  site_title = "Chicago in 2022 Registration - TESTING"
-  name = "dev-client"
-  client_src = "."
-  bucket_name = local.dev_client_bucket
-  api_host = local.dev_api_host
-  project = var.project
+  source       = "./codebuild"
+  site_title   = "Chicago in 2022 Registration - TESTING"
+  name         = "dev-client"
+  client_src   = "."
+  bucket_name  = local.dev_client_bucket
+  api_host     = local.dev_api_host
+  project      = var.project
   cache_bucket = aws_s3_bucket.cache_bucket.bucket
-  source_url = "https://github.com/${var.github_username}/${var.client_github_repo}.git"
-  role_arn = aws_iam_role.codebuild_role.arn
+  source_url   = "https://github.com/${var.github_username}/${var.client_github_repo}.git"
+  role_arn     = aws_iam_role.codebuild_role.arn
 }
 
 module "dev-admin" {
-  source = "./codebuild"
-  site_title = "Chicago in 2022 Registration Admin - TESTING"
-  name = "dev-admin"
-  client_src = "members-admin"
-  bucket_name = local.dev_admin_bucket
-  api_host = local.dev_api_host
-  project = var.project
+  source       = "./codebuild"
+  site_title   = "Chicago in 2022 Registration Admin - TESTING"
+  name         = "dev-admin"
+  client_src   = "members-admin"
+  bucket_name  = local.dev_admin_bucket
+  api_host     = local.dev_api_host
+  project      = var.project
   cache_bucket = aws_s3_bucket.cache_bucket.bucket
-  source_url = "https://github.com/${var.github_username}/${var.client_github_repo}.git"
-  role_arn = aws_iam_role.codebuild_role.arn
+  source_url   = "https://github.com/${var.github_username}/${var.client_github_repo}.git"
+  role_arn     = aws_iam_role.codebuild_role.arn
 }
 
 module "prod-client" {
-  source = "./codebuild"
-  site_title = "Chicago in 2022 Registration"
-  name = "prod-client"
-  client_src = "."
-  bucket_name = local.prod_client_bucket
-  api_host = local.prod_api_host
-  project = var.project
+  source       = "./codebuild"
+  site_title   = "Chicago in 2022 Registration"
+  name         = "prod-client"
+  client_src   = "."
+  bucket_name  = local.prod_client_bucket
+  api_host     = local.prod_api_host
+  project      = var.project
   cache_bucket = aws_s3_bucket.cache_bucket.bucket
-  source_url = "https://github.com/${var.github_username}/${var.client_github_repo}.git"
-  role_arn = aws_iam_role.codebuild_role.arn
+  source_url   = "https://github.com/${var.github_username}/${var.client_github_repo}.git"
+  role_arn     = aws_iam_role.codebuild_role.arn
 }
 
 module "prod-admin" {
-  source = "./codebuild"
-  site_title = "Chicago in 2022 Registration Admin"
-  name = "prod-admin"
-  client_src = "members-admin"
-  bucket_name = local.prod_admin_bucket
-  api_host = local.prod_api_host
-  project = var.project
+  source       = "./codebuild"
+  site_title   = "Chicago in 2022 Registration Admin"
+  name         = "prod-admin"
+  client_src   = "members-admin"
+  bucket_name  = local.prod_admin_bucket
+  api_host     = local.prod_api_host
+  project      = var.project
   cache_bucket = aws_s3_bucket.cache_bucket.bucket
-  source_url = "https://github.com/${var.github_username}/${var.client_github_repo}.git"
-  role_arn = aws_iam_role.codebuild_role.arn
+  source_url   = "https://github.com/${var.github_username}/${var.client_github_repo}.git"
+  role_arn     = aws_iam_role.codebuild_role.arn
 }
 
 # Full CodePipeline
@@ -144,12 +144,12 @@ resource "aws_codepipeline" "client-codepipeline" {
     name = "DeployBeta"
 
     action {
-      name = "BuildDevClient"
-      category = "Build"
-      owner = "AWS"
-      provider = "CodeBuild"
-      version = "1"
-      input_artifacts = [local.client_code]
+      name             = "BuildDevClient"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      version          = "1"
+      input_artifacts  = [local.client_code]
       output_artifacts = []
 
       configuration = {
@@ -158,12 +158,12 @@ resource "aws_codepipeline" "client-codepipeline" {
     }
 
     action {
-      name = "BuildDevAdmin"
-      category = "Build"
-      owner = "AWS"
-      provider = "CodeBuild"
-      version = "1"
-      input_artifacts = [local.client_code]
+      name             = "BuildDevAdmin"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      version          = "1"
+      input_artifacts  = [local.client_code]
       output_artifacts = []
 
       configuration = {
@@ -177,14 +177,14 @@ resource "aws_codepipeline" "client-codepipeline" {
     name = "ApproveProd"
 
     action {
-      name = "ApproveClientToProd"
+      name     = "ApproveClientToProd"
       category = "Approval"
       provider = "Manual"
-      owner = "AWS"
-      version = "1"
+      owner    = "AWS"
+      version  = "1"
 
       configuration = {
-        NotificationArn = aws_sns_topic.pipeline_approval.arn
+        NotificationArn    = aws_sns_topic.pipeline_approval.arn
         ExternalEntityLink = "https://${var.region}.console.aws.amazon.com/codepipeline/home?region=${var.region}#/edit/${var.client_pipeline_name}"
       }
     }
@@ -195,12 +195,12 @@ resource "aws_codepipeline" "client-codepipeline" {
     name = "DeployProd"
 
     action {
-      name = "BuildProdClient"
-      category = "Build"
-      owner = "AWS"
-      provider = "CodeBuild"
-      version = "1"
-      input_artifacts = [local.client_code]
+      name             = "BuildProdClient"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      version          = "1"
+      input_artifacts  = [local.client_code]
       output_artifacts = []
 
       configuration = {
@@ -209,12 +209,12 @@ resource "aws_codepipeline" "client-codepipeline" {
     }
 
     action {
-      name = "BuildProdAdmin"
-      category = "Build"
-      owner = "AWS"
-      provider = "CodeBuild"
-      version = "1"
-      input_artifacts = [local.client_code]
+      name             = "BuildProdAdmin"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      version          = "1"
+      input_artifacts  = [local.client_code]
       output_artifacts = []
 
       configuration = {

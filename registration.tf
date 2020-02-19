@@ -4,12 +4,12 @@ module "dev-site" {
   source = "./website"
 
   project = var.project
-  stage             = "dev"
-  region = var.region
+  stage   = "dev"
+  region  = var.region
 
-  vpc_id = aws_vpc.chicagovpc.id
+  vpc_id            = aws_vpc.chicagovpc.id
   security_group_id = aws_security_group.postgresql.id
-  public_subnet_id = aws_subnet.public.id
+  public_subnet_id  = aws_subnet.public.id
 
   domain_name       = var.domain_name
   db_hostname       = aws_db_instance.reg-db.address
@@ -26,12 +26,12 @@ module "dev-site" {
 
   # instance distinguishers
   instance_prompt_colour = "34"
-  instance_type = "t2.micro"
+  instance_type          = "t2.micro"
 
   # instance access
-  ssh_key_id    = var.ssh_key_id
+  ssh_key_id           = var.ssh_key_id
   iam_instance_profile = module.dev-creds.registration_iam_instance_profile_id
-  iam_role_name = module.dev-creds.registration_iam_role_name
+  iam_role_name        = module.dev-creds.registration_iam_role_name
 
   # remote hosts
   registration_api_domain_name = "${var.dev_api_prefix}.${var.domain_name}"
@@ -44,12 +44,12 @@ module "production-site" {
   source = "./website"
 
   project = var.project
-  stage             = "prod"
-  region = var.region
+  stage   = "prod"
+  region  = var.region
 
-  vpc_id = aws_vpc.chicagovpc.id
+  vpc_id            = aws_vpc.chicagovpc.id
   security_group_id = aws_security_group.postgresql.id
-  public_subnet_id = aws_subnet.public.id
+  public_subnet_id  = aws_subnet.public.id
 
   domain_name       = var.domain_name
   db_hostname       = aws_db_instance.reg-db.address
@@ -65,12 +65,12 @@ module "production-site" {
 
   # instance distinguishers
   instance_prompt_colour = "31"
-  instance_type = "t2.small"
+  instance_type          = "t2.small"
 
   # instance access
-  ssh_key_id    = var.ssh_key_id
+  ssh_key_id           = var.ssh_key_id
   iam_instance_profile = module.dev-creds.registration_iam_instance_profile_id
-  iam_role_name = module.prod-creds.registration_iam_role_name
+  iam_role_name        = module.prod-creds.registration_iam_role_name
 
   # remote hosts
   registration_api_domain_name = "${var.prod_api_prefix}.${var.domain_name}"

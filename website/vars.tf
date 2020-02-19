@@ -79,7 +79,7 @@ variable "ssh_key_id" {
 }
 
 variable "use_test_certs" {
-  type = bool
+  type    = bool
   default = false
 }
 
