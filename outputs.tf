@@ -11,23 +11,38 @@ output "db_instance_id" {
 }
 
 output "reg_hostname" {
-  value = aws_instance.web.public_dns
+  value = {
+    dev = module.dev-site.public_dns
+    prod = module.production-site.public_dns
+  }
 }
 
 output "reg_private_ip" {
-  value = aws_instance.web.private_ip
+  value = {
+    dev = module.dev-site.private_ip
+    prod = module.production-site.private_ip
+  }
 }
 
 output "reg_public_ip" {
-  value = aws_instance.web.public_ip
+  value = {
+    dev = module.dev-site.public_ip
+    prod = module.production-site.public_ip
+  }
 }
 
 output "reg_public_dns" {
-  value = aws_instance.web.public_dns
+  value = {
+    dev = module.dev-site.public_dns
+    prod = module.production-site.public_dns
+  }
 }
 
 output "reg_instance_id" {
-  value = aws_instance.web.id
+  value = {
+    dev = module.dev-site.id
+    prod = module.production-site.id
+  }
 }
 
 output "global_ns" {
@@ -35,11 +50,17 @@ output "global_ns" {
 }
 
 output "site" {
-  value = "${local.workspace["reg-www"]}.${var.domain_name}"
+  value = {
+    dev = "${var.dev_www_prefix}.${var.domain_name}"
+    prod = "${var.prod_www_prefix}.${var.domain_name}"
+  }
 }
 
 output "api-address" {
-  value = "${local.workspace["reg-api"]}.${var.domain_name}"
+  value = {
+    dev = "${var.dev_api_prefix}.${var.domain_name}"
+    prod = "${var.prod_api_prefix}.${var.domain_name}"
+  }
 }
 
 output "api-port" {

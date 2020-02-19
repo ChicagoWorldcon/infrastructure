@@ -11,9 +11,9 @@ resource "aws_db_instance" "reg-db" {
   allocated_storage          = "20"
   engine                     = "postgres"
   engine_version             = "9.6.6"
-  identifier                 = "chicago-worldcon-${local.stage}"
+  identifier                 = "chicago-worldcon-prod"
   snapshot_identifier        = ""
-  instance_class             = local.db_instance_type
+  instance_class             = "db.t2.micro"
   storage_type               = "gp2"
   name                       = var.db_name
   password                   = data.aws_secretsmanager_secret_version.db_superuser_password.secret_string
@@ -38,6 +38,16 @@ resource "aws_db_instance" "reg-db" {
   )
 }
 
+resource "aws_security_group_rule" "db-ingress-dev" {
+  type                     = "ingress"
+  security_group_id        = aws_security_group.postgresql.id
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  description              = "Security group allowing access from the reg server"
+  source_security_group_id = module.dev-site.security_group_id
+}
+
 resource "aws_security_group_rule" "db-ingress" {
   type                     = "ingress"
   security_group_id        = aws_security_group.postgresql.id
@@ -45,7 +55,7 @@ resource "aws_security_group_rule" "db-ingress" {
   to_port                  = 5432
   protocol                 = "tcp"
   description              = "Security group allowing access from the reg server"
-  source_security_group_id = aws_security_group.web_server_sg.id
+  source_security_group_id = module.production-site.security_group_id
 }
 
 resource "aws_db_subnet_group" "rds-subnets" {
