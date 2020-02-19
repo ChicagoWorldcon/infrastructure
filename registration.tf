@@ -65,11 +65,11 @@ module "production-site" {
 
   # instance distinguishers
   instance_prompt_colour = "31"
-  instance_type          = "t2.small"
+  instance_type          = "t2.medium"
 
   # instance access
   ssh_key_id           = var.ssh_key_id
-  iam_instance_profile = module.dev-creds.registration_iam_instance_profile_id
+  iam_instance_profile = module.prod-creds.registration_iam_instance_profile_id
   iam_role_name        = module.prod-creds.registration_iam_role_name
 
   # remote hosts

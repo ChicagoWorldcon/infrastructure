@@ -16,7 +16,7 @@ runcmd:
 
   # set up the 9.6 RPM source
   - rpm -i https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-6-x86_64/pgdg-ami201503-96-9.6-2.noarch.rpm
-  - yum -y install postgresql96 postgresql96-libs
+  - yum -y install postgresql96 postgresql96-libs postgresql-devel
 
   # Install docker-compose
   - curl -L https://github.com/docker/compose/releases/download/1.20.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose

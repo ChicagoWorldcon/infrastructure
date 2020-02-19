@@ -12,7 +12,12 @@ module "prod-creds" {
   codedeploy_bucket   = "aws-codedeploy-us-west-2"
   codepipeline_bucket = "codepipeline-us-west-2-chicago2022"
 
-  common_tags = local.common_tags
+  common_tags = merge(
+    local.common_tags,
+    {
+      Environment = "prod"
+    }
+    )
 }
 
 module "dev-creds" {
@@ -29,7 +34,12 @@ module "dev-creds" {
   codedeploy_bucket   = "aws-codedeploy-us-west-2"
   codepipeline_bucket = "codepipeline-us-west-2-chicago2022"
 
-  common_tags = local.common_tags
+  common_tags = merge(
+    local.common_tags,
+    {
+      Environment = "dev"
+    }
+    )
 }
 
 data "aws_secretsmanager_secret" "db_superuser_password_secret" {

@@ -155,7 +155,7 @@ resource "aws_instance" "web" {
 
   subnet_id                   = var.public_subnet_id
   associate_public_ip_address = true
-  vpc_security_group_ids      = [var.security_group_id]
+  vpc_security_group_ids      = [var.security_group_id, aws_security_group.web_server_sg.id]
 
   key_name = aws_key_pair.reg_system_key.key_name
 

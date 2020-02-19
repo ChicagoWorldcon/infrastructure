@@ -68,6 +68,9 @@ output "api-port" {
 }
 
 output "www-bucket" {
-  value = module.client.s3_bucket_name
+  value = {
+    dev = module.dev-client.s3_bucket_name
+    prod = module.prod-client.s3_bucket_name
+  }
 }
 
