@@ -146,6 +146,10 @@ data "template_file" "shell_prompt" {
 }
 
 resource "aws_instance" "web" {
+  lifecycle {
+    ignore_changes = [user_data, ]
+  }
+
   ami           = data.aws_ami.alinux.id
   instance_type = var.instance_type
 

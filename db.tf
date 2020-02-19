@@ -35,7 +35,11 @@ resource "aws_db_instance" "reg-db" {
   tags = merge(
     local.common_tags,
     map("Name", "DatabaseServer")
-  )
+    )
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_security_group_rule" "db-ingress-dev" {
