@@ -20,7 +20,7 @@ data "aws_ami" "alinux" {
   # Only allow a subset of image IDs here, so that we don't see churn as we update
   filter {
     name   = "image-id"
-    values = ["ami-a9d09ed1"]
+    values = ["ami-a9d09ed1", "ami-0e8c04af2729ff1bb"]
   }
 
 }
