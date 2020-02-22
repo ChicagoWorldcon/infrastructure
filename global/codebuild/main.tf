@@ -9,12 +9,12 @@ variable "cache_bucket" {}
 variable "api_host" {}
 
 output "name" {
-  value = "${aws_codebuild_project.client-build.name}"
+  value = aws_codebuild_project.client-build.name
 }
 
 resource "aws_codebuild_project" "client-build" {
   name          = "${var.project}-${var.name}-build"
-  service_role  = "${var.role_arn}"
+  service_role  = var.role_arn
   badge_enabled = true
   description   = "Build CodeBuild"
 
@@ -34,17 +34,17 @@ resource "aws_codebuild_project" "client-build" {
 
     environment_variable {
       name  = "CLIENT_SRC_DIR"
-      value = "${var.client_src}"
+      value = var.client_src
     }
 
     environment_variable {
       name  = "BUCKET_NAME"
-      value = "${var.bucket_name}"
+      value = var.bucket_name
     }
 
     environment_variable {
       name  = "API_HOST"
-      value = "${var.api_host}"
+      value = var.api_host
     }
 
     environment_variable {
@@ -54,14 +54,14 @@ resource "aws_codebuild_project" "client-build" {
 
     environment_variable {
       name  = "TITLE"
-      value = "${var.site_title}"
+      value = var.site_title
     }
 
   }
 
   source {
     type            = "GITHUB"
-    location        = "${var.source_url}"
+    location        = var.source_url
     git_clone_depth = 1
     buildspec       = "buildspec.yml"
 
@@ -71,7 +71,7 @@ resource "aws_codebuild_project" "client-build" {
   }
 
   tags = {
-    Project     = "${var.project}"
+    Project     = var.project
     Environment = "global"
   }
 }
