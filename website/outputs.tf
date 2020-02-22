@@ -11,7 +11,7 @@ output "id" {
 }
 
 output "public_dns" {
-  value = aws_instance.web.public_dns
+  value = aws_eip.web.public_dns
 }
 
 output "security_group_id" {
