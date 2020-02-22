@@ -59,7 +59,7 @@ resource "aws_security_group_rule" "db-ingress" {
   to_port                  = 5432
   protocol                 = "tcp"
   description              = "Security group allowing access from the reg server"
-  source_security_group_id = module.production-site.security_group_id
+  source_security_group_id = module.prod-site.security_group_id
 }
 
 resource "aws_db_subnet_group" "rds-subnets" {

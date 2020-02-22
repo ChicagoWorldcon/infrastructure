@@ -40,7 +40,7 @@ module "dev-site" {
 
 }
 
-module "production-site" {
+module "prod-site" {
   source = "./website"
 
   project = var.project
@@ -84,6 +84,6 @@ resource "aws_route53_record" "a_record_org" {
   name    = "api.${var.domain_name}"
   type    = "A"
   ttl     = 300
-  records = [module.production-site.public_ip]
+  records = [module.prod-site.public_ip]
 }
 

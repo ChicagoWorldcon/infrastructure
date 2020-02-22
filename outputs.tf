@@ -13,35 +13,35 @@ output "db_instance_id" {
 output "reg_hostname" {
   value = {
     dev  = module.dev-site.public_dns
-    prod = module.production-site.public_dns
+    prod = module.prod-site.public_dns
   }
 }
 
 output "reg_private_ip" {
   value = {
     dev  = module.dev-site.private_ip
-    prod = module.production-site.private_ip
+    prod = module.prod-site.private_ip
   }
 }
 
 output "reg_public_ip" {
   value = {
     dev  = module.dev-site.public_ip
-    prod = module.production-site.public_ip
+    prod = module.prod-site.public_ip
   }
 }
 
 output "reg_public_dns" {
   value = {
     dev  = module.dev-site.public_dns
-    prod = module.production-site.public_dns
+    prod = module.prod-site.public_dns
   }
 }
 
 output "reg_instance_id" {
   value = {
     dev  = module.dev-site.id
-    prod = module.production-site.id
+    prod = module.prod-site.id
   }
 }
 
