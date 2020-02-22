@@ -10,7 +10,7 @@ resource "aws_security_group" "postgresql" {
 resource "aws_db_instance" "reg-db" {
   allocated_storage          = "20"
   engine                     = "postgres"
-  engine_version             = "9.6.6"
+  engine_version             = "9.6.15"
   identifier                 = "chicago-worldcon-prod"
   snapshot_identifier        = ""
   instance_class             = "db.t2.micro"
