@@ -142,6 +142,7 @@ data "template_file" "shell_prompt" {
 
   vars = {
     colour_code = var.instance_prompt_colour
+    stage = var.stage
   }
 }
 
@@ -203,7 +204,7 @@ resource "aws_instance" "web" {
 
   tags = merge(
     local.common_tags,
-    map("Name", "registration")
+    map("Name", "${var.stage} registration")
   )
 
 }
@@ -224,6 +225,12 @@ resource "local_file" "codedeploy_script" {
 resource "aws_eip" "web" {
   instance = aws_instance.web.id
   vpc      = true
+  tags = merge(
+    local.common_tags,
+    map(
+      "Name", "${var.stage} API server"
+      )
+    )
 }
 
 resource "aws_security_group" "web_server_sg" {
@@ -232,7 +239,7 @@ resource "aws_security_group" "web_server_sg" {
   tags = merge(
     local.common_tags,
     map(
-      "Name", "web-server",
+      "Name", "${var.stage} web-server",
       "Description", "Security group for web-server with HTTP ports open within VPC",
     )
   )
@@ -307,7 +314,7 @@ resource "aws_cloudwatch_log_group" "registration_group" {
   tags = merge(
     local.common_tags,
     map(
-      "Name", "registration-logs",
+      "Name", "${var.stage} registration-logs",
       "Description", "Registration API logs",
     )
   )

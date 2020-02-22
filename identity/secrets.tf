@@ -4,7 +4,7 @@ resource "aws_secretsmanager_secret" "db_superuser_password" {
   tags = merge(
     var.common_tags,
     map(
-      "Name", "DB Superuser",
+      "Name", "${var.stage} DB Superuser",
       "ServiceName", "ChicagoAdmin"
     )
   )
@@ -16,7 +16,7 @@ resource "aws_secretsmanager_secret" "db_admin_password" {
   tags = merge(
     var.common_tags,
     map(
-      "Name", "DB Admin",
+      "Name", "${var.stage} DB Admin",
       "ServiceName", "ChicagoAdmin"
     )
   )
@@ -28,7 +28,7 @@ resource "aws_secretsmanager_secret" "db_kansa_password" {
   tags = merge(
     var.common_tags,
     map(
-      "Name", "DB Kansa",
+      "Name", "${var.stage} DB Kansa",
       "ServiceName", "ChicagoRegistration"
     )
   )
@@ -40,7 +40,7 @@ resource "aws_secretsmanager_secret" "db_hugo_password" {
   tags = merge(
     var.common_tags,
     map(
-      "Name", "DB Hugo",
+      "Name", "${var.stage} DB Hugo",
       "ServiceName", "ChicagoRegistration"
     )
   )
@@ -52,7 +52,7 @@ resource "aws_secretsmanager_secret" "db_raami_password" {
   tags = merge(
     var.common_tags,
     map(
-      "Name", "DB Raami",
+      "Name", "${var.stage} DB Raami",
       "ServiceName", "ChicagoRegistration"
     )
   )
@@ -64,7 +64,7 @@ resource "aws_secretsmanager_secret" "stripe_api_key" {
   tags = merge(
     var.common_tags,
     map(
-      "Name", "Stripe API Key",
+      "Name", "${var.stage} Stripe API Key",
       "ServiceName", "ChicagoRegistration"
     )
   )
@@ -76,7 +76,7 @@ resource "aws_secretsmanager_secret" "session_secret" {
   tags = merge(
     var.common_tags,
     map(
-      "Name", "API session secret",
+      "Name", "${var.stage} API session secret",
       "ServiceName", "ChicagoRegistration"
     )
   )
@@ -88,7 +88,7 @@ resource "aws_secretsmanager_secret" "jwt_secret" {
   tags = merge(
     var.common_tags,
     map(
-      "Name", "API JWT secret",
+      "Name", "${var.stage} API JWT secret",
       "ServiceName", "ChicagoRegistration"
     )
   )
@@ -100,7 +100,7 @@ resource "aws_secretsmanager_secret" "sendgrid_api_key" {
   tags = merge(
     var.common_tags,
     map(
-      "Name", "API email system key for sendgrid",
+      "Name", "${var.stage} API email system key for sendgrid",
       "ServiceName", "ChicagoRegistration"
     )
   )
