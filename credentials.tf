@@ -42,43 +42,36 @@ module "dev-creds" {
     )
 }
 
-data "aws_secretsmanager_secret" "db_superuser_password_secret" {
-  arn = module.prod-creds.db_superuser_password_arn
-}
-
 data "aws_secretsmanager_secret_version" "db_superuser_password" {
   secret_id = data.aws_secretsmanager_secret.db_superuser_password_secret.id
 }
 
-data "aws_secretsmanager_secret" "db_admin_password_secret" {
-  arn = module.prod-creds.db_admin_password_arn
+data "aws_secretsmanager_secret" "db_superuser_password_secret" {
+  arn = module.prod-creds.db_superuser_password_arn
 }
 
-data "aws_secretsmanager_secret" "db_kansa_password_secret" {
-  arn = module.prod-creds.db_kansa_password_arn
-}
 
-data "aws_secretsmanager_secret" "db_hugo_password_secret" {
-  arn = module.prod-creds.db_hugo_password_arn
-}
-
-data "aws_secretsmanager_secret" "db_raami_password_secret" {
-  arn = module.prod-creds.db_raami_password_arn
-}
-
-data "aws_secretsmanager_secret" "stripe_api_key_secret" {
-  arn = module.prod-creds.stripe_api_key_arn
-}
-
-data "aws_secretsmanager_secret" "session_secret" {
+data "aws_secretsmanager_secret" "prod_session_secret" {
   arn = module.prod-creds.session_secret_arn
 }
 
-data "aws_secretsmanager_secret" "jwt_secret" {
+data "aws_secretsmanager_secret" "prod_jwt_secret" {
   arn = module.prod-creds.jwt_secret_arn
 }
 
-data "aws_secretsmanager_secret" "sendgrid_api_key_secret" {
+data "aws_secretsmanager_secret" "prod_sendgrid_api_key_secret" {
   arn = module.prod-creds.sendgrid_api_key_arn
+}
+
+data "aws_secretsmanager_secret" "dev_session_secret" {
+  arn = module.dev-creds.session_secret_arn
+}
+
+data "aws_secretsmanager_secret" "dev_jwt_secret" {
+  arn = module.dev-creds.jwt_secret_arn
+}
+
+data "aws_secretsmanager_secret" "dev_sendgrid_api_key_secret" {
+  arn = module.dev-creds.sendgrid_api_key_arn
 }
 

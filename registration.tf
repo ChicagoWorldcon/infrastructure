@@ -20,9 +20,9 @@ module "dev-site" {
 
   # secrets
   db_admin_password = data.aws_secretsmanager_secret_version.db_superuser_password.secret_string
-  sendgrid_api_key  = data.aws_secretsmanager_secret.sendgrid_api_key_secret.name
-  jwt_secret        = data.aws_secretsmanager_secret.jwt_secret.name
-  session_secret    = data.aws_secretsmanager_secret.session_secret.name
+  sendgrid_api_key  = data.aws_secretsmanager_secret.dev_sendgrid_api_key_secret.name
+  jwt_secret        = data.aws_secretsmanager_secret.dev_jwt_secret.name
+  session_secret    = data.aws_secretsmanager_secret.dev_session_secret.name
 
   # instance distinguishers
   instance_prompt_colour = "34"
@@ -59,9 +59,9 @@ module "prod-site" {
 
   # secrets
   db_admin_password = data.aws_secretsmanager_secret_version.db_superuser_password.secret_string
-  sendgrid_api_key  = data.aws_secretsmanager_secret.sendgrid_api_key_secret.name
-  jwt_secret        = data.aws_secretsmanager_secret.jwt_secret.name
-  session_secret    = data.aws_secretsmanager_secret.session_secret.name
+  sendgrid_api_key  = data.aws_secretsmanager_secret.prod_sendgrid_api_key_secret.name
+  jwt_secret        = data.aws_secretsmanager_secret.prod_jwt_secret.name
+  session_secret    = data.aws_secretsmanager_secret.prod_session_secret.name
 
   # instance distinguishers
   instance_prompt_colour = "31"
