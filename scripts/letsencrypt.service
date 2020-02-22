@@ -4,6 +4,6 @@ Requires=docker.service
 After=docker.service
 
 [Service]
-ExecStartPre=/bin/bash -c 'if [ ! "$(docker ps -q -f name=letsencrypt_updater)" ]; then if [ "$(docker ps -aq -f status=exited -f name=letsencrypt_updater)" ]; then docker rm letsencrypt_updater; fi; docker create -v /opt/letsencrypt/etc:/etc/letsencrypt -v /opt/letsencrypt/lib:/var/lib/letsencrypt --name letsencrypt_updater certbot/dns-route53 certonly -n --agree-tos ${test_cert} --email "${admin_email}" --dns-route53 -d "*.${domain_name}"; fi'
+ExecStartPre=/bin/bash -c 'if [ ! "$(docker ps -q -f name=letsencrypt_updater)" ]; then if [ "$(docker ps -aq -f status=exited -f name=letsencrypt_updater)" ]; then docker rm letsencrypt_updater; fi; docker create -v /opt/letsencrypt/etc:/etc/letsencrypt -v /opt/letsencrypt/lib:/var/lib/letsencrypt --name letsencrypt_updater certbot/dns-route53 certonly -n --agree-tos ${test_cert ? "--test-cert" : ""} --email "${admin_email}" --dns-route53 -d "*.${domain_name}"; fi'
 ExecStart=/usr/bin/docker start letsencrypt_updater
 

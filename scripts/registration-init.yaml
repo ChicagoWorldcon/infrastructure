@@ -11,18 +11,19 @@ packages:
 
 runcmd:
   - yum update
+  - yum groups mark convert
   # Juuust in case, try re-install all of those packages above
   - yum -y install docker python3 python3-devel jq ruby wget
 
-  # set up the 9.6 RPM source
-  - rpm -i https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-6-x86_64/pgdg-ami201503-96-9.6-2.noarch.rpm
-  - yum -y install postgresql96 postgresql96-libs postgresql-devel
+  # install postgres 9.6
+  - amazon-linux-extras install postgresql9.6
+  - yum -y install postgresql-devel
 
   # Install docker-compose
   - curl -L https://github.com/docker/compose/releases/download/1.20.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
   - chmod +x /usr/local/bin/docker-compose
   - usermod -a -G docker ec2-user
-  - "yum -y groupinstall \"Development Tools\""
+  - yum -y groupinstall "Development Tools"
   - pip3 install pgcli psycopg2-binary keyrings.alt boto3 'awscli>=1.15'
   
   # Pull the registration API
