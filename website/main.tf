@@ -6,7 +6,7 @@ locals {
 }
 
 data "template_file" "script" {
-  template = file("scripts/registration-init.yaml")
+  template = file("${path.module}/scripts/registration-init.yaml")
 
   vars = {
     project           = var.project
@@ -19,7 +19,7 @@ data "template_file" "script" {
 
     # base64-encoded file blobs for system files
     letsencrypt_service  = base64encode("${data.template_file.letsencrypt_service.rendered}")
-    letsencrypt_timer    = base64encode(file("scripts/letsencrypt.timer"))
+    letsencrypt_timer    = base64encode(file("${path.module}/scripts/letsencrypt.timer"))
     registration_service = base64encode("${data.template_file.registration_service.rendered}")
     service_env_vars     = base64encode("${data.template_file.service_env_vars_script.rendered}")
     service_env_file     = base64encode("${data.template_file.service_env_vars_file.rendered}")
@@ -30,7 +30,7 @@ data "template_file" "script" {
 }
 
 data "template_file" "letsencrypt_service" {
-  template = file("scripts/letsencrypt.service")
+  template = file("${path.module}/scripts/letsencrypt.service")
 
   vars = {
     domain_name = var.domain_name
@@ -40,7 +40,7 @@ data "template_file" "letsencrypt_service" {
 }
 
 data "template_file" "registration_service" {
-  template = file("scripts/registration.service")
+  template = file("${path.module}/scripts/registration.service")
 
   vars = {
     db_hostname                  = var.db_hostname
@@ -52,7 +52,7 @@ data "template_file" "registration_service" {
 }
 
 data "template_file" "service_env_vars_script" {
-  template = file("scripts/service-env-vars.sh")
+  template = file("${path.module}/scripts/service-env-vars.sh")
 
   vars = {
     export                       = "export "
@@ -75,7 +75,7 @@ data "template_file" "service_env_vars_script" {
 }
 
 data "template_file" "service_env_vars_file" {
-  template = file("scripts/service-env-vars.sh")
+  template = file("${path.module}/scripts/service-env-vars.sh")
 
   vars = {
     export                       = ""
@@ -98,7 +98,7 @@ data "template_file" "service_env_vars_file" {
 }
 
 data "template_file" "db_env_vars_script" {
-  template = file("scripts/db-env-vars.sh")
+  template = file("${path.module}/scripts/db-env-vars.sh")
 
   vars = {
     project           = var.project
@@ -130,7 +130,7 @@ data "template_file" "db_init" {
 }
 
 data "template_file" "docker_daemon_json" {
-  template = file("scripts/daemon.json")
+  template = file("${path.module}/scripts/daemon.json")
 
   vars = {
     log_group = aws_cloudwatch_log_group.registration_group.name
@@ -138,7 +138,7 @@ data "template_file" "docker_daemon_json" {
 }
 
 data "template_file" "shell_prompt" {
-  template = file("scripts/set-instance-prompt.sh")
+  template = file("${path.module}/scripts/set-instance-prompt.sh")
 
   vars = {
     colour_code = var.instance_prompt_colour
@@ -210,7 +210,7 @@ resource "aws_instance" "web" {
 }
 
 data "template_file" "codedeploy_script" {
-  template = file("scripts/install-codedeploy.sh")
+  template = file("${path.module}/scripts/install-codedeploy.sh")
 
   vars = {
     codedeploy_agent_s3_bucket = "aws-codedeploy-us-west-2.s3.amazonaws.com"
