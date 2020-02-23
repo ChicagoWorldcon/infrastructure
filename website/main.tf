@@ -16,6 +16,8 @@ data "template_file" "script" {
     db_name           = var.db_name
     stage             = var.stage
     aws_region        = var.region
+    app_name          = var.app_name
+    deployment_group  = var.deployment_group_name
 
     # base64-encoded file blobs for system files
     letsencrypt_service  = base64encode("${data.template_file.letsencrypt_service.rendered}")

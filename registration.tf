@@ -17,6 +17,8 @@ module "dev-site" {
   db_admin_username = var.db_admin_username
   db_name           = var.dev_db_name
   use_test_certs    = true
+  app_name           = "ChicagoRegistration"
+  deployment_group_name = module.global.dev_deployment_group
 
   # secrets
   db_admin_password = data.aws_secretsmanager_secret_version.db_superuser_password.secret_string
@@ -56,6 +58,8 @@ module "prod-site" {
   db_username       = var.db_username
   db_admin_username = var.db_admin_username
   db_name           = var.db_name
+  app_name          = "ChicagoRegistration"
+  deployment_group_name = module.global.prod_deployment_group
 
   # secrets
   db_admin_password = data.aws_secretsmanager_secret_version.db_superuser_password.secret_string

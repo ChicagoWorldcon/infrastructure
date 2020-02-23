@@ -95,3 +95,10 @@ variable "admin_www_domain_name" {
   type = string
 }
 
+variable "app_name" {
+  type = string
+}
+
+variable "deployment_group_name" {
+  type = string
+}

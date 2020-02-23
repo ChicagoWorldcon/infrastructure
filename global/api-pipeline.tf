@@ -1,24 +1,4 @@
 # Input variables
-variable "api_pipeline_name" {
-  type    = string
-  default = "chicago-registration-api"
-}
-
-variable "api_github_repo" {
-  default = "registration-api"
-}
-
-variable "app_name" {
-  default = "ChicagoRegistration"
-}
-
-variable "deployment_groups" {
-  default = {
-    dev  = "ChicagoRegistration-Dev"
-    prod = "ChicagoRegistration-Prod"
-  }
-}
-
 data "aws_secretsmanager_secret" "github_token" {
   name = "Chicago2022/it/github_token"
 }
@@ -73,8 +53,8 @@ resource "aws_codepipeline" "codepipeline" {
       input_artifacts = [local.reg_api_code]
 
       configuration = {
-        ApplicationName     = var.app_name
-        DeploymentGroupName = var.deployment_groups["dev"]
+        ApplicationName     = var.api_deployment_app_name
+        DeploymentGroupName = var.dev_deployment_group
       }
     }
 
@@ -104,8 +84,8 @@ resource "aws_codepipeline" "codepipeline" {
       input_artifacts = [local.reg_api_code]
 
       configuration = {
-        ApplicationName     = var.app_name
-        DeploymentGroupName = var.deployment_groups["prod"]
+        ApplicationName     = var.api_deployment_app_name
+        DeploymentGroupName = var.prod_deployment_group
       }
     }
   }
