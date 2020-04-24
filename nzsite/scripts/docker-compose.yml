@@ -1,0 +1,52 @@
+version: '3.6'
+
+services:
+  ingress:
+    image: "caddy:2.0.0-rc.3-alpine"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /opt/chicago/etc/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data:rw
+      - caddy_config:/config:rw
+    environment:
+      # https://github.com/abiosoft/caddy-docker#lets-encrypt-subscriber-agreement
+      ACME_AGREE: "true"
+    restart: always
+
+  redis:
+    image: redis:alpine
+    restart: always
+    volumes:
+      - redis-data:/data
+
+  web:
+    env_file:
+      - /opt/chicago/etc/service.env
+      - /opt/chicago/etc/www.env
+      - /opt/chicago/etc/creds.env
+      - /opt/chicago/etc/overrides.env
+    image: registry.gitlab.com/worldcon/2020-wellington:latest
+    restart: always
+    volumes:
+      - type: tmpfs
+        target: /app/tmp
+
+  worker:
+    entrypoint: "script/docker_sidekiq_entry.sh"
+    image: registry.gitlab.com/worldcon/2020-wellington:latest
+    env_file:
+      - /opt/chicago/etc/service.env
+      - /opt/chicago/etc/sidekiq.env
+      - /opt/chicago/etc/creds.env
+      - /opt/chicago/etc/overrides.env
+    restart: always
+    volumes:
+      - type: tmpfs
+        target: /app/tmp
+
+volumes:
+  caddy_data:
+  caddy_config:
+  redis-data:

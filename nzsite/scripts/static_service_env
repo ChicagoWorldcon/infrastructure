@@ -1,0 +1,49 @@
+# Used for URL generation and using compiled assets
+RAILS_ENV=production
+
+# DB_NAME will be used in rake tasks to stand up your database, so use whatever you prefer here
+# Settings taken from https://console.aws.amazon.com/rds/home
+DB_HOST=${ db_hostname }
+DB_NAME=${ db_name }
+POSTGRES_USER=${ db_site_username }
+# Provided by actual service env
+# POSTGRES_PASSWORD=shuquairae2CcopypastaohmiFe1shie7eoxee2
+
+# Sidekiq settings, protected behind http basic auth
+# If you don't include sidekiq username/password, this will disable sidekiq admin panel
+SIDEKIQ_REDIS_URL=redis://redis:6379/0
+SIDEKIQ_USER=sidekiq
+
+# Provided by actual service env
+# SIDEKIQ_PASSWORD=5b197341fc62d9c9bbcopypastabc7a6cbcf07329c9fe52fa55cab98e
+
+# Suggested you use SendGrid here, use an API key as your password
+# Generate them here https://app.sendgrid.com/settings/api_keys
+SMTP_SERVER=smtp.sendgrid.net
+SMTP_PORT=465
+SMTP_USER_NAME=apikey
+# Provided by actual service env
+# SMTP_PASSWORD=SG.woithuz8Hiefah1aevaeph4tha8yi1ecopypastaitotouliaGoo0eey7te9hiuF9h
+
+# Stripe keys for payment
+# Generate them here https://dashboard.stripe.com/account/apikeys
+# STRIPE_PUBLIC_KEY=pk_test_zq022DcopypastatXAVMaOJT
+
+# Provided by actual service env
+# STRIPE_PRIVATE_KEY=sk_test_35SiP3qovcopypastaLguIyY
+# https://stripe.com/docs/currencies
+STRIPE_CURRENCY=USD
+
+# Con specific mailer configuration
+MAINTAINER_EMAIL=it@${domain_name}
+MEMBER_SERVICES_EMAIL=info@${domain_name}
+
+# Reporting, if you don't set these they don't send
+NOMINATION_REPORTS_EMAIL=hugo-admin@${domain_name}
+MEMBERSHIP_REPORTS_EMAIL=registration@${domain_name}
+
+# Instalment amounts for users to choose from
+# If not specified, defaults to $75 and $50
+INSTALMENT_MIN_PAYMENT_CENTS=7500
+INSTALMENT_PAYMENT_STEP_CENTS=5000
+

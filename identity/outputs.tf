@@ -6,12 +6,12 @@ output "registration_iam_role_name" {
   value = "${aws_iam_role.registration.name}"
 }
 
-output "db_superuser_password_arn" {
-  value = "${aws_secretsmanager_secret.db_superuser_password.arn}"
+output "db_superuser_password" {
+  value = "${aws_secretsmanager_secret.db_superuser_password}"
 }
 
-output "db_admin_password_arn" {
-  value = "${aws_secretsmanager_secret.db_admin_password.arn}"
+output "db_site_password" {
+  value = "${aws_secretsmanager_secret.db_site_password}"
 }
 
 output "db_kansa_password_arn" {
@@ -40,4 +40,8 @@ output "jwt_secret_arn" {
 
 output "sendgrid_api_key_arn" {
   value = "${aws_secretsmanager_secret.sendgrid_api_key.arn}"
+}
+
+output "sidekiq_password_arn" {
+  value = "${aws_secretsmanager_secret.sidekiq_password.arn}"
 }

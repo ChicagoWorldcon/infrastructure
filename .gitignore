@@ -4,6 +4,8 @@ terraform/
 .terraform/
 *.tfstate.d/
 *.tfstate
+*.tfstate.*
 /db.auto.tfvars
 /ssh.auto.tfvars
 plan
+/data/*.json

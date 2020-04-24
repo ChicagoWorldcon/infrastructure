@@ -3,18 +3,6 @@ provider "aws" {
   region  = "us-west-2"
 }
 
-data "terraform_remote_state" "global" {
-  backend   = "s3"
-  workspace = "default"
-
-  config = {
-    bucket = "terraform.offby1.net"
-    key    = "chicago/global.tfstate"
-    region = "us-west-2"
-
-  }
-}
-
 variable "ssh_key_id" {
   type        = string
   description = "Provide this via auto vars"
@@ -36,7 +24,8 @@ variable "project" {
   default = "Chicago2022"
 }
 
-variable "db_username" {
+# The RDS superuser
+variable "db_superuser_username" {
   default = "chicagoadmin"
 }
 
@@ -45,12 +34,18 @@ variable "db_name" {
 }
 
 variable "dev_db_name" {
-  default = "api-dev"
+  default = "api_dev"
 }
 
 variable "db_password" {
   type = string
 }
 
-variable "db_admin_username" { default = "admin" }
+variable "dev_db_site_username" {
+  default = "devsite"
+}
+
+variable "prod_db_site_username" {
+  default = "admin"
+}
 

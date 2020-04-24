@@ -8,16 +8,17 @@ locals {
 data "template_file" "script" {
   template = file("${path.module}/scripts/registration-init.yaml")
 
-  vars = {
-    project           = var.project
-    db_hostname       = var.db_hostname
-    db_username       = var.db_username
-    db_admin_username = var.db_admin_username
-    db_name           = var.db_name
-    stage             = var.stage
-    aws_region        = var.region
-    app_name          = var.app_name
-    deployment_group  = var.deployment_group_name
+  vars                    = {
+    project               = var.project
+    db_hostname           = var.db_hostname
+    db_superuser_username = var.db_superuser_username
+    db_site_username      = var.db_site_username
+    db_name               = var.db_name
+    db_superuser_secret   = var.db_superuser_secret
+    stage                 = var.stage
+    aws_region            = var.region
+    app_name              = var.app_name
+    deployment_group      = var.deployment_group_name
 
     # base64-encoded file blobs for system files
     letsencrypt_service  = base64encode("${data.template_file.letsencrypt_service.rendered}")
@@ -63,12 +64,13 @@ data "template_file" "service_env_vars_script" {
     registration_www_domain_name = var.registration_www_domain_name
     admin_www_domain_name        = var.admin_www_domain_name
 
-    db_hostname       = var.db_hostname
-    db_username       = var.db_username
-    db_admin_username = var.db_admin_username
-    db_name           = var.db_name
-    stage             = var.stage
-    aws_region        = var.region
+    db_hostname           = var.db_hostname
+    db_superuser_username = var.db_superuser_username
+    db_site_username      = var.db_site_username
+    db_superuser_secret   = var.db_superuser_secret
+    db_name               = var.db_name
+    stage                 = var.stage
+    aws_region            = var.region
 
     session_secret   = var.session_secret
     jwt_secret       = var.jwt_secret
@@ -86,12 +88,13 @@ data "template_file" "service_env_vars_file" {
     registration_www_domain_name = var.registration_www_domain_name
     admin_www_domain_name        = var.admin_www_domain_name
 
-    db_hostname       = var.db_hostname
-    db_username       = var.db_username
-    db_admin_username = var.db_admin_username
-    db_name           = var.db_name
-    stage             = var.stage
-    aws_region        = var.region
+    db_hostname           = var.db_hostname
+    db_superuser_username = var.db_superuser_username
+    db_site_username      = var.db_site_username
+    db_superuser_secret   = var.db_superuser_secret
+    db_name               = var.db_name
+    stage                 = var.stage
+    aws_region            = var.region
 
     session_secret   = var.session_secret
     jwt_secret       = var.jwt_secret
@@ -102,13 +105,14 @@ data "template_file" "service_env_vars_file" {
 data "template_file" "db_env_vars_script" {
   template = file("${path.module}/scripts/db-env-vars.sh")
 
-  vars = {
-    project           = var.project
-    db_hostname       = var.db_hostname
-    db_username       = var.db_username
-    db_admin_username = var.db_admin_username
-    db_name           = var.db_name
-    stage             = var.stage
+  vars                    = {
+    project               = var.project
+    db_hostname           = var.db_hostname
+    db_superuser_username = var.db_superuser_username
+    db_site_username      = var.db_site_username
+    db_site_secret        = var.db_site_secret
+    db_name               = var.db_name
+    stage                 = var.stage
   }
 }
 
@@ -119,15 +123,6 @@ data "template_cloudinit_config" "config" {
   part {
     content_type = "text/cloud-config"
     content      = data.template_file.script.rendered
-  }
-}
-
-data "template_file" "db_init" {
-  template = file("db_init/00-setup-rds.sql")
-
-  vars = {
-    db_admin_password = var.db_admin_password
-    db_name           = var.db_name
   }
 }
 
@@ -176,7 +171,7 @@ resource "aws_instance" "web" {
   provisioner "remote-exec" {
     inline = [
       "set -x",
-      "sudo mkdir -p /postgres/init.d/${var.db_username}",
+      "sudo mkdir -p /postgres/init.d/${var.db_superuser_username}",
       "sudo mkdir -p /postgres/init.d/admin",
       "sudo mkdir -p /opt/letsencrypt/etc /opt/letsencrypt/lib",
       "sudo chown -R ec2-user /postgres/init.d /opt/letsencrypt",
@@ -185,18 +180,6 @@ resource "aws_instance" "web" {
       "sudo systemctl enable letsencrypt.timer",
       "sudo systemctl enable registration.service",
     ]
-
-  }
-
-  provisioner "file" {
-    content     = data.template_file.db_init.rendered
-    destination = "/postgres/init.d/${var.db_username}/00-setup-rds.sql"
-
-  }
-
-  provisioner "file" {
-    source      = "../registration-api/postgres/init/"
-    destination = "/postgres/init.d/admin"
 
   }
 

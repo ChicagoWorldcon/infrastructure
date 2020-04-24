@@ -1,0 +1,23 @@
+[Unit]
+Description=Registration API service
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+
+WorkingDirectory=/opt/chicago/app
+
+User=ec2-user
+
+# Remove old containers, images and volumes
+ExecStartPre=/opt/chicago/bin/rotate-creds.sh
+
+# Compose up
+ExecStart=/usr/local/bin/docker-compose up --build
+
+# Compose down, remove containers and volumes
+ExecStop=/usr/local/bin/docker-compose down -v
+
+[Install]
+WantedBy=multi-user.target

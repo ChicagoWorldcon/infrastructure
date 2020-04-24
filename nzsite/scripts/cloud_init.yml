@@ -14,6 +14,7 @@ runcmd:
   - yum groups mark convert
   # Juuust in case, try re-install all of those packages above
   - yum -y install docker python3 python3-devel jq ruby wget
+  - usermod -a -G docker ec2-user
 
   # install postgres 9.6
   - amazon-linux-extras install postgresql9.6
@@ -22,31 +23,35 @@ runcmd:
   # Install docker-compose
   - curl -L https://github.com/docker/compose/releases/download/1.20.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
   - chmod +x /usr/local/bin/docker-compose
-  - usermod -a -G docker ec2-user
   - yum -y groupinstall "Development Tools"
   - pip3 install pgcli psycopg2-binary keyrings.alt boto3 'awscli>=1.15'
+
+  # prepare our tools
+  - mkdir -p /postgres/init.d/${db_superuser_username}
+  - mkdir -p /postgres/init.d/site
+  - mkdir -p /opt/chicago/app /opt/chicago/init
+
+  # install codedeploy
+  - curl "${codedeploy_agent_s3_bucket}/latest/install" -o /opt/chicago/init/install-codedeploy
+  - chmod +x /opt/chicago/init/install-codedeploy
+  - /opt/chicago/init/install-codedeploy auto
   
+  - chown -R ec2-user /postgres/init.d /opt/chicago
+  - chmod -R u+Xrw,g-rwx,o-rwx /opt/chicago
+
   # Bring up docker last
   - systemctl enable docker
   - systemctl start docker
-  
-  # ensure we have certificates
-  - systemctl start letsencrypt
-  
+
   # bring up the reg API
   - systemctl enable registration
-  - aws deploy create-deployment --application-name=${app_name} --region=${aws_region} --deployment-group-name=${deployment_group} --update-outdated-instances-only
+  # - aws deploy create-deployment --application-name=${app_name} --region=${aws_region} --deployment-group-name=${deployment_group} --update-outdated-instances-only
 
 
 write_files:
   - encoding: b64
-    content: "${letsencrypt_service}"
-    path: /etc/systemd/system/letsencrypt.service
-    permissions: '0644'
-
-  - encoding: b64
-    content: "${letsencrypt_timer}"
-    path: /etc/systemd/system/letsencrypt.timer
+    content: "${caddyfile}"
+    path: /opt/chicago/etc/Caddyfile
     permissions: '0644'
 
   - encoding: b64
@@ -60,18 +65,49 @@ write_files:
     permissions: 0644
 
   - encoding: b64
-    content: "${service_env_vars}"
-    path: /etc/chicago/service-env.sh
+    content: "${rotate_creds}"
+    path: /opt/chicago/bin/rotate-creds.sh
+    permissions: '0755'
+
+  - encoding: b64
+    content: "${docker_compose}"
+    path: /opt/chicago/app/docker-compose.yml
     permissions: '0644'
 
   - encoding: b64
     content: "${service_env_file}"
-    path: /etc/chicago/service-env-file
+    path: /opt/chicago/etc/service.env
+    permissions: '0644'
+
+  - encoding: b64
+    content: "${www_env_file}"
+    path: /opt/chicago/etc/www.env
+    permissions: '0644'
+
+  - encoding: b64
+    content: "${sidekiq_env_file}"
+    path: /opt/chicago/etc/sidekiq.env
+    permissions: '0644'
+
+  - content: |
+      # Times when the Hugo Nominations and Voting pages will become active for members
+      HUGO_NOMINATIONS_OPEN_AT=2021-12-31T23:59:00-08:00
+      HUGO_VOTING_OPEN_AT=2022-03-13T11:59:00-08:00
+      HUGO_CLOSED_AT=2022-08-02T12:00:00+13:00
+
+      # Instalment amounts for users to choose from
+      # If not specified, defaults to $75 and $50
+      INSTALMENT_MIN_PAYMENT_CENTS=7500
+      INSTALMENT_PAYMENT_STEP_CENTS=5000
+
+      # add post-install env vars here needed to launch. Above here are bugs, but we need them at the moment
+  
+    path: /opt/chicago/etc/overrides.env
     permissions: '0644'
 
   - encoding: b64
     content: "${db_env_vars}"
-    path: /etc/chicago/db-env.sh
+    path: /opt/chicago/etc/db-env.sh
     permissions: '0644'
 
   - content: |
@@ -90,9 +126,20 @@ write_files:
 
   - content: |
         #!/bin/bash
-        . /etc/chicago/db-env.sh
+        . /opt/chicago/etc/db-env.sh
         exec psql -h ${db_hostname} -U ${db_site_username} ${db_name} "$@"
     path: /usr/local/bin/psql.site
+    permissions: '0755'
+
+  - content: |
+      #!/bin/bash
+      docker run --rm -it \
+          --env-file=/opt/chicago/etc/creds.env \
+          --env-file=/opt/chicago/etc/www.env \
+          --env-file=/opt/chicago/etc/service.env \
+          --env-file=/opt/chicago/etc/overrides.env \
+          registry.gitlab.com/worldcon/2020-wellington:latest /bin/sh
+    path: /opt/chicago/bin/rails.admin
     permissions: '0755'
 
   - content: |
@@ -112,8 +159,6 @@ write_files:
     permissions: '0644'
 
   - content: |
-        export PATH=/usr/pgsql-9.6/bin:$PATH
-    path: /etc/profile.d/psql-9.6.sh
+        export PATH=/opt/chicago/bin:/usr/pgsql-9.6/bin:$PATH
+    path: /etc/profile.d/chicago-paths.sh
     permissions: '0644'
-
-output : { all : '| tee -a /var/log/cloud-init-output.log' }

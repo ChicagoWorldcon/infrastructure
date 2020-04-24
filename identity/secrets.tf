@@ -1,5 +1,5 @@
 resource "aws_secretsmanager_secret" "db_superuser_password" {
-  name = "${var.project}/db/${var.db_name}/${var.db_username}/${var.stage}"
+  name = "${var.project}/db/${var.db_name}/${var.db_superuser_username}/${var.stage}"
 
   tags = merge(
     var.common_tags,
@@ -10,8 +10,8 @@ resource "aws_secretsmanager_secret" "db_superuser_password" {
   )
 }
 
-resource "aws_secretsmanager_secret" "db_admin_password" {
-  name = "${var.project}/db/${var.db_name}/${var.db_admin_username}/${var.stage}"
+resource "aws_secretsmanager_secret" "db_site_password" {
+  name = "${var.project}/db/${var.db_name}/${var.db_site_username}/${var.stage}"
 
   tags = merge(
     var.common_tags,
@@ -66,8 +66,8 @@ resource "aws_secretsmanager_secret" "stripe_api_key" {
     map(
       "Name", "${var.stage} Stripe API Key",
       "ServiceName", "ChicagoRegistration"
+      )
     )
-  )
 }
 
 resource "aws_secretsmanager_secret" "session_secret" {
@@ -104,4 +104,16 @@ resource "aws_secretsmanager_secret" "sendgrid_api_key" {
       "ServiceName", "ChicagoRegistration"
     )
   )
+}
+
+resource "aws_secretsmanager_secret" "sidekiq_password" {
+  name = "${var.project}/sidekiq_password/${var.stage}"
+
+  tags = merge(
+    var.common_tags,
+    map(
+      "Name", "${var.stage} Password for queue admin",
+      "ServiceName", "ChicagoRegistration"
+      )
+    )
 }

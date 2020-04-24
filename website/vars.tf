@@ -26,11 +26,19 @@ variable "domain_name" {
   type = string
 }
 
-variable "db_username" {
+variable "db_superuser_username" {
   type = string
 }
 
-variable "db_admin_username" {
+variable "db_superuser_secret" {
+  type = string
+}
+
+variable "db_site_username" {
+  type = string
+}
+
+variable "db_site_secret" {
   type = string
 }
 
@@ -39,10 +47,6 @@ variable "db_name" {
 }
 
 variable "db_hostname" {
-  type = string
-}
-
-variable "db_admin_password" {
   type = string
 }
 

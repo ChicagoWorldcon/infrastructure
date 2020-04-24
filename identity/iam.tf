@@ -79,3 +79,23 @@ resource "aws_iam_role_policy" "registration" {
 EOF
 }
 
+resource "aws_iam_role_policy" "deployment" {
+  name = "${var.project}-api-deployment-policy"
+  role = aws_iam_role.registration.name
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "codedeploy:*"
+            ],
+            "Resource": [
+                "arn:aws:codedeploy:us-west-2:984616268605:*"
+            ]
+        }
+    ]
+}
+EOF
+}

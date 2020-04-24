@@ -46,7 +46,7 @@ output "reg_instance_id" {
 }
 
 output "global_ns" {
-  value = data.terraform_remote_state.global.outputs.name_servers
+  value = module.global.name_servers
 }
 
 output "site" {
@@ -58,7 +58,6 @@ output "site" {
 
 output "api-address" {
   value = {
-    dev  = "${var.dev_api_prefix}.${var.domain_name}"
     prod = "${var.prod_api_prefix}.${var.domain_name}"
   }
 }
@@ -69,8 +68,31 @@ output "api-port" {
 
 output "www-bucket" {
   value = {
-    dev = module.dev-client.s3_bucket_name
     prod = module.prod-client.s3_bucket_name
   }
 }
 
+output "certificate_arn" {
+  value = module.global.certificate_arn
+}
+
+output "rds_superuser" {
+  value = {
+    username = var.db_superuser_username
+    dev_secret_name = module.dev-creds.db_superuser_password.name
+    prod_secret_name = module.prod-creds.db_superuser_password.name
+  }
+}
+
+output "rds_site_user" {
+  value = {
+    dev = {
+      username = var.dev_db_site_username
+      secret_name = module.dev-creds.db_site_password.name
+    }
+    prod = {
+      username = var.prod_db_site_username
+      secret_name = module.prod-creds.db_site_password.name
+    }
+  }
+}
