@@ -15,20 +15,20 @@ data "template_file" "script" {
     codedeploy_agent_s3_bucket = "aws-codedeploy-us-west-2.s3.amazonaws.com"
 
     # shell tools for the service
-    rotate_creds               = base64encode("${data.template_file.rotate_creds.rendered}")
-    db_env_vars                = base64encode("${data.template_file.db_env_vars_script.rendered}")
-    prompt_file                = base64encode("${data.template_file.shell_prompt.rendered}")
+    rotate_creds = base64encode("${data.template_file.rotate_creds.rendered}")
+    db_env_vars  = base64encode("${data.template_file.db_env_vars_script.rendered}")
+    prompt_file  = base64encode("${data.template_file.shell_prompt.rendered}")
 
     # service initializationa and config
-    caddyfile                  = base64encode("${data.template_file.caddyfile.rendered}")
-    registration_service       = base64encode("${data.template_file.registration_service.rendered}")
-    docker_daemon_json         = base64encode("${data.template_file.docker_daemon_json.rendered}")
-    docker_compose             = base64encode(file("${path.module}/scripts/docker-compose.yml"))
+    caddyfile            = base64encode("${data.template_file.caddyfile.rendered}")
+    registration_service = base64encode("${data.template_file.registration_service.rendered}")
+    docker_daemon_json   = base64encode("${data.template_file.docker_daemon_json.rendered}")
+    docker_compose       = base64encode(file("${path.module}/scripts/docker-compose.yml"))
 
     # env files for services
-    www_env_file               = base64encode("${data.template_file.www_env_vars_file.rendered}")
-    sidekiq_env_file           = base64encode("${data.template_file.sidekiq_env_vars_file.rendered}")
-    service_env_file           = base64encode("${data.template_file.service_env_vars_file.rendered}")
+    www_env_file     = base64encode("${data.template_file.www_env_vars_file.rendered}")
+    sidekiq_env_file = base64encode("${data.template_file.sidekiq_env_vars_file.rendered}")
+    service_env_file = base64encode("${data.template_file.service_env_vars_file.rendered}")
   }
 }
 
@@ -36,19 +36,19 @@ data "template_file" "rotate_creds" {
   template = file("${path.module}/scripts/rotate-creds.sh")
 
   vars = {
-    devise_secret    = var.session_secret
-    jwt_secret       = var.jwt_secret
-    stripe_secret    = var.stripe_secret
-    sendgrid_secret  = var.sendgrid_secret
-    postgres_secret  = var.db_site_secret
-    sidekiq_secret   = var.sidekiq_secret
+    devise_secret   = var.session_secret
+    jwt_secret      = var.jwt_secret
+    stripe_secret   = var.stripe_secret
+    sendgrid_secret = var.sendgrid_secret
+    postgres_secret = var.db_site_secret
+    sidekiq_secret  = var.sidekiq_secret
   }
 }
 
 data "template_file" "db_env_vars_script" {
   template = file("${path.module}/scripts/db-env-vars.sh")
 
-  vars                    = {
+  vars = {
     project               = var.project
     db_hostname           = var.db_hostname
     db_superuser_username = var.db_superuser_username
@@ -64,7 +64,7 @@ data "template_file" "shell_prompt" {
 
   vars = {
     colour_code = var.instance_prompt_colour
-    stage = var.stage
+    stage       = var.stage
   }
 }
 
@@ -101,14 +101,14 @@ data "template_file" "docker_daemon_json" {
 data "template_file" "www_env_vars_file" {
   template = file("${path.module}/scripts/hostname.env")
   vars = {
-    fqdn             = var.www_domain_name
+    fqdn = var.www_domain_name
   }
 }
 
 data "template_file" "sidekiq_env_vars_file" {
   template = file("${path.module}/scripts/hostname.env")
   vars = {
-    fqdn             = var.sidekiq_domain_name
+    fqdn = var.sidekiq_domain_name
   }
 }
 
@@ -116,7 +116,7 @@ data "template_file" "service_env_vars_file" {
   template = file("${path.module}/scripts/static_service_env")
 
   vars = {
-    domain_name      = var.domain_name
+    domain_name = var.domain_name
 
     db_hostname      = var.db_hostname
     db_site_username = var.db_site_username

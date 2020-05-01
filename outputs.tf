@@ -78,8 +78,8 @@ output "certificate_arn" {
 
 output "rds_superuser" {
   value = {
-    username = var.db_superuser_username
-    dev_secret_name = module.dev-creds.db_superuser_password.name
+    username         = var.db_superuser_username
+    dev_secret_name  = module.dev-creds.db_superuser_password.name
     prod_secret_name = module.prod-creds.db_superuser_password.name
   }
 }
@@ -87,11 +87,11 @@ output "rds_superuser" {
 output "rds_site_user" {
   value = {
     dev = {
-      username = var.dev_db_site_username
+      username    = var.dev_db_site_username
       secret_name = module.dev-creds.db_site_password.name
     }
     prod = {
-      username = var.prod_db_site_username
+      username    = var.prod_db_site_username
       secret_name = module.prod-creds.db_site_password.name
     }
   }

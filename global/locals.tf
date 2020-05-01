@@ -1,8 +1,8 @@
 locals {
   common_tags = {
-    Project     = "${var.project}"
+    Project = "${var.project}"
   }
-  
+
   dev_client_bucket  = "${var.dev_client_bucket_prefix}.${var.domain_name}"
   dev_admin_bucket   = "${var.dev_admin_bucket_prefix}.${var.domain_name}"
   dev_api_host       = "${var.dev_api_host_prefix}.${var.domain_name}:443"

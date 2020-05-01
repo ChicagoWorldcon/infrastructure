@@ -17,7 +17,7 @@ module "prod-creds" {
     {
       Environment = "prod"
     }
-    )
+  )
 }
 
 module "dev-creds" {
@@ -39,7 +39,7 @@ module "dev-creds" {
     {
       Environment = "dev"
     }
-    )
+  )
 }
 
 data "aws_secretsmanager_secret" "db_superuser_password_secret" {

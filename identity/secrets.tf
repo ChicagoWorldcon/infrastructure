@@ -66,8 +66,8 @@ resource "aws_secretsmanager_secret" "stripe_api_key" {
     map(
       "Name", "${var.stage} Stripe API Key",
       "ServiceName", "ChicagoRegistration"
-      )
     )
+  )
 }
 
 resource "aws_secretsmanager_secret" "session_secret" {
@@ -114,6 +114,6 @@ resource "aws_secretsmanager_secret" "sidekiq_password" {
     map(
       "Name", "${var.stage} Password for queue admin",
       "ServiceName", "ChicagoRegistration"
-      )
     )
+  )
 }

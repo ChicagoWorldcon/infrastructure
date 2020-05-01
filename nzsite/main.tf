@@ -37,8 +37,8 @@ resource "aws_eip" "web" {
     local.common_tags,
     map(
       "Name", "${var.stage} API server"
-      )
     )
+  )
 }
 
 resource "aws_security_group" "web_server_sg" {

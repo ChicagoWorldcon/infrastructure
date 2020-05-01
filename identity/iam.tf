@@ -80,8 +80,8 @@ EOF
 }
 
 resource "aws_iam_role_policy" "deployment" {
-  name = "${var.project}-api-deployment-policy"
-  role = aws_iam_role.registration.name
+  name   = "${var.project}-api-deployment-policy"
+  role   = aws_iam_role.registration.name
   policy = <<EOF
 {
     "Version": "2012-10-17",

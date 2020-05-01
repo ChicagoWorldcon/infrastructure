@@ -8,7 +8,7 @@ locals {
 data "template_file" "script" {
   template = file("${path.module}/scripts/registration-init.yaml")
 
-  vars                    = {
+  vars = {
     project               = var.project
     db_hostname           = var.db_hostname
     db_superuser_username = var.db_superuser_username
@@ -105,7 +105,7 @@ data "template_file" "service_env_vars_file" {
 data "template_file" "db_env_vars_script" {
   template = file("${path.module}/scripts/db-env-vars.sh")
 
-  vars                    = {
+  vars = {
     project               = var.project
     db_hostname           = var.db_hostname
     db_superuser_username = var.db_superuser_username
@@ -139,7 +139,7 @@ data "template_file" "shell_prompt" {
 
   vars = {
     colour_code = var.instance_prompt_colour
-    stage = var.stage
+    stage       = var.stage
   }
 }
 
@@ -214,8 +214,8 @@ resource "aws_eip" "web" {
     local.common_tags,
     map(
       "Name", "${var.stage} API server"
-      )
     )
+  )
 }
 
 resource "aws_security_group" "web_server_sg" {
