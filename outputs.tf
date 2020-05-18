@@ -49,6 +49,10 @@ output "global_ns" {
   value = module.global.name_servers
 }
 
+output "chicon_ns" {
+  value = aws_route53_zone.mail.name_servers
+}
+
 output "site" {
   value = {
     dev  = "${var.dev_www_prefix}.${var.domain_name}"

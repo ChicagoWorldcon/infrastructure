@@ -21,3 +21,10 @@ module "global" {
 
   api_deployment_app_name = "ChicagoRegistration"
 }
+
+
+# Document the name servers for our email domain
+resource "aws_route53_zone" "mail" {
+  name = "chicon.org"
+}
+
