@@ -1,5 +1,5 @@
 [Unit]
-Description=Registration API service
+Description=Registration website
 Requires=docker.service
 After=docker.service
 
