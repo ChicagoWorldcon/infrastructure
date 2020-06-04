@@ -1,8 +1,3 @@
-provider "aws" {
-  profile = "chicago"
-  region  = "us-west-2"
-}
-
 variable "ssh_key_id" {
   type        = string
   description = "Provide this via auto vars"
