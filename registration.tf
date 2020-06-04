@@ -6,7 +6,7 @@ module "dev-site" {
   project     = var.project
   stage       = "dev"
   region      = var.region
-  dns_zone_id = module.global.dns_zone_id
+  dns_zone_id = module.reg-dns.dns_zone_id
 
   vpc_id            = aws_vpc.chicagovpc.id
   security_group_id = aws_security_group.postgresql.id
@@ -87,7 +87,7 @@ module "prod-site" {
 }
 
 resource "aws_route53_record" "a_record_org" {
-  zone_id = module.global.dns_zone_id
+  zone_id = module.reg-dns.dns_zone_id
   name    = "api.${var.domain_name}"
   type    = "A"
   ttl     = 300

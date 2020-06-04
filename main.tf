@@ -22,9 +22,13 @@ module "global" {
   api_deployment_app_name = "ChicagoRegistration"
 }
 
+module "reg-dns" {
+  source      = "./dns/"
+  domain_name = var.domain_name
+}
 
-# Document the name servers for our email domain
-resource "aws_route53_zone" "mail" {
-  name = "chicon.org"
+module "chicon-dns" {
+  source      = "./dns/"
+  domain_name = "chicon.org"
 }
 

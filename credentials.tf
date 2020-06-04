@@ -7,7 +7,7 @@ module "prod-creds" {
   db_site_username      = var.prod_db_site_username
   db_superuser_username = var.db_superuser_username
 
-  route53_zone_id = module.global.dns_zone_id
+  route53_zone_id = module.reg-dns.dns_zone_id
 
   codedeploy_bucket   = "aws-codedeploy-us-west-2"
   codepipeline_bucket = "codepipeline-us-west-2-chicago2022"
@@ -29,7 +29,7 @@ module "dev-creds" {
   db_site_username      = var.dev_db_site_username
   db_superuser_username = var.db_superuser_username
 
-  route53_zone_id = module.global.dns_zone_id
+  route53_zone_id = module.reg-dns.dns_zone_id
 
   codedeploy_bucket   = "aws-codedeploy-us-west-2"
   codepipeline_bucket = "codepipeline-us-west-2-chicago2022"

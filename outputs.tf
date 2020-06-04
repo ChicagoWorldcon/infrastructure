@@ -46,11 +46,11 @@ output "reg_instance_id" {
 }
 
 output "global_ns" {
-  value = module.global.name_servers
+  value = module.reg-dns.name_servers
 }
 
 output "chicon_ns" {
-  value = aws_route53_zone.mail.name_servers
+  value = module.chicon-dns.name_servers
 }
 
 output "site" {
