@@ -2,24 +2,43 @@
 # site hosts are in registration.tf
 # DB is in db.tf
 
-module "global" {
-  source = "./global/"
-
+module "registration" {
+  source      = "./registration/"
   project     = var.project
-  domain_name = var.domain_name
   region      = var.region
+  dns_zone_id = module.reg-dns.dns_zone_id
+  domain_name = var.domain_name
 
-  dev_client_bucket_prefix = var.dev_www_prefix
-  dev_admin_bucket_prefix  = var.dev_admin_prefix
-  dev_api_host_prefix      = var.dev_api_prefix
-  dev_deployment_group     = "ChicagoRegistration-Dev"
+  vpc_id               = aws_vpc.chicagovpc.id
+  vpc_public_subnet_id = aws_subnet.public.id
 
-  prod_client_bucket_prefix = var.prod_www_prefix
-  prod_admin_bucket_prefix  = var.prod_admin_prefix
-  prod_api_host_prefix      = var.prod_api_prefix
-  prod_deployment_group     = "ChicagoRegistration-Prod"
+  ssh_key_id = var.ssh_key_id
 
-  api_deployment_app_name = "ChicagoRegistration"
+  db_security_group_id  = aws_security_group.postgresql.id
+  db_hostname           = module.db.this_db_instance_address
+  db_superuser_username = var.db_superuser_username
+
+  dev_db_site_username  = var.dev_db_site_username
+  prod_db_site_username = var.prod_db_site_username
+
+  db_site_secret            = module.dev-creds.db_site_password.name
+  db_superuser_secret_name  = module.prod-creds.db_superuser_password.name
+  dev_db_site_password_arn  = module.dev-creds.db_site_password.arn
+  prod_db_site_password_arn = module.prod-creds.db_site_password.arn
+
+  dev_db_name  = var.dev_db_name
+  prod_db_name = var.db_name
+
+  dev_api_prefix     = var.dev_api_prefix
+  dev_www_prefix     = var.dev_www_prefix
+  dev_sidekiq_prefix = var.dev_sidekiq_prefix
+  dev_admin_prefix   = var.dev_admin_prefix
+  prod_api_prefix    = var.prod_api_prefix
+  prod_www_prefix    = var.prod_www_prefix
+  prod_admin_prefix  = var.prod_admin_prefix
+
+
+
 }
 
 module "reg-dns" {

@@ -4,7 +4,7 @@ module "prod-client" {
   aliases             = ["${var.prod_www_prefix}.${var.domain_name}"]
   bucket_name         = "${var.prod_www_prefix}.${var.domain_name}"
   acm_certificate_arn = module.global.certificate_arn
-  dns_zone_id         = module.reg-dns.dns_zone_id
+  dns_zone_id         = var.dns_zone_id
 
   aws_region = var.region
 
@@ -18,7 +18,7 @@ module "prod-admin" {
   aliases             = ["${var.prod_admin_prefix}.${var.domain_name}"]
   bucket_name         = "${var.prod_admin_prefix}.${var.domain_name}"
   acm_certificate_arn = module.global.certificate_arn
-  dns_zone_id         = module.reg-dns.dns_zone_id
+  dns_zone_id         = var.dns_zone_id
 
   aws_region = var.region
 

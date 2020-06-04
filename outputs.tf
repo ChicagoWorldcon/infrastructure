@@ -12,36 +12,36 @@ output "db_instance_id" {
 
 output "reg_hostname" {
   value = {
-    dev  = module.dev-site.public_dns
-    prod = module.prod-site.public_dns
+    dev  = module.registration.dev.public_dns
+    prod = module.registration.prod.public_dns
   }
 }
 
 output "reg_private_ip" {
   value = {
-    dev  = module.dev-site.private_ip
-    prod = module.prod-site.private_ip
+    dev  = module.registration.dev.private_ip
+    prod = module.registration.prod.private_ip
   }
 }
 
 output "reg_public_ip" {
   value = {
-    dev  = module.dev-site.public_ip
-    prod = module.prod-site.public_ip
+    dev  = module.registration.dev.public_ip
+    prod = module.registration.prod.public_ip
   }
 }
 
 output "reg_public_dns" {
   value = {
-    dev  = module.dev-site.public_dns
-    prod = module.prod-site.public_dns
+    dev  = module.registration.dev.public_dns
+    prod = module.registration.prod.public_dns
   }
 }
 
 output "reg_instance_id" {
   value = {
-    dev  = module.dev-site.id
-    prod = module.prod-site.id
+    dev  = module.registration.dev.instance_id
+    prod = module.registration.prod.instance_id
   }
 }
 
@@ -72,12 +72,12 @@ output "api-port" {
 
 output "www-bucket" {
   value = {
-    prod = module.prod-client.s3_bucket_name
+    prod = module.registration.prod.s3_bucket_name
   }
 }
 
 output "certificate_arn" {
-  value = module.global.certificate_arn
+  value = module.registration.global.certificate_arn
 }
 
 output "rds_superuser" {

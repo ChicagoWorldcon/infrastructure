@@ -1,4 +1,41 @@
 # Define our dev API; this is optional
+module "global" {
+  source = "./global/"
+
+  project     = var.project
+  domain_name = var.domain_name
+  region      = var.region
+
+  dev_client_bucket_prefix = var.dev_www_prefix
+  dev_admin_bucket_prefix  = var.dev_admin_prefix
+  dev_api_host_prefix      = var.dev_api_prefix
+  dev_deployment_group     = "ChicagoRegistration-Dev"
+
+  prod_client_bucket_prefix = var.prod_www_prefix
+  prod_admin_bucket_prefix  = var.prod_admin_prefix
+  prod_api_host_prefix      = var.prod_api_prefix
+  prod_deployment_group     = "ChicagoRegistration-Prod"
+
+  api_deployment_app_name = "ChicagoRegistration"
+}
+
+
+module "dev-creds" {
+  source  = "./identity"
+  project = var.project
+  stage   = "dev"
+  db_name = var.dev_db_name
+
+  route53_zone_id = var.dns_zone_id
+
+  codedeploy_bucket   = "aws-codedeploy-us-west-2"
+  codepipeline_bucket = "codepipeline-us-west-2-chicago2022"
+
+  common_tags = {
+    Project     = var.project
+    Environment = "dev"
+  }
+}
 
 module "dev-site" {
   source = "./nzsite"
@@ -6,19 +43,19 @@ module "dev-site" {
   project     = var.project
   stage       = "dev"
   region      = var.region
-  dns_zone_id = module.reg-dns.dns_zone_id
+  dns_zone_id = var.dns_zone_id
 
-  vpc_id            = aws_vpc.chicagovpc.id
-  security_group_id = aws_security_group.postgresql.id
-  public_subnet_id  = aws_subnet.public.id
+  vpc_id            = var.vpc_id
+  security_group_id = var.db_security_group_id
+  public_subnet_id  = var.vpc_public_subnet_id
 
   domain_name           = var.domain_name
-  db_hostname           = module.db.this_db_instance_address
+  db_hostname           = var.db_hostname
   db_superuser_username = var.db_superuser_username
   db_site_username      = var.dev_db_site_username
   db_name               = var.dev_db_name
-  db_site_secret        = module.dev-creds.db_site_password.name
-  db_superuser_secret   = module.prod-creds.db_superuser_password.name
+  db_site_secret        = var.db_site_secret
+  db_superuser_secret   = var.db_superuser_secret_name
   use_test_certs        = true
   app_name              = "wellington"
   deployment_group_name = module.global.dev_deployment_group
@@ -44,6 +81,23 @@ module "dev-site" {
   sidekiq_domain_name = "${var.dev_sidekiq_prefix}.${var.domain_name}"
 }
 
+module "prod-creds" {
+  source  = "./identity"
+  project = var.project
+  stage   = "prod"
+  db_name = var.prod_db_name
+
+  route53_zone_id = var.dns_zone_id
+
+  codedeploy_bucket   = "aws-codedeploy-us-west-2"
+  codepipeline_bucket = "codepipeline-us-west-2-chicago2022"
+
+  common_tags = {
+    Project     = var.project
+    Environment = "prod"
+  }
+}
+
 module "prod-site" {
   source = "./website"
 
@@ -51,17 +105,17 @@ module "prod-site" {
   stage   = "prod"
   region  = var.region
 
-  vpc_id            = aws_vpc.chicagovpc.id
-  security_group_id = aws_security_group.postgresql.id
-  public_subnet_id  = aws_subnet.public.id
+  vpc_id            = var.vpc_id
+  security_group_id = var.db_security_group_id
+  public_subnet_id  = var.vpc_public_subnet_id
 
   domain_name           = var.domain_name
-  db_hostname           = module.db.this_db_instance_address
+  db_hostname           = var.db_hostname
   db_superuser_username = var.db_superuser_username
   db_site_username      = var.prod_db_site_username
-  db_name               = var.db_name
-  db_superuser_secret   = module.prod-creds.db_superuser_password.name
-  db_site_secret        = module.prod-creds.db_site_password.name
+  db_name               = var.prod_db_name
+  db_superuser_secret   = var.db_superuser_secret_name
+  db_site_secret        = var.db_site_secret
   app_name              = "ChicagoRegistration"
   deployment_group_name = module.global.prod_deployment_group
 
@@ -87,7 +141,7 @@ module "prod-site" {
 }
 
 resource "aws_route53_record" "a_record_org" {
-  zone_id = module.reg-dns.dns_zone_id
+  zone_id = var.dns_zone_id
   name    = "api.${var.domain_name}"
   type    = "A"
   ttl     = 300

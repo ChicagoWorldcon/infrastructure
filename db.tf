@@ -29,7 +29,7 @@ resource "aws_security_group_rule" "db-ingress-dev" {
   to_port                  = 5432
   protocol                 = "tcp"
   description              = "Security group allowing access from the reg server"
-  source_security_group_id = module.dev-site.security_group_id
+  source_security_group_id = module.registration.dev.security_group_id
 }
 
 resource "aws_security_group_rule" "db-ingress" {
@@ -39,7 +39,7 @@ resource "aws_security_group_rule" "db-ingress" {
   to_port                  = 5432
   protocol                 = "tcp"
   description              = "Security group allowing access from the reg server"
-  source_security_group_id = module.prod-site.security_group_id
+  source_security_group_id = module.registration.prod.security_group_id
 }
 
 module "db" {
