@@ -1,5 +1,5 @@
 resource "aws_vpc" "chicagovpc" {
-  cidr_block           = "172.42.0.0/16"
+  cidr_block           = local.vpc_cidr_block
   enable_dns_hostnames = true
   enable_dns_support   = true
   instance_tenancy     = "default"
