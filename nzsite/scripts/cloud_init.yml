@@ -45,8 +45,8 @@ runcmd:
 
   # bring up the reg API
   - systemctl enable registration
-  - systemctl start registration
-  # - aws deploy create-deployment --application-name=${app_name} --region=${aws_region} --deployment-group-name=${deployment_group} --update-outdated-instances-only
+  # - systemctl start registration
+  - aws deploy create-deployment --application-name=${app_name} --region=${aws_region} --deployment-group-name=${deployment_group} --update-outdated-instances-only
 
 
 write_files:
