@@ -32,3 +32,7 @@ module "chicon-dns" {
   domain_name = "chicon.org"
 }
 
+module "chicon-dns-entries" {
+  source      = "./legacy-dns/"
+  dns_zone_id = module.chicon-dns.dns_zone_id
+}
