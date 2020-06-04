@@ -6,6 +6,9 @@ output "prod" {
     public_ip         = module.prod-site.public_ip
     instance_id       = module.prod-site.id
     s3_bucket_name    = module.prod-client.s3_bucket_name
+    api_fqdn          = aws_route53_record.a_record_org.fqdn
+    www_fqdn          = module.prod-client.s3_bucket_cname
+    admin_fqdn        = module.prod-admin.s3_bucket_cname
   }
 }
 
@@ -16,6 +19,7 @@ output "dev" {
     private_ip        = module.dev-site.private_ip
     public_ip         = module.dev-site.public_ip
     instance_id       = module.dev-site.id
+    www_fqdn          = module.dev-site.site_fqdn
   }
 }
 

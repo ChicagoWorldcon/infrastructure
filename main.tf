@@ -29,16 +29,6 @@ module "registration" {
   dev_db_name  = var.dev_db_name
   prod_db_name = var.db_name
 
-  dev_api_prefix     = var.dev_api_prefix
-  dev_www_prefix     = var.dev_www_prefix
-  dev_sidekiq_prefix = var.dev_sidekiq_prefix
-  dev_admin_prefix   = var.dev_admin_prefix
-  prod_api_prefix    = var.prod_api_prefix
-  prod_www_prefix    = var.prod_www_prefix
-  prod_admin_prefix  = var.prod_admin_prefix
-
-
-
 }
 
 module "reg-dns" {

@@ -1,12 +1,3 @@
-# These are values we get from the constants
-variable "dev_api_prefix" { type = string }
-variable "dev_www_prefix" { type = string }
-variable "dev_sidekiq_prefix" { type = string }
-variable "dev_admin_prefix" { type = string }
-variable "prod_api_prefix" { type = string }
-variable "prod_www_prefix" { type = string }
-variable "prod_admin_prefix" { type = string }
-
 variable "project" {
   type        = string
   description = "The top level project for taggigng"

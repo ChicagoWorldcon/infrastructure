@@ -55,14 +55,14 @@ output "chicon_ns" {
 
 output "site" {
   value = {
-    dev  = "${var.dev_www_prefix}.${var.domain_name}"
-    prod = "${var.prod_www_prefix}.${var.domain_name}"
+    dev  = module.registration.dev.www_fqdn
+    prod = module.registration.prod.www_fqdn
   }
 }
 
 output "api-address" {
   value = {
-    prod = "${var.prod_api_prefix}.${var.domain_name}"
+    prod = module.registration.prod.api_fqdn
   }
 }
 
