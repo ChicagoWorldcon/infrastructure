@@ -1,13 +1,13 @@
 output "db_endpoint" {
-  value = aws_db_instance.reg-db.endpoint
+  value = module.db.this_db_instance_endpoint
 }
 
 output "db_hostname" {
-  value = aws_db_instance.reg-db.address
+  value = module.db.this_db_instance_address
 }
 
 output "db_instance_id" {
-  value = aws_db_instance.reg-db.id
+  value = module.db.this_db_instance_id
 }
 
 output "reg_hostname" {

@@ -13,7 +13,7 @@ module "dev-site" {
   public_subnet_id  = aws_subnet.public.id
 
   domain_name           = var.domain_name
-  db_hostname           = aws_db_instance.reg-db.address
+  db_hostname           = module.db.this_db_instance_address
   db_superuser_username = var.db_superuser_username
   db_site_username      = var.dev_db_site_username
   db_name               = var.dev_db_name
@@ -56,7 +56,7 @@ module "prod-site" {
   public_subnet_id  = aws_subnet.public.id
 
   domain_name           = var.domain_name
-  db_hostname           = aws_db_instance.reg-db.address
+  db_hostname           = module.db.this_db_instance_address
   db_superuser_username = var.db_superuser_username
   db_site_username      = var.prod_db_site_username
   db_name               = var.db_name
