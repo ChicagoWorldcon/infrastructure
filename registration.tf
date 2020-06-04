@@ -20,7 +20,7 @@ module "dev-site" {
   db_site_secret        = module.dev-creds.db_site_password.name
   db_superuser_secret   = module.prod-creds.db_superuser_password.name
   use_test_certs        = true
-  app_name              = "ChicagoRegistration"
+  app_name              = "wellington"
   deployment_group_name = module.global.dev_deployment_group
 
   # secrets

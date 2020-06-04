@@ -2,10 +2,14 @@ resource "aws_codedeploy_app" "api" {
   name = var.api_deployment_app_name
 }
 
+resource "aws_codedeploy_app" "rails" {
+  name = "wellington"
+}
+
 
 resource "aws_codedeploy_deployment_group" "dev" {
   deployment_group_name = var.dev_deployment_group
-  app_name              = "wellington"
+  app_name              = aws_codedeploy_app.rails.name
   service_role_arn      = aws_iam_role.codedeploy_role.arn
 
   ec2_tag_set {
