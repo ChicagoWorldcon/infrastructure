@@ -34,14 +34,25 @@ module "registration" {
 module "reg-dns" {
   source      = "./dns/"
   domain_name = var.domain_name
+  project     = var.project
+  role        = "registration"
 }
 
 module "chicon-dns" {
   source      = "./dns/"
   domain_name = "chicon.org"
+  project     = var.project
+  role        = "IT"
 }
 
 module "chicon-dns-entries" {
+  source                = "./dns-entries/"
+  dns_zone_id           = module.chicon-dns.dns_zone_id
+  google_dns_validation = "2qv7hpi7tzfqzcwnjq77zd6qyt5uq43ovh4sg42lh4ixnl6c7bua.mx-verification.google.com."
+}
+
+module "chicon-legacy-dns-entries" {
   source      = "./legacy-dns/"
   dns_zone_id = module.chicon-dns.dns_zone_id
 }
+

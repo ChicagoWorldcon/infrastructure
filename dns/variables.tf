@@ -3,3 +3,10 @@ variable domain_name {
   description = "The domain name to create a zone for"
 }
 
+variable project {
+  type = string
+}
+
+variable role {
+  type = string
+}
