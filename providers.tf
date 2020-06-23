@@ -1,6 +1,6 @@
 provider "aws" {
   version = "~> 2.60"
-  profile = "chicago"
+  profile = "chicago-bid"
   region  = "us-west-2"
 }
 

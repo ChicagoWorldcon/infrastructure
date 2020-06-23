@@ -1,5 +1,5 @@
 provider "aws" {
-  profile = "chicago"
+  profile = "chicago-bid"
   region  = "us-east-1"
   alias   = "us-east-1"
 }
