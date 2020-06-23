@@ -12,17 +12,6 @@ output "prod" {
   }
 }
 
-output "dev" {
-  value = {
-    security_group_id = module.dev-site.security_group_id
-    public_dns        = module.dev-site.public_dns
-    private_ip        = module.dev-site.private_ip
-    public_ip         = module.dev-site.public_ip
-    instance_id       = module.dev-site.id
-    www_fqdn          = module.dev-site.site_fqdn
-  }
-}
-
 output "global" {
   value = {
     certificate_arn = module.global.certificate_arn

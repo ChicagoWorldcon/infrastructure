@@ -22,16 +22,6 @@ resource "aws_db_subnet_group" "rds-subnets" {
   )
 }
 
-resource "aws_security_group_rule" "db-ingress-dev" {
-  type                     = "ingress"
-  security_group_id        = aws_security_group.postgresql.id
-  from_port                = 5432
-  to_port                  = 5432
-  protocol                 = "tcp"
-  description              = "Security group allowing access from the reg server"
-  source_security_group_id = module.registration.dev.security_group_id
-}
-
 resource "aws_security_group_rule" "db-ingress" {
   type                     = "ingress"
   security_group_id        = aws_security_group.postgresql.id
