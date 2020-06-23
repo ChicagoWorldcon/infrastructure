@@ -28,16 +28,8 @@ variable "db_name" {
   default = "api"
 }
 
-variable "dev_db_name" {
-  default = "api_dev"
-}
-
 variable "db_password" {
   type = string
-}
-
-variable "dev_db_site_username" {
-  default = "devsite"
 }
 
 variable "prod_db_site_username" {

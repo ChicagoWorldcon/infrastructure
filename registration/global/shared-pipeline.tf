@@ -83,15 +83,11 @@ data "aws_iam_policy_document" "codebuild_output_policy" {
     # This is somewhat hardcoded, regrettably
     resources = [
       "${aws_s3_bucket.build_artifact_bucket.arn}/*",
-      "arn:aws:s3:::${local.dev_client_bucket}/*",
       "arn:aws:s3:::${local.prod_client_bucket}/*",
-      "arn:aws:s3:::${local.dev_admin_bucket}/*",
       "arn:aws:s3:::${local.prod_admin_bucket}/*",
       "${aws_s3_bucket.cache_bucket.arn}/*",
       aws_s3_bucket.build_artifact_bucket.arn,
-      "arn:aws:s3:::${local.dev_client_bucket}",
       "arn:aws:s3:::${local.prod_client_bucket}",
-      "arn:aws:s3:::${local.dev_admin_bucket}",
       "arn:aws:s3:::${local.prod_admin_bucket}",
       aws_s3_bucket.cache_bucket.arn,
     ]

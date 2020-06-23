@@ -43,10 +43,6 @@ variable "db_site_secret" {
   type = string
 }
 
-variable "dev_db_site_password_arn" {
-  type = string
-}
-
 variable "prod_db_site_password_arn" {
   type = string
 }
@@ -55,15 +51,7 @@ variable "db_superuser_secret_name" {
   type = string
 }
 
-variable "dev_db_site_username" {
-  type = string
-}
-
 variable "prod_db_site_username" {
-  type = string
-}
-
-variable "dev_db_name" {
   type = string
 }
 

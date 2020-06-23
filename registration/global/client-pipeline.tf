@@ -17,22 +17,6 @@ resource "aws_s3_bucket" "cache_bucket" {
 
   lifecycle_rule {
     enabled = true
-    prefix  = "dev-client/"
-    expiration {
-      days = 1
-    }
-  }
-
-  lifecycle_rule {
-    enabled = true
-    prefix  = "dev-admin/"
-    expiration {
-      days = 1
-    }
-  }
-
-  lifecycle_rule {
-    enabled = true
     prefix  = "prod-client/"
     expiration {
       days = 1
