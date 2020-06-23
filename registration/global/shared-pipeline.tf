@@ -57,10 +57,6 @@ data "aws_iam_policy_document" "codebuild_logging_policy" {
     ]
 
     resources = [
-      "arn:aws:logs:us-west-2:${data.aws_caller_identity.account.account_id}:log-group:/aws/codebuild/${module.dev-client.name}",
-      "arn:aws:logs:us-west-2:${data.aws_caller_identity.account.account_id}:log-group:/aws/codebuild/${module.dev-client.name}:*",
-      "arn:aws:logs:us-west-2:${data.aws_caller_identity.account.account_id}:log-group:/aws/codebuild/${module.dev-admin.name}",
-      "arn:aws:logs:us-west-2:${data.aws_caller_identity.account.account_id}:log-group:/aws/codebuild/${module.dev-admin.name}:*",
       "arn:aws:logs:us-west-2:${data.aws_caller_identity.account.account_id}:log-group:/aws/codebuild/${module.prod-client.name}",
       "arn:aws:logs:us-west-2:${data.aws_caller_identity.account.account_id}:log-group:/aws/codebuild/${module.prod-client.name}:*",
       "arn:aws:logs:us-west-2:${data.aws_caller_identity.account.account_id}:log-group:/aws/codebuild/${module.prod-admin.name}",

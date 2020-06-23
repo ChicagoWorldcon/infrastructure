@@ -42,37 +42,6 @@ resource "aws_codepipeline" "codepipeline" {
   }
 
   stage {
-    name = "Staging"
-
-    action {
-      name            = "ChicagoRegistration-Dev"
-      category        = "Deploy"
-      provider        = "CodeDeploy"
-      owner           = "AWS"
-      version         = "1"
-      input_artifacts = [local.reg_api_code]
-
-      configuration = {
-        ApplicationName     = var.api_deployment_app_name
-        DeploymentGroupName = var.dev_deployment_group
-      }
-    }
-
-    action {
-      name     = "ApproveAPIToProd"
-      category = "Approval"
-      provider = "Manual"
-      owner    = "AWS"
-      version  = "1"
-
-      configuration = {
-        NotificationArn    = aws_sns_topic.pipeline_approval.arn
-        ExternalEntityLink = "https://${var.region}.console.aws.amazon.com/codepipeline/home?region=${var.region}#/edit/${var.api_pipeline_name}"
-      }
-    }
-  }
-
-  stage {
     name = "Production"
 
     action {

@@ -53,32 +53,6 @@ resource "aws_s3_bucket" "cache_bucket" {
   }
 }
 
-module "dev-client" {
-  source       = "./codebuild"
-  site_title   = "Chicago in 2022 Registration - TESTING"
-  name         = "dev-client"
-  client_src   = "."
-  bucket_name  = local.dev_client_bucket
-  api_host     = local.dev_api_host
-  project      = var.project
-  cache_bucket = aws_s3_bucket.cache_bucket.bucket
-  source_url   = "https://github.com/${var.github_username}/${var.client_github_repo}.git"
-  role_arn     = aws_iam_role.codebuild_role.arn
-}
-
-module "dev-admin" {
-  source       = "./codebuild"
-  site_title   = "Chicago in 2022 Registration Admin - TESTING"
-  name         = "dev-admin"
-  client_src   = "members-admin"
-  bucket_name  = local.dev_admin_bucket
-  api_host     = local.dev_api_host
-  project      = var.project
-  cache_bucket = aws_s3_bucket.cache_bucket.bucket
-  source_url   = "https://github.com/${var.github_username}/${var.client_github_repo}.git"
-  role_arn     = aws_iam_role.codebuild_role.arn
-}
-
 module "prod-client" {
   source       = "./codebuild"
   site_title   = "Chicago in 2022 Registration"
@@ -138,57 +112,6 @@ resource "aws_codepipeline" "client-codepipeline" {
         PollForSourceChanges = "false"
       }
     }
-  }
-
-  stage {
-    name = "DeployBeta"
-
-    action {
-      name             = "BuildDevClient"
-      category         = "Build"
-      owner            = "AWS"
-      provider         = "CodeBuild"
-      version          = "1"
-      input_artifacts  = [local.client_code]
-      output_artifacts = []
-
-      configuration = {
-        ProjectName = module.dev-client.name
-      }
-    }
-
-    action {
-      name             = "BuildDevAdmin"
-      category         = "Build"
-      owner            = "AWS"
-      provider         = "CodeBuild"
-      version          = "1"
-      input_artifacts  = [local.client_code]
-      output_artifacts = []
-
-      configuration = {
-        ProjectName = module.dev-admin.name
-      }
-    }
-
-  }
-
-  stage {
-    name = "ApproveProd"
-
-    action {
-      name     = "ApproveClientToProd"
-      category = "Approval"
-      provider = "Manual"
-      owner    = "AWS"
-      version  = "1"
-
-      configuration = {
-        NotificationArn    = aws_sns_topic.pipeline_approval.arn
-        ExternalEntityLink = "https://${var.region}.console.aws.amazon.com/codepipeline/home?region=${var.region}#/edit/${var.client_pipeline_name}"
-      }
-    }
-
   }
 
   stage {
