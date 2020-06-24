@@ -4,11 +4,11 @@ variable "ssh_key_id" {
 }
 
 variable "domain_name" {
-  default = "chicagoworldcon.org"
+  default = "chicon.org"
 }
 
 variable "secondary_domain_name" {
-  default = "chicagoworldcon.com"
+  default = "chicon.com"
 }
 
 variable "region" {
@@ -16,31 +16,27 @@ variable "region" {
 }
 
 variable "project" {
-  default = "Chicago2022"
+  default = "Chicon8"
 }
 
 # The RDS superuser
 variable "db_superuser_username" {
-  default = "chicagoadmin"
+  default = "chiconadmin"
 }
 
-variable "db_name" {
-  default = "api"
+variable "registration_db_name" {
+  default = "registration"
 }
 
-variable "dev_db_name" {
-  default = "api_dev"
-}
-
-variable "db_password" {
-  type = string
+variable "registration_dev_db_name" {
+  default = "registration_dev"
 }
 
 variable "dev_db_site_username" {
-  default = "devsite"
+  default = "registration_dev_admin"
 }
 
 variable "prod_db_site_username" {
-  default = "admin"
+  default = "registration_admin"
 }
 

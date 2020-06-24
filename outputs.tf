@@ -1,13 +1,13 @@
 output "db_endpoint" {
-  value = module.db.this_db_instance_endpoint
+  value = module.chicondb.db_instance_endpoint
 }
 
 output "db_hostname" {
-  value = module.db.this_db_instance_address
+  value = module.chicondb.db_instance_address
 }
 
 output "db_instance_id" {
-  value = module.db.this_db_instance_id
+  value = module.chicondb.db_instance_id
 }
 
 output "reg_hostname" {
@@ -46,11 +46,7 @@ output "reg_instance_id" {
 }
 
 output "global_ns" {
-  value = module.reg-dns.name_servers
-}
-
-output "chicon_ns" {
-  value = module.chicon-dns.name_servers
+  value = module.dns.name_servers
 }
 
 output "site" {
@@ -60,31 +56,10 @@ output "site" {
   }
 }
 
-output "api-address" {
-  value = {
-    prod = module.registration.prod.api_fqdn
-  }
-}
-
-output "api-port" {
-  value = "443"
-}
-
-output "www-bucket" {
-  value = {
-    prod = module.registration.prod.s3_bucket_name
-  }
-}
-
-output "certificate_arn" {
-  value = module.registration.global.certificate_arn
-}
-
 output "rds_superuser" {
   value = {
-    username         = var.db_superuser_username
-    dev_secret_name  = module.dev-creds.db_superuser_password.name
-    prod_secret_name = module.prod-creds.db_superuser_password.name
+    username    = var.db_superuser_username
+    secret_name = module.global.db_superuser_password.name
   }
 }
 

@@ -7,10 +7,6 @@ resource "aws_s3_bucket" "build_artifact_bucket" {
 
 data "aws_caller_identity" "account" {}
 
-data "aws_iam_policy" "CodeBuildBasePolicy-client" {
-  arn = "arn:aws:iam::${data.aws_caller_identity.account.account_id}:policy/service-role/CodeBuildBasePolicy-${var.project}-client-${var.region}"
-}
-
 data "aws_iam_policy_document" "codepipeline_assume_policy" {
   statement {
     effect  = "Allow"
@@ -47,28 +43,6 @@ data "aws_iam_policy_document" "codebuild_assume_policy" {
   }
 }
 
-data "aws_iam_policy_document" "codebuild_logging_policy" {
-  statement {
-    effect = "Allow"
-    actions = [
-      "logs:CreateLogGroup",
-      "logs:CreateLogStream",
-      "logs:PutLogEvents",
-    ]
-
-    resources = [
-      "arn:aws:logs:us-west-2:${data.aws_caller_identity.account.account_id}:log-group:/aws/codebuild/${module.dev-client.name}",
-      "arn:aws:logs:us-west-2:${data.aws_caller_identity.account.account_id}:log-group:/aws/codebuild/${module.dev-client.name}:*",
-      "arn:aws:logs:us-west-2:${data.aws_caller_identity.account.account_id}:log-group:/aws/codebuild/${module.dev-admin.name}",
-      "arn:aws:logs:us-west-2:${data.aws_caller_identity.account.account_id}:log-group:/aws/codebuild/${module.dev-admin.name}:*",
-      "arn:aws:logs:us-west-2:${data.aws_caller_identity.account.account_id}:log-group:/aws/codebuild/${module.prod-client.name}",
-      "arn:aws:logs:us-west-2:${data.aws_caller_identity.account.account_id}:log-group:/aws/codebuild/${module.prod-client.name}:*",
-      "arn:aws:logs:us-west-2:${data.aws_caller_identity.account.account_id}:log-group:/aws/codebuild/${module.prod-admin.name}",
-      "arn:aws:logs:us-west-2:${data.aws_caller_identity.account.account_id}:log-group:/aws/codebuild/${module.prod-admin.name}:*",
-    ]
-  }
-}
-
 data "aws_iam_policy_document" "codebuild_output_policy" {
   statement {
     effect = "Allow"
@@ -87,16 +61,8 @@ data "aws_iam_policy_document" "codebuild_output_policy" {
     # This is somewhat hardcoded, regrettably
     resources = [
       "${aws_s3_bucket.build_artifact_bucket.arn}/*",
-      "arn:aws:s3:::${local.dev_client_bucket}/*",
-      "arn:aws:s3:::${local.prod_client_bucket}/*",
-      "arn:aws:s3:::${local.dev_admin_bucket}/*",
-      "arn:aws:s3:::${local.prod_admin_bucket}/*",
       "${aws_s3_bucket.cache_bucket.arn}/*",
       aws_s3_bucket.build_artifact_bucket.arn,
-      "arn:aws:s3:::${local.dev_client_bucket}",
-      "arn:aws:s3:::${local.prod_client_bucket}",
-      "arn:aws:s3:::${local.dev_admin_bucket}",
-      "arn:aws:s3:::${local.prod_admin_bucket}",
       aws_s3_bucket.cache_bucket.arn,
     ]
   }
@@ -164,13 +130,6 @@ resource "aws_iam_role_policy_attachment" "codebuild_logging_policy" {
 resource "aws_iam_role_policy_attachment" "codebuild_deploy_policy" {
   role       = aws_iam_role.codebuild_role.name
   policy_arn = aws_iam_policy.codebuild_deploy_policy.arn
-}
-
-resource "aws_iam_policy" "codebuild_logging_policy" {
-  name        = "CodeBuild-${var.project}-client-${var.region}"
-  description = "Policy used in trust relationship with CodeBuild"
-  path        = "/service-role/"
-  policy      = data.aws_iam_policy_document.codebuild_logging_policy.json
 }
 
 resource "aws_iam_policy" "codebuild_deploy_policy" {

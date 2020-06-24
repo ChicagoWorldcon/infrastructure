@@ -70,3 +70,13 @@ variable "dev_db_name" {
 variable "prod_db_name" {
   type = string
 }
+
+variable "dev_deployment_group" {
+  type    = string
+  default = "ChicagoRegistration-Dev"
+}
+
+variable "prod_deployment_group" {
+  type    = string
+  default = "ChicagoRegistration-Prod"
+}

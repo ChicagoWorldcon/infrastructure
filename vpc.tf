@@ -1,107 +1,26 @@
-resource "aws_vpc" "chicagovpc" {
-  cidr_block           = local.vpc_cidr_block
+module "vpc" {
+  source = "terraform-aws-modules/vpc/aws"
+
+  name = "chicon-vpc"
+  cidr = "172.42.0.0/16"
+
+  # Subnet structure
+  azs              = ["us-west-2a", "us-west-2b", "us-west-2c"]
+  private_subnets  = ["172.42.1.0/24", "172.42.2.0/24", "172.42.3.0/24"]
+  public_subnets   = ["172.42.11.0/24", "172.42.12.0/24", "172.42.13.0/24"]
+  database_subnets = ["172.42.21.0/24", "172.42.22.0/24", "172.42.23.0/24"]
+
+  # cheaper NAT
+  single_nat_gateway     = true
+  enable_nat_gateway     = false
+  one_nat_gateway_per_az = false
+
   enable_dns_hostnames = true
-  enable_dns_support   = true
-  instance_tenancy     = "default"
-
+  enable_s3_endpoint   = true
 
   tags = merge(
     local.common_tags,
-    map("Name", "Chicago 2022")
+    map("Terraform", "true", "Department", "IT")
   )
 }
-
-resource "aws_vpc_endpoint" "s3" {
-  vpc_id       = aws_vpc.chicagovpc.id
-  service_name = "com.amazonaws.us-west-2.s3"
-}
-
-resource "aws_route_table" "chicago-public" {
-  vpc_id = aws_vpc.chicagovpc.id
-
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.chicago-gateway.id
-  }
-
-  tags = merge(
-    local.common_tags,
-    map("Name", "Public Subnet")
-  )
-}
-
-resource "aws_route_table" "chicago-main" {
-  vpc_id = aws_vpc.chicagovpc.id
-
-  tags = merge(
-    local.common_tags,
-    map("Name", "Main Routes")
-  )
-}
-
-resource "aws_main_route_table_association" "chicago-vpc" {
-  vpc_id         = aws_vpc.chicagovpc.id
-  route_table_id = aws_route_table.chicago-main.id
-}
-
-resource "aws_route_table_association" "chicago-public" {
-  subnet_id      = aws_subnet.public.id
-  route_table_id = aws_route_table.chicago-public.id
-}
-
-resource "aws_internet_gateway" "chicago-gateway" {
-  vpc_id = aws_vpc.chicagovpc.id
-
-  tags = local.common_tags
-}
-
-resource "aws_subnet" "public" {
-  vpc_id = aws_vpc.chicagovpc.id
-
-  cidr_block        = "172.42.100.0/24"
-  availability_zone = "${var.region}a"
-
-  tags = merge(
-    local.common_tags,
-    map("Name", "Public Subnet")
-  )
-}
-
-resource "aws_subnet" "subnet-az-b" {
-  vpc_id                  = aws_vpc.chicagovpc.id
-  cidr_block              = cidrsubnet(aws_vpc.chicagovpc.cidr_block, 8, 1)
-  availability_zone       = "${var.region}b"
-  map_public_ip_on_launch = true
-
-  tags = merge(
-    local.common_tags,
-    map("Name", "DB Subnet B")
-  )
-}
-
-resource "aws_subnet" "subnet-az-c" {
-  vpc_id                  = aws_vpc.chicagovpc.id
-  cidr_block              = cidrsubnet(aws_vpc.chicagovpc.cidr_block, 8, 2)
-  availability_zone       = "${var.region}c"
-  map_public_ip_on_launch = true
-
-  tags = merge(
-    local.common_tags,
-    map("Name", "DB Subnet C")
-  )
-
-}
-
-resource "aws_subnet" "subnet-az-a" {
-  vpc_id                  = aws_vpc.chicagovpc.id
-  cidr_block              = cidrsubnet(aws_vpc.chicagovpc.cidr_block, 8, 0)
-  availability_zone       = "${var.region}a"
-  map_public_ip_on_launch = true
-
-  tags = merge(
-    local.common_tags,
-    map("Name", "DB Subnet A")
-  )
-}
-
 
