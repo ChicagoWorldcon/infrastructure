@@ -27,7 +27,7 @@ variable "vpc_public_subnet_id" {
   type = string
 }
 
-variable "db_security_group_id" {
+variable "security_group_id" {
   type = string
 }
 

@@ -7,26 +7,6 @@ resource "aws_security_group" "postgresql" {
   )
 }
 
-# resource "aws_security_group_rule" "db-ingress-dev" {
-#   type                     = "ingress"
-#   security_group_id        = aws_security_group.postgresql.id
-#   from_port                = 5432
-#   to_port                  = 5432
-#   protocol                 = "tcp"
-#   description              = "Security group allowing access from the reg server"
-#   source_security_group_id = module.registration.dev.security_group_id
-# }
-
-# resource "aws_security_group_rule" "db-ingress" {
-#   type                     = "ingress"
-#   security_group_id        = aws_security_group.postgresql.id
-#   from_port                = 5432
-#   to_port                  = 5432
-#   protocol                 = "tcp"
-#   description              = "Security group allowing access from the reg server"
-#   source_security_group_id = module.registration.prod.security_group_id
-# }
-
 module "db" {
   source  = "terraform-aws-modules/rds/aws"
   version = "~> 2.0"
@@ -34,7 +14,7 @@ module "db" {
   identifier = "chicon-shared"
 
   engine            = "postgres"
-  engine_version    = "12.3"
+  engine_version    = "11.8"
   instance_class    = "db.t2.micro"
   allocated_storage = "20"
   storage_encrypted = false
@@ -43,7 +23,7 @@ module "db" {
   password = var.db_superuser_password
   port     = "5432"
 
-  vpc_security_group_ids = [aws_security_group.postgresql.id]
+  vpc_security_group_ids = [var.security_group_id, aws_security_group.postgresql.id]
 
   maintenance_window = "sun:04:30-sun:05:30"
   backup_window      = "04:00-04:30"
@@ -60,10 +40,10 @@ module "db" {
   db_subnet_group_name = var.db_subnet_group_name
 
   # DB parameter group
-  family = "postgres12.3"
+  family = "postgres11"
 
   # DB option group
-  major_engine_version = "12.3"
+  major_engine_version = "11"
 
   # Snapshot name upon DB deletion
   final_snapshot_identifier = "terraform-aws-postgresql-rds-snapshot"

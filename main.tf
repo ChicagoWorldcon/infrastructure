@@ -11,7 +11,7 @@ module "chicondb" {
   db_superuser_username = var.db_superuser_username
   db_superuser_password = data.aws_secretsmanager_secret_version.db_superuser_password.secret_string
   db_subnet_group_name  = module.vpc.database_subnet_group
-  db_security_group_id  = module.vpc.default_security_group_id
+  security_group_id     = module.vpc.default_security_group_id
 }
 
 module "registration" {
@@ -26,7 +26,7 @@ module "registration" {
 
   ssh_key_id = var.ssh_key_id
 
-  db_security_group_id  = module.vpc.default_security_group_id
+  security_group_id     = module.vpc.default_security_group_id
   db_hostname           = module.chicondb.db_instance_address
   db_superuser_username = var.db_superuser_username
 

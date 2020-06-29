@@ -17,11 +17,12 @@ runcmd:
   - usermod -a -G docker ec2-user
 
   # install postgres 9.6
-  - amazon-linux-extras install postgresql9.6
-  - yum -y install postgresql-devel
+  - amazon-linux-extras enable postgresql11
+  - yum clean metadata
+  - yum -y install postgresql postgresql-devel
 
   # Install docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/1.20.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/1.26.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
   - chmod +x /usr/local/bin/docker-compose
   - yum -y groupinstall "Development Tools"
   - pip3 install pgcli psycopg2-binary keyrings.alt boto3 'awscli>=1.15'
@@ -114,15 +115,22 @@ write_files:
   - content: |
         #!/bin/bash
         export PGPASSWORD=$(aws secretsmanager get-secret-value --secret-id ${db_superuser_secret} | jq -r .SecretString)
-        exec pgcli -h ${db_hostname} -U ${db_superuser_username} ${db_name} "$@"
-    path: /usr/local/bin/db
+        exec pgcli -h ${db_hostname} -U ${db_superuser_username} "$@"
+    path: /usr/local/bin/db.admin
     permissions: '0755'
 
   - content: |
         #!/bin/bash
         export PGPASSWORD=$(aws secretsmanager get-secret-value --secret-id ${db_superuser_secret} | jq -r .SecretString)
-        exec psql -h ${db_hostname} -U ${db_superuser_username} ${db_name} "$@"
+        exec psql -h ${db_hostname} -U ${db_superuser_username} "$@"
     path: /usr/local/bin/psql.admin
+    permissions: '0755'
+
+  - content: |
+        #!/bin/bash
+        . /opt/chicago/etc/db-env.sh
+        exec pgcli -h ${db_hostname} -U ${db_site_username} ${db_name} "$@"
+    path: /usr/local/bin/db
     permissions: '0755'
 
   - content: |

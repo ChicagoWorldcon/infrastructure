@@ -42,7 +42,7 @@ module "dev-site" {
   dns_zone_id = var.dns_zone_id
 
   vpc_id            = var.vpc_id
-  security_group_id = var.db_security_group_id
+  security_group_id = var.security_group_id
   public_subnet_id  = var.vpc_public_subnet_id
 
   domain_name           = var.domain_name
