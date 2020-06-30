@@ -42,23 +42,3 @@ resource "aws_route53_record" "chicon7_A" {
   ttl = "300"
 }
 
-resource "aws_route53_record" "twok_A" {
-  zone_id = var.dns_zone_id
-  name    = "2000"
-  type    = "A"
-  records = [
-    "74.104.188.4"
-  ]
-  ttl = "300"
-}
-
-resource "aws_route53_record" "twok_AAAA" {
-  zone_id = var.dns_zone_id
-  name    = "2000"
-  type    = "AAAA"
-  records = [
-    "2001:470:1f07:15ff:0:0:0:5000"
-  ]
-  ttl = "300"
-}
-
