@@ -1,39 +1,3 @@
-resource "aws_secretsmanager_secret" "db_kansa_password" {
-  name = "${var.project}/db/${var.db_name}/kansa/${var.stage}"
-
-  tags = merge(
-    var.common_tags,
-    map(
-      "Name", "${var.stage} DB Kansa",
-      "ServiceName", "ChicagoRegistration"
-    )
-  )
-}
-
-resource "aws_secretsmanager_secret" "db_hugo_password" {
-  name = "${var.project}/db/${var.db_name}/hugo/${var.stage}"
-
-  tags = merge(
-    var.common_tags,
-    map(
-      "Name", "${var.stage} DB Hugo",
-      "ServiceName", "ChicagoRegistration"
-    )
-  )
-}
-
-resource "aws_secretsmanager_secret" "db_raami_password" {
-  name = "${var.project}/db/${var.db_name}/raami/${var.stage}"
-
-  tags = merge(
-    var.common_tags,
-    map(
-      "Name", "${var.stage} DB Raami",
-      "ServiceName", "ChicagoRegistration"
-    )
-  )
-}
-
 resource "aws_secretsmanager_secret" "stripe_api_key" {
   name = "${var.project}/stripe_api_key/${var.stage}"
 

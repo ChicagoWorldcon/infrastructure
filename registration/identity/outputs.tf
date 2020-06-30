@@ -6,18 +6,6 @@ output "registration_iam_role_name" {
   value = "${aws_iam_role.registration.name}"
 }
 
-output "db_kansa_password_arn" {
-  value = "${aws_secretsmanager_secret.db_kansa_password.arn}"
-}
-
-output "db_hugo_password_arn" {
-  value = "${aws_secretsmanager_secret.db_hugo_password.arn}"
-}
-
-output "db_raami_password_arn" {
-  value = "${aws_secretsmanager_secret.db_raami_password.arn}"
-}
-
 output "stripe_api_key_arn" {
   value = "${aws_secretsmanager_secret.stripe_api_key.arn}"
 }
