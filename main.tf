@@ -5,13 +5,15 @@
 module "chicondb" {
   source = "./db/"
 
-  project               = var.project
-  vpc_id                = module.vpc.vpc_id
-  tags                  = local.common_tags
-  db_superuser_username = var.db_superuser_username
-  db_superuser_password = data.aws_secretsmanager_secret_version.db_superuser_password.secret_string
-  db_subnet_group_name  = module.vpc.database_subnet_group
-  security_group_id     = module.vpc.default_security_group_id
+  project                 = var.project
+  vpc_id                  = module.vpc.vpc_id
+  tags                    = local.common_tags
+  db_superuser_username   = var.db_superuser_username
+  db_superuser_password   = data.aws_secretsmanager_secret_version.db_superuser_password.secret_string
+  db_subnet_group_name    = module.vpc.database_subnet_group
+  db_engine_major_version = "12"
+  db_engine_version       = "12.3"
+  security_group_id       = module.vpc.default_security_group_id
 }
 
 module "registration" {

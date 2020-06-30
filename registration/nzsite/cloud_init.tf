@@ -2,17 +2,16 @@ data "template_file" "script" {
   template = file("${path.module}/scripts/cloud_init.yml")
 
   vars = {
-    project                    = var.project
-    db_hostname                = var.db_hostname
-    db_superuser_username      = var.db_superuser_username
-    db_site_username           = var.db_site_username
-    db_name                    = var.db_name
-    db_superuser_secret        = var.db_superuser_secret
-    stage                      = var.stage
-    aws_region                 = var.region
-    app_name                   = var.app_name
-    deployment_group           = var.deployment_group_name
-    codedeploy_agent_s3_bucket = "aws-codedeploy-us-west-2.s3.amazonaws.com"
+    project               = var.project
+    db_hostname           = var.db_hostname
+    db_superuser_username = var.db_superuser_username
+    db_site_username      = var.db_site_username
+    db_name               = var.db_name
+    db_superuser_secret   = var.db_superuser_secret
+    stage                 = var.stage
+    aws_region            = var.region
+    app_name              = var.app_name
+    deployment_group      = var.deployment_group_name
 
     # shell tools for the service
     rotate_creds = base64encode("${data.template_file.rotate_creds.rendered}")
@@ -20,15 +19,33 @@ data "template_file" "script" {
     prompt_file  = base64encode("${data.template_file.shell_prompt.rendered}")
 
     # service initializationa and config
-    caddyfile            = base64encode("${data.template_file.caddyfile.rendered}")
-    registration_service = base64encode("${data.template_file.registration_service.rendered}")
-    docker_daemon_json   = base64encode("${data.template_file.docker_daemon_json.rendered}")
-    docker_compose       = base64encode(file("${path.module}/scripts/docker-compose.yml"))
+    instance_launch_script    = base64encode("${data.template_file.bootstrap.rendered}")
+    install_codedeploy_script = base64encode("${data.template_file.install_codedeploy.rendered}")
+    caddyfile                 = base64encode("${data.template_file.caddyfile.rendered}")
+    registration_service      = base64encode("${data.template_file.registration_service.rendered}")
+    docker_daemon_json        = base64encode("${data.template_file.docker_daemon_json.rendered}")
+    docker_compose            = base64encode(file("${path.module}/scripts/docker-compose.yml"))
 
     # env files for services
     www_env_file     = base64encode("${data.template_file.www_env_vars_file.rendered}")
     sidekiq_env_file = base64encode("${data.template_file.sidekiq_env_vars_file.rendered}")
     service_env_file = base64encode("${data.template_file.service_env_vars_file.rendered}")
+  }
+}
+
+data "template_file" "bootstrap" {
+  template = file("${path.module}/scripts/bootstrap.sh")
+
+  vars = {
+    db_superuser_username = var.db_superuser_username
+  }
+}
+
+data "template_file" "install_codedeploy" {
+  template = file("${path.module}/scripts/install-codedeploy.sh")
+
+  vars = {
+    codedeploy_agent_s3_bucket = "aws-codedeploy-us-west-2.s3.amazonaws.com"
   }
 }
 
@@ -91,7 +108,7 @@ data "template_file" "registration_service" {
 }
 
 data "template_file" "docker_daemon_json" {
-  template = file("${path.module}/scripts/daemon.json")
+  template = file("${path.module}/scripts/docker-daemon-${var.docker_log_driver}.json")
 
   vars = {
     log_group = aws_cloudwatch_log_group.registration_group.name

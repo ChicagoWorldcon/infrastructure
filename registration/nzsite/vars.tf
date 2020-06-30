@@ -37,4 +37,7 @@ variable "use_test_certs" {
 
 variable "app_name" { type = string }
 variable "deployment_group_name" { type = string }
-
+variable "docker_log_driver" {
+  type    = string
+  default = "journald"
+}

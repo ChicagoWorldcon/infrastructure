@@ -52,3 +52,16 @@ prod:
 ssh $(terraform output -json reg_public_dns | jq -r ".prod") 
 ```
 
+
+## Initializing the DB
+
+One time per reg stage, you need to do this:
+
+```
+# psql.admin postgres 
+postgres=> CREATE ROLE <stage-site-user> WITH LOGIN CREATEDB PASSWORD '<stage-site-password>';
+postgres=> \q
+
+# cd /opt/chicago/app
+# sudo docker-compose run web bundle exec rake db:create db:structure:load db:migrate db:seed:chicago:production
+```
