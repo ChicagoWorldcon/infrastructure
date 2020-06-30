@@ -27,7 +27,7 @@ services:
       - /opt/chicago/etc/www.env
       - /opt/chicago/etc/creds.env
       - /opt/chicago/etc/overrides.env
-    image: registry.gitlab.com/worldcon/2020-wellington:latest
+    image: registry.gitlab.com/worldcon/wellington:latest
     restart: always
     volumes:
       - type: tmpfs
@@ -35,7 +35,7 @@ services:
 
   worker:
     entrypoint: "script/docker_sidekiq_entry.sh"
-    image: registry.gitlab.com/worldcon/2020-wellington:latest
+    image: registry.gitlab.com/worldcon/wellington:latest
     env_file:
       - /opt/chicago/etc/service.env
       - /opt/chicago/etc/sidekiq.env

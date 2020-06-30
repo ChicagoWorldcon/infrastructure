@@ -9,7 +9,7 @@ ${www_domain_name} {
     log stdout
 %{ if stage != "prod" }
     basicauth / {
-        preview JDJhJDEwJEJsRlZCSEwwVjFMSTdJWmF5cDNSUS5FTFk3M2VERFBEaVRSYVFjd0R6Yldwdy93Y0VKZ0Jh
+        preview JDJhJDEwJGdDcm9uR0EwOE9NQUFGNWx5Rzl5VHVjQmVaY1V2elJwbktDbi92YlU1S241anA1Z2lrWHM2
     }
 %{ endif }
     reverse_proxy * web:3000 {
