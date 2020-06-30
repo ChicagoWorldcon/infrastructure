@@ -61,11 +61,24 @@ module "chicon-legacy-dns-entries" {
   dns_zone_id = module.dns.dns_zone_id
 }
 
+module "chicon-2000-site" {
+  source              = "./legacy-site/"
+  dns_zone_id         = module.dns.dns_zone_id
+  bucket_name         = "2000.chicon.org"
+  aws_region          = var.region
+  aliases             = ["2000.chicon.org"]
+  acm_certificate_arn = module.global.acm_certificate_arn
+}
+
 data "aws_region" "current" {}
 
 module "global" {
-  source  = "./all_stages/"
-  project = var.project
+  source = "./all_stages/"
+  providers = {
+    aws.acm = aws.us-east-1
+  }
+  project     = var.project
+  domain_name = var.domain_name
 }
 
 module "prod-creds" {
