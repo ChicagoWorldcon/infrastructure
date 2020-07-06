@@ -16,8 +16,8 @@ module "chicondb" {
   security_group_id       = module.vpc.default_security_group_id
 }
 
-module "registration" {
-  source      = "./registration/"
+module "hosting" {
+  source      = "./hosting/"
   project     = var.project
   region      = var.region
   dns_zone_id = module.dns.dns_zone_id

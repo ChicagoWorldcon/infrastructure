@@ -12,36 +12,36 @@ output "db_instance_id" {
 
 output "reg_hostname" {
   value = {
-    dev  = module.registration.dev.public_dns
-    prod = module.registration.prod.public_dns
+    dev  = module.hosting.dev.public_dns
+    prod = module.hosting.prod.public_dns
   }
 }
 
 output "reg_private_ip" {
   value = {
-    dev  = module.registration.dev.private_ip
-    prod = module.registration.prod.private_ip
+    dev  = module.hosting.dev.private_ip
+    prod = module.hosting.prod.private_ip
   }
 }
 
 output "reg_public_ip" {
   value = {
-    dev  = module.registration.dev.public_ip
-    prod = module.registration.prod.public_ip
+    dev  = module.hosting.dev.public_ip
+    prod = module.hosting.prod.public_ip
   }
 }
 
 output "reg_public_dns" {
   value = {
-    dev  = module.registration.dev.public_dns
-    prod = module.registration.prod.public_dns
+    dev  = module.hosting.dev.public_dns
+    prod = module.hosting.prod.public_dns
   }
 }
 
 output "reg_instance_id" {
   value = {
-    dev  = module.registration.dev.instance_id
-    prod = module.registration.prod.instance_id
+    dev  = module.hosting.dev.instance_id
+    prod = module.hosting.prod.instance_id
   }
 }
 
@@ -51,8 +51,8 @@ output "global_ns" {
 
 output "site" {
   value = {
-    dev  = module.registration.dev.www_fqdn
-    prod = module.registration.prod.www_fqdn
+    dev  = module.hosting.dev.www_fqdn
+    prod = module.hosting.prod.www_fqdn
   }
 }
 
