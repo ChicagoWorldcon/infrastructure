@@ -1,0 +1,24 @@
+---
+- name: install caddy
+  apt:
+    deb: https://github.com/caddyserver/caddy/releases/download/v{{ caddy_version }}/caddy_{{ caddy_version }}_linux_{{ caddy_architecture }}.deb
+  become: yes
+
+- name: set up Caddy paths
+  file: path={{ item }} state=directory owner=root group=chicago mode=0750   
+  with_items:
+    - "{{ caddy_conf_dir }}/sites-enabled"
+  become: yes
+    
+- name: setup Caddyfile
+  template:
+    src: Caddyfile.j2
+    dest: "/etc/caddy/Caddyfile"
+
+  notify: restart webserver
+  become: yes
+
+- name: setup default redirect
+  template: src=redirect.conf.j2 dest=/opt/chicago/etc/sites-enabled/00-redirect.conf owner=root group=chicago mode=0644
+  become: yes
+  notify: restart webserver

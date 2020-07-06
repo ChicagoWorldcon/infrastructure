@@ -1,0 +1,7 @@
+---
+service_paths:
+  - /opt/chicago/bin
+  - /opt/chicago/sbin
+  - /opt/chicago/etc
+  - /opt/chicago/app
+  - /opt/chicago/var

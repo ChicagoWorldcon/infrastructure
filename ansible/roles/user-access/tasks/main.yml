@@ -1,0 +1,42 @@
+---
+- name: "[admin] override our skel files"
+  copy:
+    src: dot_bashrc
+    dest: /etc/skel/.bashrc
+    owner: root
+    group: root
+    mode: 0644
+
+- name: "[admin] add user"
+  become: yes
+  user:
+    name: "{{ item.username }}"
+    shell: /bin/bash
+    state: present
+  with_items: "{{ admin_users }}"
+
+- name: "[admin] authorize key for user"
+  become: yes
+  authorized_key:
+    key: "{{ item.public_key }}"
+    user: "{{ item.username }}"
+    manage_dir: yes
+  with_items: "{{ admin_users }}"
+
+- name: "[admin] add sudo access for user"
+  become: yes
+  user:
+    name: "{{ item.username }}"
+    append: yes
+    groups:
+      - sudo
+  when: item.sudo
+  with_items: "{{ admin_users }}"
+
+- name: "[admin] add additional groups for user"
+  become: yes
+  user:
+    name: "{{ item.username }}"
+    append: yes
+    groups: "{{ item.extra_groups }}"
+  with_items: "{{ admin_users }}"

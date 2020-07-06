@@ -1,0 +1,10 @@
+[Unit]
+Description=Runs credential rotator
+Wants=rorate-creds.timer
+
+[Service]
+ExecStart=/opt/chicago/sbin/rotate-creds.sh
+WorkingDirectory=/opt/chicago
+
+[Install]
+WantedBy=multi-user.target

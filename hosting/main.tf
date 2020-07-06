@@ -33,6 +33,13 @@ module "dev-creds" {
   }
 }
 
+module "dev-dns" {
+  source      = "./dns"
+  suffix      = "-dev"
+  dns_zone_id = var.dns_zone_id
+  infra_host  = module.dev-site.site_fqdn
+}
+
 module "dev-site" {
   source = "./nzsite"
 

@@ -73,6 +73,16 @@ resource "aws_iam_role_policy" "registration" {
             "arn:aws:s3:::${var.codepipeline_bucket}/*",
             "arn:aws:s3:::${var.codedeploy_bucket}/*"
           ]
+        },
+        {
+          "Effect": "Allow",
+          "Action": [
+            "rds:DescribeDBInstances",
+            "rds:ListTagsForResource"
+          ],
+          "Resource": [
+            "*"
+          ]
         }
     ]
 }

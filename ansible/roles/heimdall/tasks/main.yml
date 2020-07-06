@@ -1,0 +1,66 @@
+---
+- name: "[heimdall] Create the service user"
+  user:
+    name: heimdall
+    groups:
+      - chicago
+  register: service_user
+  become: yes
+
+- name: get chicago gid
+  getent:
+    database: group
+    key: chicago
+
+- name: Ensure the config directories are present
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+    owner: heimdall
+    group: chicago
+  with_items:
+    - /opt/chicago/etc/heimdall
+  become: yes
+
+- name: Define the default service Docker volumes
+  set_fact:
+    _heimdall_docker_volumes:
+      - "/opt/chicago/etc/heimdall:/config"
+
+- name: Append any additional volume mounts
+  set_fact:
+    _heimdall_docker_volumes: "{{ _heimdall_docker_volumes }} + {{ heimdall_additional_volumes }}"
+
+- name: Define the default Docker environment variables
+  set_fact:
+    _heimdall_environment_vars:
+      PGID: "{{ service_user.uid }}"
+      PUID: "{{ getent_group.chicago[1] }}"
+
+- name: Append any additional environment variables
+  set_fact:
+    _heimdall_environment_vars: "{{ _heimdall_environment_vars | combine(heimdall_additional_environment_variables) }}"
+
+- name: Ensure the docker-compose template directory exists
+  file:
+    state: directory
+    path: "/opt/chicago/app/heimdall"
+  become: yes
+
+- name: Ensure this service's docker-compose template is present
+  template:
+    src: docker-compose.yml.j2
+    dest: /opt/chicago/app/heimdall/docker-compose.yml
+  become: yes
+
+- name: Ensure the service container(s) is/are started
+  docker_compose:
+    project_src: /opt/chicago/app/heimdall
+    pull: yes
+  become: yes
+
+- name: Set up caddy forwarder
+  template: src=heimdall.conf.j2 dest=/opt/chicago/etc/sites-enabled/heimdall.conf owner=root group=chicago mode=0644
+  become: yes
+  notify: reload webserver

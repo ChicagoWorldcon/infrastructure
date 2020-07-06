@@ -2,13 +2,14 @@ locals {
   common_tags = {
     Project     = var.project
     Environment = var.stage
+    Application = "web"
   }
 }
 
 resource "aws_instance" "web" {
-  # lifecycle {
-  #   ignore_changes = [user_data, ]
-  # }
+  lifecycle {
+    ignore_changes = [user_data, ]
+  }
 
   ami           = data.aws_ami.alinux.id
   instance_type = var.instance_type

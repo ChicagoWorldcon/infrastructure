@@ -1,0 +1,7 @@
+---
+- name: reload webserver
+  service:
+    name: caddy
+    state: reloaded
+  become: yes
+    

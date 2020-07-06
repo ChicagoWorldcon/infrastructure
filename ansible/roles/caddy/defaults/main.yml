@@ -1,0 +1,8 @@
+---
+caddy_version: "2.1.1"
+
+caddy_conf_dir: "/opt/chicago/etc"
+
+caddy_architecture: "{{ ansible_architecture }}"
+
+caddy_use_test_endpoint: false

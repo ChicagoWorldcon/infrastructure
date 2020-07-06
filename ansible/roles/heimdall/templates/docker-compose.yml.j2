@@ -1,0 +1,20 @@
+version: '3.7'
+services:
+  heimdall:
+    image: linuxserver/heimdall:{{ heimdall_docker_version }}
+    container_name: heimdall
+    hostname: heimdall
+    restart: always
+    ports:
+      - "{{ heimdall_public_port }}:443"
+      - "127.0.0.1:{{ heimdall_insecure_public_port}}:80"
+    volumes:
+{% for vol in _heimdall_docker_volumes %}
+      - {{ vol }}
+{% endfor %}
+{% if _heimdall_environment_vars %}
+    environment:
+{% for k, v in _heimdall_environment_vars.items() %}
+      - {{ k }}={{ v }}
+{% endfor %}
+{% endif %}

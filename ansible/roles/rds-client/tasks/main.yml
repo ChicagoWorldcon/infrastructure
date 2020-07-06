@@ -1,0 +1,33 @@
+---
+- name: ensure that we have our library requirements
+  pip:
+    name: boto3
+    state: present
+  become: yes
+
+- name: get the db endpoint
+  rds_instance_info:
+    aws_region: "{{ lookup('env', 'AWS_REGION') }}"
+    db_instance_identifier: chicon-shared
+  register: chicon_db
+
+- name: set the DB enpoint
+  set_fact:
+    chicon_db_endpoint: "{{ chicon_db.instances[0].endpoint.address }}"
+
+
+- name: create the admin psql
+  template: src=psql.sh.j2 dest=/usr/local/bin/psql.admin mode=0755 owner=root group=chicago
+  vars:
+    db_username: "{{ db_superuser_username }}"
+    db_secret: "{{ db_superuser_secret }}"
+    db_name: ""
+  become: yes
+
+- name: create the admin db
+  template: src=db.sh.j2 dest=/usr/local/bin/db.admin mode=0755 owner=root group=chicago
+  vars:
+    db_username: "{{ db_superuser_username }}"
+    db_secret: "{{ db_superuser_secret }}"
+    db_name: ""
+  become: yes

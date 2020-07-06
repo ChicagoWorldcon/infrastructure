@@ -9,3 +9,4 @@ terraform/
 /ssh.auto.tfvars
 plan
 /data/*.json
+.vault-password

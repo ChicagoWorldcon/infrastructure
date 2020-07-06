@@ -1,0 +1,57 @@
+---
+- name: Create the service group
+  group:
+    name: chicago
+    state: present
+  become: yes
+
+- name: set the AWS region in all shell profiles
+  lineinfile:
+    path: /etc/profile.d/set-aws-region.sh
+    line: export AWS_DEFAULT_REGION={{ lookup('env', 'AWS_REGION') }}
+    regexp: ^export AWS_DEFAULT_REGION=
+    state: present
+    create: yes
+  become: yes
+
+- name: set the instance prompt to a stage colour
+  template:
+    src: set-instance-prompt.sh.j2
+    dest: /etc/profile.d/instance-prompt.sh
+  become: yes
+
+- name: set the default paths
+  lineinfile:
+    path: /etc/profile.d/chicago-paths.sh
+    line: export PATH=/opt/chicago/bin:$PATH
+    state: present
+    create: yes
+  become: yes
+
+- name: Prepare the service directories
+  file:
+    path: "{{ item }}"
+    owner: root
+    group: chicago
+    state: directory
+    mode: 0755
+  with_items: "{{ service_paths }}"
+  become: yes
+
+- name: Install the credential rotation script
+  template: src=rotate-creds.sh.j2 dest=/opt/chicago/sbin/rotate-creds.sh owner=root group=root mode=0700
+  become: yes
+
+- name: Install the credential rotation service
+  template: src=rotate-creds.service.j2 dest=/etc/systemd/system/rotate-creds.service
+  notify: reload services
+  become: yes
+
+- name: Install the credential rotation service timer
+  template: src=rotate-creds.timer.j2 dest=/etc/systemd/system/rotate-creds.timer
+  notify: reload services
+  become: yes
+
+- name: Install the hostname env script
+  template: src=hostname.env.j2 dest=/opt/chicago/etc/hostname.env owner=root group=chicago mode=0644
+  become: yes

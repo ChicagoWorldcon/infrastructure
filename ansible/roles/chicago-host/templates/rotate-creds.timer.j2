@@ -1,0 +1,12 @@
+[Unit]
+Description=Run rotate-creds every 3 hours
+Requires=rotate-creds.service
+
+[Timer]
+Unit=rotate-creds.service
+OnUnitInactiveSec=3h
+RandomizedDelaySec=15m
+AccuracySec=1s
+
+[Install]
+WantedBy=timers.target

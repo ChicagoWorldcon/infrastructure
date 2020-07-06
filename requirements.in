@@ -4,3 +4,4 @@ invoke
 python-terraform
 pyhcl
 isort
+ansible
