@@ -1,2 +1,6 @@
 db_superuser_username: chiconadmin
 db_superuser_secret: Chicon8/db/db_superuser_password
+
+wellington_ecr_registry: 666959015006.dkr.ecr.us-west-2.amazonaws.com/wellington
+
+domain_name: chicon.org

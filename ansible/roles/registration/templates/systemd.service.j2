@@ -1,0 +1,12 @@
+[Unit]
+Restart=always
+Description=Run wellington docker container
+User=wellington
+
+[Service]
+ExecStartPre=/bin/bash -c 'eval $(docker run rlister/ecr-login:latest)'
+ExecStart=/usr/bin/docker-compose up
+WorkingDirectory=/opt/chicago/app/wellington
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,56 @@
+version: '3.7'
+services:
+  redis:
+    image: redis:alpine
+    restart: always
+    volumes:
+      - redis-data:/data
+
+  web:
+    image: {{ wellington_ecr_registry }}:{{ wellington_docker_version }}
+    ports:
+      - "{{ wellington_public_port }}:443"
+      - "127.0.0.1:{{ wellington_insecure_public_port}}:3000"
+    volumes:
+      - type: tmpfs
+        target: /app/tmp
+{% for vol in _wellington_docker_volumes %}
+      - {{ vol }}
+{% endfor %}
+{% if _wellington_environment_vars %}
+    environment:
+{% for k, v in _wellington_environment_vars.items() %}
+      - {{ k }}={{ v }}
+{% endfor %}
+{% endif %}
+    env_file:
+      - /opt/chicago/etc/hostname.env
+      - /opt/chicago/etc/wellington.env
+      - /opt/chicago/etc/wellington-overrides.env
+      - /opt/chicago/etc/creds.env
+    restart: always
+
+  worker:
+    entrypoint: "script/docker_sidekiq_entry.sh"
+    image: {{ wellington_ecr_registry }}:{{ wellington_docker_version }}
+    volumes:
+      - type: tmpfs
+        target: /app/tmp
+{% for vol in _wellington_docker_volumes %}
+      - {{ vol }}
+{% endfor %}
+{% if _wellington_environment_vars %}
+    environment:
+{% for k, v in _wellington_environment_vars.items() %}
+      - {{ k }}={{ v }}
+{% endfor %}
+{% endif %}
+    env_file:
+      - /opt/chicago/etc/hostname.env
+      - /opt/chicago/etc/wellington.env
+      - /opt/chicago/etc/wellington-overrides.env
+      - /opt/chicago/etc/creds.env
+    restart: always
+
+volumes:
+  redis-data:

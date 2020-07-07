@@ -17,7 +17,7 @@
         "ecr:BatchGetImage",
         "ecr:BatchCheckLayerAvailability"
       ],
-      "Resource": "arn:aws:ecr:::repository/*"
+      "Resource": "*"
     }
   ]
 }

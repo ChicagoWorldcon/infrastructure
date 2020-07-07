@@ -55,3 +55,15 @@
 - name: Install the hostname env script
   template: src=hostname.env.j2 dest=/opt/chicago/etc/hostname.env owner=root group=chicago mode=0644
   become: yes
+
+- name: reload services
+  systemd:
+    daemon_reload: yes
+  become: yes
+
+- name: Enable the credential rotation timer
+  systemd:
+    name: rotate-creds.timer
+    state: started
+    enabled: yes
+  become: yes

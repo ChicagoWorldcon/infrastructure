@@ -4,6 +4,7 @@ Requires=rotate-creds.service
 
 [Timer]
 Unit=rotate-creds.service
+OnBootSec=1min
 OnUnitInactiveSec=3h
 RandomizedDelaySec=15m
 AccuracySec=1s

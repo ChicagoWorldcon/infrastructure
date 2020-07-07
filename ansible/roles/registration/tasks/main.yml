@@ -1,2 +1,122 @@
 ---
-# tasks file for registration
+- name: "[wellington] Create the service user"
+  user:
+    name: wellington
+    groups:
+      - chicago
+  register: service_user
+  become: yes
+
+- name: get chicago gid
+  getent:
+    database: group
+    key: chicago
+  check_mode: no
+
+- name: Ensure the config directories are present
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+    owner: wellington
+    group: chicago
+  with_items:
+    - /opt/chicago/etc/wellington
+  become: yes
+
+- name: Define the default service Docker volumes
+  set_fact:
+    _wellington_docker_volumes:
+      - "/opt/chicago/etc/wellington:/config"
+
+- name: Append any additional volume mounts
+  set_fact:
+    _wellington_docker_volumes: "{{ _wellington_docker_volumes }} + {{ wellington_additional_volumes }}"
+
+- name: Define the default Docker environment variables
+  set_fact:
+    _wellington_environment_vars:
+      PGID: "{{ service_user.uid }}"
+      PUID: "{{ getent_group.chicago[1] }}"
+
+- name: Append any additional environment variables
+  set_fact:
+    _wellington_environment_vars: "{{ _wellington_environment_vars | combine(wellington_additional_environment_variables) }}"
+
+- name: Ensure the docker-compose template directory exists
+  file:
+    state: directory
+    path: "/opt/chicago/app/wellington"
+  become: yes
+
+- name: get the db endpoint
+  rds_instance_info:
+    aws_region: "{{ lookup('env', 'AWS_REGION') }}"
+    db_instance_identifier: chicon-shared
+  register: chicon_db
+
+- name: set the DB enpoint
+  set_fact:
+    chicon_db_endpoint: "{{ chicon_db.instances[0].endpoint.address }}"
+
+- name: create the admin psql script 
+  template: src=psql.sh.j2 dest=/usr/local/bin/psql.reg mode=0755 owner=root group=chicago
+  vars:
+    db_username: "{{ registration_db_username }}"
+    db_secret: "{{ registration_db_secret }}"
+    db_name: "{{ registration_db_name }}"
+  become: yes
+
+- name: create the admin db script
+  template: src=db.sh.j2 dest=/usr/local/bin/db.reg mode=0755 owner=root group=chicago
+  vars:
+    db_username: "{{ registration_db_username }}"
+    db_secret: "{{ registration_db_secret }}"
+    db_name: "{{ registration_db_name }}"
+  become: yes
+
+- name: Ensure an override file is present
+  file:
+    path: /opt/chicago/etc/wellington-overrides.env
+    state: file
+
+- name: Ensure this service's environment file is present
+  template:
+    src: service.env.j2
+    dest: /opt/chicago/etc/wellington.env
+  vars:
+    db_hostname: "{{ chicon_db_endpoint }}"
+    db_name: "{{ registration_db_name }}"
+    db_site_username: "{{ registration_db_username }}"
+  become: yes
+  notify: restart site
+
+- name: Ensure this service's docker-compose template is present
+  template:
+    src: docker-compose.yml.j2
+    dest: /opt/chicago/app/wellington/docker-compose.yml
+  become: yes
+  notify: restart site
+
+- name: Set up a unit file for the service
+  template:
+    src: systemd.service.j2
+    dest: /etc/systemd/system/wellington.service
+  become: yes
+
+- name: reload services
+  systemd:
+    daemon_reload: yes
+  become: yes
+
+- name: Ensure the service container(s) is/are started
+  systemd:
+    name: wellington
+    enabled: yes
+    state: started
+  become: yes
+
+- name: Set up caddy forwarder
+  template: src=wellington.conf.j2 dest=/opt/chicago/etc/sites-enabled/wellington.conf owner=root group=chicago mode=0644
+  become: yes
+  notify: reload webserver

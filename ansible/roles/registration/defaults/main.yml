@@ -1,2 +1,9 @@
 ---
-# defaults file for registration
+wellington_docker_version: "ci-testing"
+
+wellington_additional_volumes: []
+wellington_additional_environment_variables: {}
+
+# The public port for the Wellington server
+wellington_public_port: 2443
+wellington_insecure_public_port: 2380

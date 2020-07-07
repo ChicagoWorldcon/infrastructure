@@ -16,7 +16,7 @@
     chicon_db_endpoint: "{{ chicon_db.instances[0].endpoint.address }}"
 
 
-- name: create the admin psql
+- name: create the admin psql script 
   template: src=psql.sh.j2 dest=/usr/local/bin/psql.admin mode=0755 owner=root group=chicago
   vars:
     db_username: "{{ db_superuser_username }}"
@@ -24,7 +24,7 @@
     db_name: ""
   become: yes
 
-- name: create the admin db
+- name: create the admin db script
   template: src=db.sh.j2 dest=/usr/local/bin/db.admin mode=0755 owner=root group=chicago
   vars:
     db_username: "{{ db_superuser_username }}"

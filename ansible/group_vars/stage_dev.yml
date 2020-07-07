@@ -15,4 +15,14 @@ prompt_color_code: "34"
 
 external_hostname: infra-dev.chicon.org
 heimdall_fqdn: dashboard-dev.chicon.org
+wellington_fqdn: registration-dev.chicon.org
 
+registration_db_name: registration_dev
+registration_db_username: registration_dev
+
+devise_secret: Chicon8/tokens/session/dev
+jwt_secret: Chicon8/tokens/jwt/dev
+sendgrid_secret: Chicon8/sendgrid_api_key/dev
+registration_db_secret: Chicon8/db/registration_dev/registration_dev_admin/dev
+sidekiq_secret: Chicon8/sidekiq_password/dev
+stripe_secret: Chicon8/stripe_api_key/dev
