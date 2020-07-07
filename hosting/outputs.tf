@@ -12,6 +12,8 @@ output "prod" {
     public_ip         = "UNSET"
     instance_id       = "UNSET"
     www_fqdn          = "UNSET"
+
+    instance_role_name = module.prod-creds.registration_iam_role_name
   }
 }
 
@@ -23,6 +25,8 @@ output "dev" {
     public_ip         = module.dev-site.public_ip
     instance_id       = module.dev-site.id
     www_fqdn          = module.dev-site.site_fqdn
+
+    instance_role_name = module.dev-creds.registration_iam_role_name
   }
 }
 

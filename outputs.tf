@@ -75,3 +75,7 @@ output "rds_site_user" {
     }
   }
 }
+
+output "ecr_urls" {
+  value = module.global.ecr_urls
+}

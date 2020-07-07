@@ -83,6 +83,26 @@ module "global" {
   domain_name = var.domain_name
 }
 
+resource "aws_iam_group" "developers" {
+  name = "developers"
+  path = "/it/users/"
+}
+
+resource "aws_iam_group_policy_attachment" "dev-pull" {
+  group      = aws_iam_group.developers.name
+  policy_arn = module.global.ecr_pull_policy
+}
+
+resource "aws_iam_role_policy_attachment" "instance-pull-dev" {
+  role       = module.hosting.dev.instance_role_name
+  policy_arn = module.global.ecr_pull_policy
+}
+
+resource "aws_iam_role_policy_attachment" "instance-pull-prod" {
+  role       = module.hosting.prod.instance_role_name
+  policy_arn = module.global.ecr_pull_policy
+}
+
 module "prod-creds" {
   source  = "./identity"
   db_name = var.registration_db_name
