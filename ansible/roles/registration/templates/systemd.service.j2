@@ -1,12 +1,19 @@
 [Unit]
 Restart=always
+Requires=docker.service
+Requires=rotate-creds.timer
+
 Description=Run wellington docker container
 User=wellington
 
 [Service]
-ExecStartPre=/bin/bash -c 'eval $(docker run rlister/ecr-login:latest)'
-ExecStart=/usr/bin/docker-compose up
 WorkingDirectory=/opt/chicago/app/wellington
+
+ExecStartPre=/bin/bash -c 'eval $(docker run rlister/ecr-login:latest)'
+
+ExecStart=/usr/bin/docker-compose up
+
+ExecStop=/usr/bin/docker-compose down -v
 
 [Install]
 WantedBy=multi-user.target
