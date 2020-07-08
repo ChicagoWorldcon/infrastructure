@@ -16,6 +16,7 @@ prompt_color_code: "34"
 external_hostname: infra-dev.chicon.org
 heimdall_fqdn: dashboard-dev.chicon.org
 wellington_fqdn: registration-dev.chicon.org
+wellington_docker_version: "staging"
 
 registration_db_name: registration_dev
 registration_db_username: registration_dev

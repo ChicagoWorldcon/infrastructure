@@ -1,6 +1,4 @@
 ---
-wellington_docker_version: "ci-testing"
-
 wellington_additional_volumes: []
 wellington_additional_environment_variables: {}
 
