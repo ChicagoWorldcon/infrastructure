@@ -35,7 +35,7 @@ module "dev-creds" {
 
 module "dev-dns" {
   source      = "./dns"
-  suffix      = "-dev"
+  suffix      = ".dev"
   dns_zone_id = var.dns_zone_id
   infra_host  = module.dev-site.site_fqdn
 }
@@ -60,8 +60,7 @@ module "dev-site" {
   iam_role_name        = module.dev-creds.registration_iam_role_name
 
   # remote hosts
-  www_domain_name     = "${var.dev_www_prefix}.${var.domain_name}"
-  sidekiq_domain_name = "${var.dev_sidekiq_prefix}.${var.domain_name}"
+  www_domain_name = "${var.dev_www_prefix}.${var.domain_name}"
 }
 
 module "prod-creds" {

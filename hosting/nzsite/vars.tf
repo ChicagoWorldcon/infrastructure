@@ -7,7 +7,6 @@ variable "security_group_id" { type = string }
 variable "public_subnet_id" { type = string }
 
 variable "www_domain_name" { type = string }
-variable "sidekiq_domain_name" { type = string }
 
 variable "instance_type" { type = string }
 variable "iam_instance_profile" { type = string }
