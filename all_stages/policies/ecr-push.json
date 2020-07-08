@@ -21,7 +21,7 @@
         "ecr:UploadLayerPart",
         "ecr:CompleteLayerUpload"
       ],
-      "Resource": "arn:aws:ecr:::repository/*"
+      "Resource": "*"
     }
   ]
 }
