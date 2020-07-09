@@ -5,6 +5,7 @@ filters:
   tag:Project: Chicon8
   tag:Environment:
     - dev
+    - blog
 
 keyed_groups:
   - prefix: stage

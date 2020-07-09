@@ -7,7 +7,7 @@
 #         object: "chicago/state.tfstate"
 #       register: infra
 - hosts:
-    - app_web
+    - stage_dev
   roles:
     - role: chicago-host
     - role: caddy
@@ -15,7 +15,7 @@
       become: yes
 
 - hosts:
-    - app_web
+    - app_Registration
   roles:
     - role: heimdall
     - role: rds-client

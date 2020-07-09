@@ -1,0 +1,16 @@
+[Unit]
+Restart=always
+Requires=docker.service
+
+Description=Run wordpress docker container
+User=wordpress
+
+[Service]
+WorkingDirectory=/opt/chicago/app/wordpress
+
+ExecStart=/usr/bin/docker-compose up
+
+ExecStop=/usr/bin/docker-compose down -v
+
+[Install]
+WantedBy=multi-user.target

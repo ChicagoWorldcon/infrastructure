@@ -1,7 +1,8 @@
 variable "stage" { type = string }
 variable "project" { type = string }
-variable "vpc_id" { type = string }
+variable "application" { type = string }
 
+variable "vpc_id" { type = string }
 variable "dns_zone_id" { type = string }
 variable "security_group_id" { type = string }
 variable "public_subnet_id" { type = string }

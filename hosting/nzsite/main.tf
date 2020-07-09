@@ -2,7 +2,7 @@ locals {
   common_tags = {
     Project     = var.project
     Environment = var.stage
-    Application = "web"
+    Application = var.application
   }
 }
 
@@ -26,7 +26,7 @@ resource "aws_instance" "web" {
 
   tags = merge(
     local.common_tags,
-    map("Name", "${var.stage} registration")
+    map("Name", "${var.stage} ${var.application}")
   )
 
 }
@@ -113,18 +113,18 @@ data "local_file" "public_key" {
 }
 
 resource "aws_key_pair" "reg_system_key" {
-  key_name   = "${var.project}-${var.stage}-registration-key"
+  key_name   = "${var.project}-${var.stage}-${lower(var.application)}-key"
   public_key = data.local_file.public_key.content
 }
 
 resource "aws_cloudwatch_log_group" "registration_group" {
-  name = "Registration/${var.stage}"
+  name = "${var.application}/${var.stage}"
 
   tags = merge(
     local.common_tags,
     map(
-      "Name", "${var.stage} registration-logs",
-      "Description", "Registration API logs",
+      "Name", "${var.stage} hosting logs",
+      "Description", "${var.application} ${var.stage} hosting logs",
     )
   )
 }

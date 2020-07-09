@@ -45,6 +45,8 @@ module "dev-site" {
 
   project     = var.project
   stage       = "dev"
+  application = "Registration"
+
   dns_zone_id = var.dns_zone_id
 
   vpc_id            = var.vpc_id
@@ -61,6 +63,7 @@ module "dev-site" {
 
   # remote hosts
   www_domain_name = "${var.dev_www_prefix}.${var.domain_name}"
+
 }
 
 module "prod-creds" {
@@ -80,11 +83,33 @@ module "prod-creds" {
   }
 }
 
-# resource "aws_route53_record" "a_record_org" {
-#   zone_id = var.dns_zone_id
-#   name    = "${var.prod_api_prefix}.${var.domain_name}"
-#   type    = "A"
-#   ttl     = 300
-#   records = [module.prod-site.public_ip]
-# }
 
+resource "aws_route53_zone" "blog" {
+  name    = "chicagoworldconbid.org"
+  comment = "Blog DNS zone"
+}
+
+module "temp-blog" {
+  source = "./nzsite/"
+
+  project     = var.project
+  stage       = "blog"
+  application = "Wordpress"
+
+  dns_zone_id = aws_route53_zone.blog.zone_id
+
+  vpc_id            = var.vpc_id
+  security_group_id = var.security_group_id
+  public_subnet_id  = var.vpc_public_subnet_id
+
+  # instance distinguishers
+  instance_type = "t2.micro"
+
+  # instance access
+  ssh_key_id           = var.ssh_key_id
+  iam_instance_profile = module.dev-creds.registration_iam_instance_profile_id
+  iam_role_name        = module.dev-creds.registration_iam_role_name
+
+  # remote hosts
+  www_domain_name = "${var.dev_www_prefix}.${var.domain_name}"
+}

@@ -1,0 +1,8 @@
+- hosts:
+    - app_Wordpress
+  roles:
+    - role: caddy
+    - role: user-access
+      become: yes
+    - role: wordpress
+

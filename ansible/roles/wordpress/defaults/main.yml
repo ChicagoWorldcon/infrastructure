@@ -1,0 +1,7 @@
+---
+wordpress_additional_volumes: []
+wordpress_additional_environment_variables: {}
+
+# The public port for the Wordpress server
+wordpress_public_port: 2443
+wordpress_insecure_public_port: 2380
