@@ -31,6 +31,22 @@ resource "aws_instance" "web" {
 
 }
 
+resource "aws_ebs_volume" "web" {
+  availability_zone = aws_instance.web.availability_zone
+  size              = var.volume_size
+
+  tags = merge(
+    local.common_tags,
+    map("Name", "${var.stage} ${var.application}")
+  )
+}
+
+resource "aws_volume_attachment" "web" {
+  volume_id   = aws_ebs_volume.web.id
+  instance_id = aws_instance.web.id
+  device_name = "/dev/sda1"
+}
+
 resource "aws_eip" "web" {
   instance = aws_instance.web.id
   vpc      = true
