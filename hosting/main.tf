@@ -89,29 +89,10 @@ resource "aws_route53_zone" "blog" {
   comment = "Blog DNS zone"
 }
 
-resource "aws_ses_domain_identity" "chicon_email" {
-  domain = var.domain_name
-}
-
-resource "aws_ses_domain_dkim" "chicon_email" {
-  domain = aws_ses_domain_identity.chicon_email.domain
-}
-
-resource "aws_route53_record" "chicon_email_verification" {
-  zone_id = var.dns_zone_id
-  name    = "_amazonses.${var.domain_name}"
-  type    = "TXT"
-  ttl     = "600"
-  records = [aws_ses_domain_identity.chicon_email.verification_token]
-}
-
-resource "aws_route53_record" "chicon_dkim_record" {
-  count   = 3
-  zone_id = var.dns_zone_id
-  name    = "${element(aws_ses_domain_dkim.chicon_email.dkim_tokens, count.index)}._domainkey.${var.domain_name}"
-  type    = "CNAME"
-  ttl     = "600"
-  records = ["${element(aws_ses_domain_dkim.chicon_email.dkim_tokens, count.index)}.dkim.amazonses.com"]
+module "chicon-email" {
+  source      = "../email/"
+  domain_name = "chicagoworldconbid.org"
+  dns_zone_id = var.dns_zone_id
 }
 
 module "temp-blog" {

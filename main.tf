@@ -52,6 +52,12 @@ module "dns" {
   role        = "IT"
 }
 
+module "chicon-email" {
+  source      = "./email/"
+  domain_name = var.domain_name
+  dns_zone_id = module.dns.dns_zone_id
+}
+
 module "chicon-dns-entries" {
   source                = "./dns-entries/"
   dns_zone_id           = module.dns.dns_zone_id
