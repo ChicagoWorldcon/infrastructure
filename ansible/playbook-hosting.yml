@@ -8,6 +8,7 @@
 #       register: infra
 - hosts:
     - stage_dev
+    - stage_prod
   roles:
     - role: chicago-host
     - role: caddy
