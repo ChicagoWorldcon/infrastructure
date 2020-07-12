@@ -1,4 +1,13 @@
 ---
+- name: install user support packages
+  apt:
+    pkg:
+      - acl
+      - hub
+      - direnv
+      - python3-venv
+    state: present
+
 - name: "[admin] override our skel files"
   copy:
     src: dot_bashrc
@@ -40,3 +49,42 @@
     append: yes
     groups: "{{ item.extra_groups }}"
   with_items: "{{ admin_users }}"
+
+- name: Add profile entry to enable direnv
+  become: yes
+  copy:
+    src: direnv_profile
+    dest: /etc/profile.d/direnv.sh
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Set up source checkout location
+  file:
+    path: /opt/chicago/src
+    state: directory
+    mode: 0770
+    owner: "{{ admin_users[0].username }}"
+    group: chicago
+
+- name: Set up the .envrc file in the checkout with postgres support
+  template:
+    src: src.envrc.j2
+    dest: /opt/chicago/src/.envrc
+    mode: 0660
+    owner: "{{ admin_users[0].username }}"
+    group: chicago
+
+- name: download rbenv installer
+  get_url:
+    url: https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-installer
+    dest: /opt/chicago/bin/rbenv-installer
+
+- name: install rbenv for admin users
+  become: yes
+  become_user: "{{ item.username }}"
+  command:
+    cmd: "bash < /opt/chicago/bin/rbenv-installer"
+    creates: "/home/{{ item.username }}/.rbenv/bin/rbenv"
+  with_items: "{{ admin_users }}"
+
