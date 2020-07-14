@@ -7,7 +7,7 @@ services:
       - redis-data:/data
 
   web:
-    image: {{ wellington_ecr_registry }}:{{ wellington_docker_version }}
+    image: {{ wellington_ecr_registry }}:${WELLINGTON_DOCKER_TAG}
     ports:
       - "{{ wellington_public_port }}:443"
       - "127.0.0.1:{{ wellington_insecure_public_port}}:3000"
@@ -32,7 +32,7 @@ services:
 
   worker:
     entrypoint: "script/docker_sidekiq_entry.sh"
-    image: {{ wellington_ecr_registry }}:{{ wellington_docker_version }}
+    image: {{ wellington_ecr_registry }}:${WELLINGTON_DOCKER_TAG}
     volumes:
       - type: tmpfs
         target: /app/tmp

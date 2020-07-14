@@ -1,19 +1,24 @@
 [Unit]
-Restart=always
 Requires=docker.service
 Requires=rotate-creds.timer
-
 Description=Run wellington docker container
-User=wellington
 
 [Service]
+User=wellington
+
 WorkingDirectory=/opt/chicago/app/wellington
 
+Environment=WELLINGTON_DOCKER_TAG={{ wellington_docker_version }}
+
 ExecStartPre=/bin/bash -c 'eval $(docker run rlister/ecr-login:latest)'
+
+ExecStartPre=/usr/bin/docker-compose pull
 
 ExecStart=/usr/bin/docker-compose up
 
 ExecStop=/usr/bin/docker-compose down -v
+
+Restart=always
 
 [Install]
 WantedBy=multi-user.target

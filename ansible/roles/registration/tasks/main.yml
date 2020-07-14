@@ -4,6 +4,7 @@
     name: wellington
     groups:
       - chicago
+      - docker
   register: service_user
   become: yes
 
