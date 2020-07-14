@@ -4,3 +4,13 @@ db_superuser_secret: Chicon8/db/db_superuser_password
 wellington_ecr_registry: 666959015006.dkr.ecr.us-west-2.amazonaws.com/wellington
 
 domain_name: chicon.org
+
+
+admin_users:
+  - username: offby1
+    public_key: "{{ lookup('file', '~/.ssh/id_ed25519.pub') }}"
+    sudo: yes
+    extra_groups:
+      - docker
+      - chicago
+      - adm
