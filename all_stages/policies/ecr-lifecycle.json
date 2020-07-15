@@ -1,0 +1,33 @@
+{
+    "rules": [
+        {
+            "rulePriority": 1,
+            "description": "Remove untagged after a day",
+            "selection": {
+                "countNumber": 1,
+                "countUnit": "days",
+                "countType": "sinceImagePushed",
+                "tagStatus": "untagged"
+            },
+            "action": {
+                "type": "expire"
+            }
+        },
+        {
+            "rulePriority": 2,
+            "description": "Remove ci test images after a day",
+            "selection": {
+                "countNumber": 1,
+                "countUnit": "days",
+                "countType": "sinceImagePushed",
+                "tagPrefixList": [
+                    "ci-"
+                ],
+                "tagStatus": "tagged"
+            },
+            "action": {
+                "type": "expire"
+            }
+        }
+    ]
+}

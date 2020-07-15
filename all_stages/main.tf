@@ -83,6 +83,10 @@ data "template_file" "policy_pull" {
   template = file("${path.module}/policies/ecr-pull.json")
 }
 
+data "template_file" "policy_ecr" {
+  template = file("${path.module}/policies/ecr-lifecycle.json")
+}
+
 resource "aws_iam_policy" "push" {
   name_prefix = "ecr-push"
   path        = "/it/docker/"
@@ -122,3 +126,7 @@ resource "aws_ecr_repository" "registration" {
   )
 }
 
+resource "aws_ecr_lifecycle_policy" "registration" {
+  repository = aws_ecr_repository.registration.name
+  policy     = data.template_file.policy_ecr.rendered
+}
