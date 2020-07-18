@@ -32,7 +32,7 @@ resource "aws_cloudfront_distribution" "site" {
 
     // Important to use this format of origin domain name, it is the only format that
     // supports S3 redirects with CloudFront
-    domain_name = aws_s3_bucket.site.bucket_domain_name
+    domain_name = aws_s3_bucket.site.bucket_regional_domain_name
     // domain_name = "${var.bucket_name}.s3-website-${var.aws_region}.amazonaws.com"
 
     origin_id   = var.s3_origin_id

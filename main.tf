@@ -78,6 +78,15 @@ module "chicon-2000-site" {
   acm_certificate_arn = module.global.acm_certificate_arn
 }
 
+module "chicon-7-site" {
+  source              = "./legacy-site/"
+  dns_zone_id         = module.dns.dns_zone_id
+  bucket_name         = "7.chicon.org"
+  aws_region          = var.region
+  aliases             = ["7.chicon.org"]
+  acm_certificate_arn = module.global.acm_certificate_arn
+}
+
 data "aws_region" "current" {}
 
 module "global" {
