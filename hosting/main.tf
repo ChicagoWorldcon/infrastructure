@@ -119,7 +119,7 @@ resource "aws_route53_zone" "blog" {
 module "chicon-email" {
   source      = "../email/"
   domain_name = "chicagoworldconbid.org"
-  dns_zone_id = var.dns_zone_id
+  dns_zone_id = aws_route53_zone.blog.zone_id
 }
 
 module "blog-mx" {
