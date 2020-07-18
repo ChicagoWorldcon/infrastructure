@@ -4,6 +4,7 @@ package_upgrade: true
 
 packages:
   - awscli
+  - amazon-ecr-credential-helper
   - build-essential
   - docker-compose
   - docker.io
