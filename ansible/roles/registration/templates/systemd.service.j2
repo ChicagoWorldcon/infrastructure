@@ -12,7 +12,7 @@ Environment=WELLINGTON_DOCKER_TAG={{ wellington_docker_version }}
 
 ExecStartPre=/bin/bash -c 'eval $(docker run rlister/ecr-login:latest)'
 
-ExecStartPre=/usr/bin/docker-compose pull
+ExecStart=/usr/bin/docker-compose pull
 
 ExecStart=/usr/bin/docker-compose up
 
