@@ -49,7 +49,7 @@ module "dev-dns" {
 }
 
 # module "prod-site" {
-#   source = "./nzsite"
+#   source = "./appserver"
 
 #   project     = var.project
 #   stage       = "prod"
@@ -75,7 +75,7 @@ module "dev-dns" {
 # }
 
 module "dev-site" {
-  source = "./nzsite"
+  source = "./appserver"
 
   project     = var.project
   stage       = "dev"
@@ -146,7 +146,7 @@ resource "aws_route53_record" "gsuite-txt" {
 }
 
 module "temp-blog" {
-  source = "./nzsite/"
+  source = "./appserver/"
 
   project     = var.project
   stage       = "blog"
