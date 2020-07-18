@@ -1,0 +1,10 @@
+[Unit]
+Description=Prune dangling docker images
+Wants=prune-images.timer
+
+[Service]
+ExecStart=/usr/bin/docker image prune --force --all
+WorkingDirectory=/opt/chicago
+
+[Install]
+WantedBy=multi-user.target

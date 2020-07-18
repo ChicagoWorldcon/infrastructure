@@ -1,0 +1,13 @@
+[Unit]
+Description=Run prune-images every 3 hours
+Requires=prune-images.service
+
+[Timer]
+Unit=prune-images.service
+OnBootSec=1min
+OnUnitInactiveSec=3h
+RandomizedDelaySec=15m
+AccuracySec=1s
+
+[Install]
+WantedBy=timers.target

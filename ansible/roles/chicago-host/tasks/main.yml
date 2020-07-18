@@ -52,6 +52,16 @@
   notify: reload services
   become: yes
 
+- name: Install the image prune service
+  template: src=prune-images.service.j2 dest=/etc/systemd/system/prune-images.service
+  notify: reload services
+  become: yes
+
+- name: Install the image prune service timer
+  template: src=prune-images.timer.j2 dest=/etc/systemd/system/prune-images.timer
+  notify: reload services
+  become: yes
+
 - name: Install the hostname env script
   template: src=hostname.env.j2 dest=/opt/chicago/etc/hostname.env owner=root group=chicago mode=0644
   become: yes
@@ -64,6 +74,13 @@
 - name: Enable the credential rotation timer
   systemd:
     name: rotate-creds.timer
+    state: started
+    enabled: yes
+  become: yes
+
+- name: Enable the docker prune timer
+  systemd:
+    name: prune-images.timer
     state: started
     enabled: yes
   become: yes
