@@ -33,6 +33,14 @@ module "dev-creds" {
   }
 }
 
+# module "prod-dns" {
+#   source      = "./dns"
+#   suffix      = ""
+#   dns_zone_id = var.dns_zone_id
+#   infra_host  = module.prod-site.site_fqdn
+# }
+
+
 module "dev-dns" {
   source      = "./dns"
   suffix      = ".dev"
@@ -40,7 +48,6 @@ module "dev-dns" {
   infra_host  = module.dev-site.site_fqdn
 }
 
-# Ready to construct the prod site
 # module "prod-site" {
 #   source = "./nzsite"
 
@@ -56,6 +63,7 @@ module "dev-dns" {
 
 #   # instance distinguishers
 #   instance_type = "t2.medium"
+#   volume_size   = 20
 
 #   # instance access
 #   ssh_key_id           = var.ssh_key_id
@@ -63,7 +71,7 @@ module "dev-dns" {
 #   iam_role_name        = module.prod-creds.registration_iam_role_name
 
 #   # remote hosts
-#   www_domain_name = "${var.dev_www_prefix}.${var.domain_name}"
+#   www_domain_name = "${var.prod_www_prefix}.${var.domain_name}"
 # }
 
 module "dev-site" {
