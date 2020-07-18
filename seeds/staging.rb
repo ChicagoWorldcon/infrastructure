@@ -199,7 +199,7 @@ support = Support.create(
 )
 puts
 puts "Support user created"
-puts "http://registration.dev.chicon.org/supports/sign_in"
+puts "https://registration.dev.chicon.org/supports/sign_in"
 puts "user: #{support.email}"
 puts "pass: 111111"
 puts
