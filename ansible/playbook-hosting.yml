@@ -19,6 +19,7 @@
     - app_Registration
   roles:
     - role: heimdall
+      when: stage != 'prod'
     - role: rds-client
     - role: registration
       

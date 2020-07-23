@@ -16,14 +16,15 @@ prompt_color_code: "31"
 external_hostname: infra.chicon.org
 heimdall_fqdn: dashboard.chicon.org
 wellington_fqdn: registration.chicon.org
-wellington_docker_version: "release"
+wellington_docker_version: "staging"
 
 registration_db_name: registration_prod
 registration_db_username: registration_prod
+registration_preview: yes
 
 devise_secret: Chicon8/tokens/session/prod
 jwt_secret: Chicon8/tokens/jwt/prod
 sendgrid_secret: Chicon8/sendgrid_api_key/prod
-registration_db_secret: Chicon8/db/registration_prod/registration_prod_admin/prod
+registration_db_secret: Chicon8/db/registration/registration_admin/prod
 sidekiq_secret: Chicon8/sidekiq_password/prod
 stripe_secret: Chicon8/stripe_api_key/prod

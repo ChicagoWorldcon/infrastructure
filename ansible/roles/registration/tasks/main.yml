@@ -77,10 +77,9 @@
   become: yes
 
 - name: Ensure an override file is present
-  file:
-    path: /opt/chicago/etc/wellington-overrides.env
-    state: file
-
+  file: path=/opt/chicago/etc/wellington-overrides.env state=touch mode=640 owner=root group=chicago
+  become: yes
+    
 - name: Ensure this service's environment file is present
   template:
     src: service.env.j2
