@@ -6,6 +6,8 @@
       - hub
       - direnv
       - python3-venv
+      - libssl-dev
+      - mosh
     state: present
 
 - name: "[admin] override our skel files"
@@ -83,8 +85,8 @@
 - name: install rbenv for admin users
   become: yes
   become_user: "{{ item.username }}"
-  command:
-    cmd: "bash < /opt/chicago/bin/rbenv-installer"
+  shell:
+    cmd: "cat /opt/chicago/bin/rbenv-installer | bash"
     creates: "/home/{{ item.username }}/.rbenv/bin/rbenv"
   with_items: "{{ admin_users }}"
-
+  ignore_errors: yes
