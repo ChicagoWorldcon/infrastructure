@@ -33,12 +33,12 @@ module "dev-creds" {
   }
 }
 
-# module "prod-dns" {
-#   source      = "./dns"
-#   suffix      = ""
-#   dns_zone_id = var.dns_zone_id
-#   infra_host  = module.prod-site.site_fqdn
-# }
+module "prod-dns" {
+  source      = "./dns"
+  suffix      = ""
+  dns_zone_id = var.dns_zone_id
+  infra_host  = module.prod-site.site_fqdn
+}
 
 
 module "dev-dns" {
@@ -48,31 +48,31 @@ module "dev-dns" {
   infra_host  = module.dev-site.site_fqdn
 }
 
-# module "prod-site" {
-#   source = "./appserver"
+module "prod-site" {
+  source = "./appserver"
 
-#   project     = var.project
-#   stage       = "prod"
-#   application = "Registration"
+  project     = var.project
+  stage       = "prod"
+  application = "Registration"
 
-#   dns_zone_id = var.dns_zone_id
+  dns_zone_id = var.dns_zone_id
 
-#   vpc_id            = var.vpc_id
-#   security_group_id = var.security_group_id
-#   public_subnet_id  = var.vpc_public_subnet_id
+  vpc_id            = var.vpc_id
+  security_group_id = var.security_group_id
+  public_subnet_id  = var.vpc_public_subnet_id
 
-#   # instance distinguishers
-#   instance_type = "t2.medium"
-#   volume_size   = 20
+  # instance distinguishers
+  instance_type = "t2.medium"
+  volume_size   = 20
 
-#   # instance access
-#   ssh_key_id           = var.ssh_key_id
-#   iam_instance_profile = module.prod-creds.registration_iam_instance_profile_id
-#   iam_role_name        = module.prod-creds.registration_iam_role_name
+  # instance access
+  ssh_key_id           = var.ssh_key_id
+  iam_instance_profile = module.prod-creds.registration_iam_instance_profile_id
+  iam_role_name        = module.prod-creds.registration_iam_role_name
 
-#   # remote hosts
-#   www_domain_name = "${var.prod_www_prefix}.${var.domain_name}"
-# }
+  # remote hosts
+  www_domain_name = "${var.prod_www_prefix}.${var.domain_name}"
+}
 
 module "dev-site" {
   source = "./appserver"
