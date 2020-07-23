@@ -22,71 +22,21 @@ resource "aws_iam_instance_profile" "registration" {
   role = aws_iam_role.registration.name
 }
 
+data "template_file" "hosting-role-policy" {
+  template = file("${path.module}/policies/instance-policy.json")
+
+  vars = {
+    stage               = var.stage
+    zone_id             = var.route53_zone_id
+    codepipeline_bucket = var.codepipeline_bucket
+    codedeploy_bucket   = var.codedeploy_bucket
+  }
+}
+
 resource "aws_iam_role_policy" "registration" {
   name   = "${var.project}-registration-policy-${var.stage}"
   role   = aws_iam_role.registration.name
-  policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "secretsmanager:GetSecretValue",
-                "secretsmanager:DescribeSecret"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "secretsmanager:ListSecrets"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "route53:ListHostedZones",
-                "route53:GetChange"
-            ],
-            "Resource": [
-                "*"
-            ]
-        },
-        {
-            "Effect" : "Allow",
-            "Action" : [
-                "route53:ChangeResourceRecordSets"
-            ],
-            "Resource" : [
-                "arn:aws:route53:::hostedzone/${var.route53_zone_id}"
-            ]
-        },
-        {
-          "Effect": "Allow",
-          "Action": [
-            "s3:Get*",
-            "s3:List*"
-          ],
-          "Resource": [
-            "arn:aws:s3:::${var.codepipeline_bucket}/*",
-            "arn:aws:s3:::${var.codedeploy_bucket}/*"
-          ]
-        },
-        {
-          "Effect": "Allow",
-          "Action": [
-            "rds:DescribeDBInstances",
-            "rds:ListTagsForResource"
-          ],
-          "Resource": [
-            "*"
-          ]
-        }
-    ]
-}
-EOF
+  policy = data.template_file.hosting-role-policy.rendered
 }
 
 resource "aws_iam_role_policy" "deployment" {
