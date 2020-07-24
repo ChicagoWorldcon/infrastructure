@@ -2,14 +2,21 @@
     "Version": "2012-10-17",
     "Statement": [
         {
+            "Sid": "GetSecretsForStage${stage}",
             "Effect": "Allow",
             "Action": [
                 "secretsmanager:GetSecretValue",
                 "secretsmanager:DescribeSecret"
             ],
-            "Resource": "*"
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "secretsmanager:ResourceTag/Environment": "${stage}"
+                }
+            }
         },
         {
+            "Sid": "ListSecretsForStage${stage}",
             "Effect": "Allow",
             "Action": [
                 "secretsmanager:ListSecrets"
@@ -17,44 +24,27 @@
             "Resource": "*"
         },
         {
+            "Sid": "DeploymentBucketAccessForStage${stage}",
             "Effect": "Allow",
             "Action": [
-                "route53:ListHostedZones",
-                "route53:GetChange"
+                "s3:Get*",
+                "s3:List*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::${codepipeline_bucket}/*",
+                "arn:aws:s3:::${codedeploy_bucket}/*"
+            ]
+        },
+        {
+            "Sid": "DatabaseDescriptionAccessForStage${stage}",
+            "Effect": "Allow",
+            "Action": [
+                "rds:DescribeDBInstances",
+                "rds:ListTagsForResource"
             ],
             "Resource": [
                 "*"
             ]
-        },
-        {
-            "Effect" : "Allow",
-            "Action" : [
-                "route53:ChangeResourceRecordSets"
-            ],
-            "Resource" : [
-                "arn:aws:route53:::hostedzone/${zone_id}"
-            ]
-        },
-        {
-          "Effect": "Allow",
-          "Action": [
-            "s3:Get*",
-            "s3:List*"
-          ],
-          "Resource": [
-            "arn:aws:s3:::${codepipeline_bucket}/*",
-            "arn:aws:s3:::${codedeploy_bucket}/*"
-          ]
-        },
-        {
-          "Effect": "Allow",
-          "Action": [
-            "rds:DescribeDBInstances",
-            "rds:ListTagsForResource"
-          ],
-          "Resource": [
-            "*"
-          ]
         }
     ]
 }
