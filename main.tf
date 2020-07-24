@@ -62,6 +62,30 @@ module "chicon-dns-entries" {
   source                = "./dns-entries/"
   dns_zone_id           = module.dns.dns_zone_id
   google_dns_validation = "2qv7hpi7tzfqzcwnjq77zd6qyt5uq43ovh4sg42lh4ixnl6c7bua.mx-verification.google.com."
+  sendgrid_records = [
+    # three DKIM tokens
+    {
+      name  = "em9738.chicon.org"
+      value = "u8094855.wl106.sendgrid.net"
+    },
+    {
+      name  = "s1._domainkey.chicon.org"
+      value = "s1.domainkey.u8094855.wl106.sendgrid.net"
+    },
+    {
+      name  = "s2._domainkey.chicon.org"
+      value = "s2.domainkey.u8094855.wl106.sendgrid.net"
+    },
+    # two records for link tracking
+    {
+      name  = "url2986.chicon.org"
+      value = "sendgrid.net"
+    },
+    {
+      name  = "8094855.chicon.org"
+      value = "sendgrid.net"
+    }
+  ]
 }
 
 module "chicon-legacy-dns-entries" {
