@@ -86,6 +86,7 @@ module "chicon-dns-entries" {
       value = "sendgrid.net"
     }
   ]
+  chicon_org_A_records = ["192.0.78.150", "192.0.78.229"]
 }
 
 module "chicon-legacy-dns-entries" {

@@ -5,10 +5,6 @@ module "google_domain_MX" {
   dns_validation = var.google_dns_validation
 }
 
-variable "sendgrid_records" {
-  type = list
-}
-
 resource "aws_route53_record" "sendgrid-dkim" {
   count   = length(var.sendgrid_records)
   zone_id = var.dns_zone_id
@@ -18,3 +14,10 @@ resource "aws_route53_record" "sendgrid-dkim" {
   records = [lookup(element(var.sendgrid_records, count.index), "value")]
 }
 
+# resource "aws_route53_record" "site_a_records" {
+#   zone_id = var.dns_zone_id
+#   name    = "chicon.org"
+#   type    = "A"
+#   ttl     = 300
+#   records = var.chicon_org_A_records
+# }
