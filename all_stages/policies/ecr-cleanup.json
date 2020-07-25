@@ -1,0 +1,13 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowCleanup",
+            "Effect": "Allow",
+            "Action": [
+                "ecr:BatchDeleteImage"
+            ],
+            "Resource": "arn:aws:ecr:*:*:repository/wellington"
+        }
+    ]
+}

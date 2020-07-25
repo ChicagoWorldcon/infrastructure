@@ -83,6 +83,10 @@ data "template_file" "policy_pull" {
   template = file("${path.module}/policies/ecr-pull.json")
 }
 
+data "template_file" "policy_cleanup" {
+  template = file("${path.module}/policies/ecr-cleanup.json")
+}
+
 data "template_file" "policy_ecr" {
   template = file("${path.module}/policies/ecr-lifecycle.json")
 }
@@ -101,14 +105,26 @@ resource "aws_iam_policy" "pull" {
   policy = data.template_file.policy_pull.rendered
 }
 
-resource "aws_iam_user_policy_attachment" "github-pull" {
-  user       = aws_iam_user.github-registration.name
-  policy_arn = aws_iam_policy.push.arn
+resource "aws_iam_policy" "cleanup" {
+  name_prefix = "ecr-cleanup"
+  path        = "/it/docker/"
+
+  policy = data.template_file.policy_cleanup.rendered
 }
 
 resource "aws_iam_user_policy_attachment" "github-push" {
   user       = aws_iam_user.github-registration.name
+  policy_arn = aws_iam_policy.push.arn
+}
+
+resource "aws_iam_user_policy_attachment" "github-pull" {
+  user       = aws_iam_user.github-registration.name
   policy_arn = aws_iam_policy.pull.arn
+}
+
+resource "aws_iam_user_policy_attachment" "github-cleanup" {
+  user       = aws_iam_user.github-registration.name
+  policy_arn = aws_iam_policy.cleanup.arn
 }
 
 resource "aws_ecr_repository" "registration" {
