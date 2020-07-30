@@ -14,6 +14,10 @@
     create: yes
   become: yes
 
+- name: provide tab coloring support
+  copy: src=it2-tab-color.sh dest=/etc/profile.d/02-set-it2-tab-color.sh mode=0644 owner=root group=root
+  become: yes
+
 - name: set the instance prompt to a stage colour
   template:
     src: set-instance-prompt.sh.j2

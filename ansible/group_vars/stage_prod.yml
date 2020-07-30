@@ -12,6 +12,7 @@ caddy_use_test_endpoint: no
 
 stage: prod
 prompt_color_code: "31"
+prompt_color_hex: "f85454"
 
 external_hostname: infra.chicon.org
 heimdall_fqdn: dashboard.chicon.org
@@ -20,7 +21,7 @@ wellington_docker_version: "staging"
 
 registration_db_name: registration_prod
 registration_db_username: registration_prod
-registration_preview: yes
+registration_preview: no
 
 devise_secret: Chicon8/tokens/session/prod
 jwt_secret: Chicon8/tokens/jwt/prod

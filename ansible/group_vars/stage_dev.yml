@@ -3,6 +3,7 @@ caddy_use_test_endpoint: no
 
 stage: dev
 prompt_color_code: "34"
+prompt_color_hex: "bd93f8"
 
 external_hostname: infra.dev.chicon.org
 heimdall_fqdn: dashboard.dev.chicon.org

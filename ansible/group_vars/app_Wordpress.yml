@@ -14,6 +14,7 @@ caddy_use_test_endpoint: no
 
 stage: blog
 prompt_color_code: "32"
+prompt_color_hex: "50fa7a"
 
 external_hostname: infra.blog.chicon.org
 wordpress_fqdn_list:
@@ -21,3 +22,4 @@ wordpress_fqdn_list:
   - bid.chicon.org
   - www.chicagoworldconbid.org
 
+registration_db_secret: BOGON
