@@ -16,8 +16,16 @@ resource "aws_route53_record" "sendgrid-dkim" {
 
 resource "aws_route53_record" "site_a_records" {
   zone_id = var.dns_zone_id
-  name    = "staging.chicon.org"
+  name    = ""
   type    = "A"
   ttl     = 300
   records = var.chicon_org_A_records
+}
+
+resource "aws_route53_record" "site_www_cname" {
+  zone_id = var.dns_zone_id
+  name    = "www"
+  type    = "CNAME"
+  ttl     = 300
+  records = ["chicon.org"]
 }
