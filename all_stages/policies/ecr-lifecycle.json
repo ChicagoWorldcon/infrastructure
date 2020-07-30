@@ -17,7 +17,7 @@
             "rulePriority": 2,
             "description": "Remove ci test images after a day",
             "selection": {
-                "countNumber": 1,
+                "countNumber": 2,
                 "countUnit": "days",
                 "countType": "sinceImagePushed",
                 "tagPrefixList": [
