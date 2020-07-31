@@ -40,3 +40,6 @@ variable "prod_db_site_username" {
   default = "registration_admin"
 }
 
+variable "chicon_org_A_records" {
+  default = ["192.0.78.150", "192.0.78.229"]
+}

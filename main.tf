@@ -86,7 +86,7 @@ module "chicon-dns-entries" {
       value = "sendgrid.net"
     }
   ]
-  chicon_org_A_records = ["192.0.78.150", "192.0.78.229"]
+  chicon_org_A_records = var.chicon_org_A_records
 }
 
 module "chicon-legacy-dns-entries" {
@@ -193,5 +193,50 @@ data "aws_secretsmanager_secret" "db_superuser_password_secret" {
 
 data "aws_secretsmanager_secret_version" "db_superuser_password" {
   secret_id = data.aws_secretsmanager_secret.db_superuser_password_secret.id
+}
+
+module "bid-domain-redirects" {
+  source             = "./site-redirect/"
+  project            = var.project
+  domain_name        = "chicagoworldconbid.org"
+  target_a_records   = var.chicon_org_A_records
+  target_domain_name = var.domain_name
+}
+
+module "chicon8_org" {
+  source             = "./site-redirect/"
+  project            = var.project
+  domain_name        = "chicon8.org"
+  target_a_records   = var.chicon_org_A_records
+  target_domain_name = var.domain_name
+}
+
+module "chicon8_com" {
+  source             = "./site-redirect/"
+  project            = var.project
+  domain_name        = "chicon8.com"
+  target_a_records   = var.chicon_org_A_records
+  target_domain_name = var.domain_name
+}
+
+module "bid-site-email" {
+  source      = "./email/"
+  domain_name = "chicagoworldconbid.org"
+  dns_zone_id = module.bid-domain-redirects.this_zone_id
+}
+
+module "blog-mx" {
+  source = "./gsuite/"
+
+  dns_zone_id    = module.bid-domain-redirects.this_zone_id
+  dns_validation = "2qv7hpi7tzfqzcwnjq77zd6qyt5uq43ovh4sg42lh4ixnl6c7bua.mx-verification.google.com."
+}
+
+resource "aws_route53_record" "gsuite-txt" {
+  zone_id = module.bid-domain-redirects.this_zone_id
+  name    = "chicagoworldconbid.org"
+  type    = "TXT"
+  ttl     = "300"
+  records = ["google-site-verification=MvUZPt3UXJHTY_cMjARPhtxyaJd_4aH5KAWZrywfHRA"]
 }
 
