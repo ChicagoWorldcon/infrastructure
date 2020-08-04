@@ -219,6 +219,14 @@ module "chicon8_com" {
   target_domain_name = var.domain_name
 }
 
+module "worldcon80_org" {
+  source             = "./site-redirect/"
+  project            = var.project
+  domain_name        = "worldcon80.org"
+  target_a_records   = var.chicon_org_A_records
+  target_domain_name = var.domain_name
+}
+
 module "bid-site-email" {
   source      = "./email/"
   domain_name = "chicagoworldconbid.org"
