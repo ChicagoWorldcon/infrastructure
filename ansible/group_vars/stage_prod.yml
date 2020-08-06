@@ -33,3 +33,4 @@ stripe_secret: Chicon8/stripe_api_key/prod
 journald_cloudwatch_logs_log_group: Registration/prod
 journald_cloudwatch_logs_units:
   - wellington
+  - caddy
