@@ -72,6 +72,9 @@ module "prod-site" {
 
   # remote hosts
   www_domain_name = "${var.prod_www_prefix}.${var.domain_name}"
+
+  # logging
+  log_retention = 60
 }
 
 module "dev-site" {
@@ -99,6 +102,8 @@ module "dev-site" {
   # remote hosts
   www_domain_name = "${var.dev_www_prefix}.${var.domain_name}"
 
+  # logging
+  log_retention = 7
 }
 
 module "prod-creds" {

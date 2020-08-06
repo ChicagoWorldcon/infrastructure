@@ -18,7 +18,7 @@ variable "volume_size" {
   default = 8
 }
 
-variable "docker_log_driver" {
-  type    = string
-  default = "journald"
+variable "log_retention" {
+  type    = number
+  default = 30
 }

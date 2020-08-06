@@ -156,7 +156,8 @@ resource "aws_key_pair" "reg_system_key" {
 }
 
 resource "aws_cloudwatch_log_group" "registration_group" {
-  name = "${var.application}/${var.stage}"
+  name              = "${var.application}/${var.stage}"
+  retention_in_days = var.log_retention
 
   tags = merge(
     local.common_tags,
