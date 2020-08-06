@@ -1,0 +1,5 @@
+log_group = "{{ journald_cloudwatch_logs_log_group }}"
+
+state_file = "{{ journald_cloudwatch_logs_state_dir }}/state"
+
+log_unit = "{{ journald_cloudwatch_logs_units | join(',') }}"

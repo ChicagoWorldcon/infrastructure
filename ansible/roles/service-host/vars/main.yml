@@ -1,2 +1,5 @@
 ---
-# vars file for service-host
+journald_cloudwatch_logs_url: https://github.com/codemonauts/journald-cloudwatch-logs/releases/download/v1.0.0/journald-cloudwatch-logs_1.0.0_Linux_x86_64.tar.gz
+journald_cloudwatch_logs_binary: /usr/local/bin/journald-cloudwatch-logs
+journald_cloudwatch_logs_config_file: /etc/journald-cloudwatch-logs.conf
+journald_cloudwatch_logs_state_dir: /var/lib/journald-cloudwatch-logs

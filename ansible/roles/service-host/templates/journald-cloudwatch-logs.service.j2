@@ -1,0 +1,10 @@
+[Unit]
+Description=journald-cloudwatch-logs
+Wants=basic.target
+After=basic.target network.target
+
+[Service]
+ExecStart={{ journald_cloudwatch_logs_binary }} {{ journald_cloudwatch_logs_config_file }}
+KillMode=process
+Restart=on-failure
+RestartSec=42s

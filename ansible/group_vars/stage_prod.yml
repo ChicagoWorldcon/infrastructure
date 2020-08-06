@@ -29,3 +29,7 @@ sendgrid_secret: Chicon8/sendgrid_api_key/prod
 registration_db_secret: Chicon8/db/registration/registration_admin/prod
 sidekiq_secret: Chicon8/sidekiq_password/prod
 stripe_secret: Chicon8/stripe_api_key/prod
+
+journald_cloudwatch_logs_log_group: Registration/prod
+journald_cloudwatch_logs_units:
+  - wellington

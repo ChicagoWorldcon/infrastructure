@@ -4,3 +4,20 @@
     name: docker
     state: restarted
   become: yes
+
+- name: reload services
+  systemd:
+    daemon_reload: yes
+  become: yes
+
+- name: restart log emitter
+  systemd:
+    name: journald-cloudwatch-logs
+    state: restarted
+  become: yes
+
+- name: clean up tempdir
+  file:
+    path: "{{ jcl_tempdir.path }}"
+    state: absent
+  check_mode: no 
