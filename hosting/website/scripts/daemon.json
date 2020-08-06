@@ -1,7 +1,0 @@
-{
-  "log-driver": "awslogs",
-  "log-opts": {
-      "awslogs-group": "${log_group}",
-      "tag": "{{ with split .ImageName \":\" }}{{join . \"_\"}}{{end}}/{{.Name}}/{{.ID}}"
-  }
-}
