@@ -24,3 +24,10 @@ journald_cloudwatch_logs_log_group: Registration/dev
 journald_cloudwatch_logs_units:
   - wellington
   - caddy
+
+registration_contacts:
+  registration_email: registration+staging@{{ domain_name }}
+  treasurer_email: treasurer+staging@{{ domain_name }}
+  maintainer_email: it@{{ domain_name }}
+  hugo_help_email: it@{{ domain_name }}
+  hugo_admin_email: it@{{ domain_name }}
