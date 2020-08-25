@@ -1,5 +1,5 @@
 provider "aws" {
-  version = "~> 2.60"
+  version = "~> 3.3.0"
   profile = "chicago"
   region  = "us-west-2"
 }
