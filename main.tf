@@ -240,6 +240,11 @@ module "blog-mx" {
   dns_validation = "2qv7hpi7tzfqzcwnjq77zd6qyt5uq43ovh4sg42lh4ixnl6c7bua.mx-verification.google.com."
 }
 
+module "dashboard" {
+  source  = "./dashboard/"
+  project = var.project
+}
+
 resource "aws_route53_record" "gsuite-txt" {
   zone_id = module.bid-domain-redirects.this_zone_id
   name    = "chicagoworldconbid.org"
