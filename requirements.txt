@@ -11,7 +11,7 @@ cachetools==4.1.0         # via google-auth
 certifi==2020.6.20        # via requests
 cffi==1.14.0              # via cryptography
 chardet==3.0.4            # via requests
-cryptography==2.9.2       # via ansible
+cryptography==3.2         # via ansible
 docutils==0.15.2          # via botocore
 google-api-core==1.21.0   # via google-api-python-client
 google-api-python-client==1.9.3  # via -r requirements.in
