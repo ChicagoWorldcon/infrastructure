@@ -29,3 +29,19 @@ resource "aws_route53_record" "site_www_cname" {
   ttl     = 300
   records = ["chicon.org"]
 }
+
+resource "aws_route53_record" "staff_wiki_cname" {
+  zone_id = var.dns_zone_id
+  name    = "wiki"
+  type    = "CNAME"
+  ttl     = 300
+  records = ["ghs.googlehosted.com"]
+}
+
+resource "aws_route53_record" "dh_wiki_cname" {
+  zone_id = var.dns_zone_id
+  name    = "dh-wiki"
+  type    = "CNAME"
+  ttl     = 300
+  records = ["ghs.googlehosted.com"]
+}
