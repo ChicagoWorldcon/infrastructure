@@ -1,0 +1,20 @@
+#+TITLE: Chicon Infrastructure
+
+* Overview
+
+* Registration
+
+- url :: https://registration.chicon.org
+
+** Preview Site
+- url :: https://registration.dev.chicon.org
+
+The preview url is gated by an HTTP login. The username is ~preview~, the password is available on request.
+
+The site there is fully functional, but uses Stripe's testing payment endpoint. This means that it doesn't take /real/ credit card numbers, it takes a few select fake ones for testing different results. All of these work with any expiry date and CVV and zip code.
+
+- successful payment :: 4242 4242 4242 4242
+
+Other test card numbers can be found [[https://stripe.com/docs/testing#regulatory-cards][at the stripe website]].
+
+To test creating accounts, use your own email; the site will email you there. If you need to test multiple accounts, just use "+" addressing (meaning, youremail@yourdomain.org, youremail+testing@yourdomain.org, etc...)
