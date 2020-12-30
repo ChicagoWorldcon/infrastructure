@@ -73,3 +73,11 @@ provider "registry.terraform.io/hashicorp/template" {
     "zh:c979425ddb256511137ecd093e23283234da0154b7fa8b21c2687182d9aea8b2",
   ]
 }
+
+provider "terraform.offby1.net/adamdecaf/namecheap" {
+  version     = "1.5.0"
+  constraints = "~> 1.5.0"
+  hashes = [
+    "h1:+ILyd+CI0aQHluyyCCjgjczzClm+xR1f2/GWjnbw3NY=",
+  ]
+}

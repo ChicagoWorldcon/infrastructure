@@ -1,6 +1,6 @@
 variable "project" { type = string }
 variable "domain_name" { type = string }
-variable "target_a_records" { type = list }
+variable "target_a_records" { type = list(any) }
 variable "target_domain_name" { type = string }
 
 resource "aws_route53_zone" "redirect_zone" {
@@ -22,6 +22,11 @@ resource "aws_route53_record" "redirect_cname_www" {
   type    = "CNAME"
   ttl     = "300"
   records = [var.target_domain_name]
+}
+
+resource "namecheap_ns" "redirect_zone" {
+  domain  = var.domain_name
+  servers = aws_route53_zone.redirect_zone.name_servers
 }
 
 output "this_zone_id" {

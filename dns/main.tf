@@ -4,3 +4,7 @@ resource "aws_route53_zone" "main" {
   comment = "${var.project} DNS zone: ${var.role}"
 }
 
+resource "namecheap_ns" "main" {
+  domain  = var.domain_name
+  servers = aws_route53_zone.main.name_servers
+}

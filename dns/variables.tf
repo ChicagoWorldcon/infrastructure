@@ -1,12 +1,12 @@
-variable domain_name {
+variable "domain_name" {
   type        = string
   description = "The domain name to create a zone for"
 }
 
-variable project {
+variable "project" {
   type = string
 }
 
-variable role {
+variable "role" {
   type = string
 }
