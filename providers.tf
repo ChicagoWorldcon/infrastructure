@@ -1,5 +1,13 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "aws"
+      version = "~> 3.3.0"
+    }
+  }
+}
+
 provider "aws" {
-  version = "~> 3.3.0"
   profile = "chicago"
   region  = "us-west-2"
 }
