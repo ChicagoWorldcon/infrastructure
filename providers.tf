@@ -8,6 +8,14 @@ terraform {
       source  = "terraform.offby1.net/adamdecaf/namecheap"
       version = "~> 1.5.0"
     }
+    local = {
+      source  = "local"
+      version = "~> 1.4"
+    }
+    template = {
+      source  = "template"
+      version = "~> 2.1"
+    }
   }
 }
 
@@ -20,14 +28,6 @@ provider "aws" {
   profile = "chicago"
   region  = "us-east-1"
   alias   = "us-east-1"
-}
-
-provider "local" {
-  version = "~> 1.4"
-}
-
-provider "template" {
-  version = "~> 2.1"
 }
 
 variable "namecheaptoken" {
