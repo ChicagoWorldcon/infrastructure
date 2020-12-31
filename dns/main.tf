@@ -6,5 +6,5 @@ resource "aws_route53_zone" "main" {
 
 resource "namecheap_ns" "main" {
   domain  = var.domain_name
-  servers = aws_route53_zone.main.name_servers
+  servers = sort(aws_route53_zone.main.name_servers)
 }

@@ -26,7 +26,7 @@ resource "aws_route53_record" "redirect_cname_www" {
 
 resource "namecheap_ns" "redirect_zone" {
   domain  = var.domain_name
-  servers = aws_route53_zone.redirect_zone.name_servers
+  servers = sort(aws_route53_zone.redirect_zone.name_servers)
 }
 
 output "this_zone_id" {
