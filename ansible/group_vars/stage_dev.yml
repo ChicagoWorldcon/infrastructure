@@ -26,8 +26,8 @@ journald_cloudwatch_logs_units:
   - caddy
 
 registration_contacts:
-  registration_email: registration+staging@{{ domain_name }}
-  treasurer_email: treasurer+staging@{{ domain_name }}
-  maintainer_email: it@{{ domain_name }}
-  hugo_help_email: it@{{ domain_name }}
-  hugo_admin_email: it@{{ domain_name }}
+  registration_email: it+registration@{{ domain_name }}
+  treasurer_email: it+treasurer@{{ domain_name }}
+  maintainer_email: it+maintainer@{{ domain_name }}
+  hugo_help_email: it+hugo@{{ domain_name }}
+  hugo_admin_email: it+hugo-admin@{{ domain_name }}
