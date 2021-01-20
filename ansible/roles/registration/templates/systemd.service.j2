@@ -8,11 +8,7 @@ User=wellington
 
 WorkingDirectory=/opt/chicago/app/wellington
 
-Environment=WELLINGTON_DOCKER_TAG={{ wellington_docker_version }}
-
-ExecStartPre=/bin/bash -c 'eval $(docker run rlister/ecr-login:latest)'
-
-ExecStartPre=/usr/bin/docker-compose pull
+EnvironmentFile=/opt/chicago/etc/wellington/tag.env
 
 ExecStart=/usr/bin/docker-compose --no-ansi up 
 

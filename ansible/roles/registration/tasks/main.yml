@@ -60,7 +60,7 @@
   set_fact:
     chicon_db_endpoint: "{{ chicon_db.instances[0].endpoint.address }}"
 
-- name: create the admin psql script 
+- name: create the admin psql script
   template: src=psql.sh.j2 dest=/usr/local/bin/psql.reg mode=0755 owner=root group=chicago
   vars:
     db_username: "{{ registration_db_username }}"
@@ -77,9 +77,14 @@
   become: yes
 
 - name: Ensure an override file is present
-  file: path=/opt/chicago/etc/wellington-overrides.env state=touch mode=640 owner=root group=chicago
+  template:
+    src: tag.env.j2
+    dest: /opt/chicago/etc/wellington/tag.env
+    mode: 0640
+    group: chicago
   become: yes
-    
+  notify: restart site
+
 - name: Ensure this service's environment file is present
   template:
     src: service.env.j2
