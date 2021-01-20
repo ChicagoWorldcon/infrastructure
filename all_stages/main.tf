@@ -5,6 +5,9 @@ locals {
   }
 }
 
+data "aws_region" "current" {}
+data "aws_caller_identity" "current" {}
+
 # Create the resources that all stages need.
 resource "aws_secretsmanager_secret" "db_superuser_password" {
   name = "${var.project}/db/db_superuser_password"
@@ -103,6 +106,17 @@ data "template_file" "policy_ecr" {
   template = file("${path.module}/policies/ecr-lifecycle.json")
 }
 
+data "template_file" "policy_codedeploy" {
+  template = file("${path.module}/policies/codedeploy-deploy.json")
+
+  vars = {
+    bucket_name                 = aws_s3_bucket.build_artifact_bucket.bucket
+    codedeploy_service_role_arn = aws_iam_role.codedeploy_role.arn
+    aws_region                  = data.aws_region.current.name
+    account_id                  = data.aws_caller_identity.current.account_id
+  }
+}
+
 resource "aws_iam_policy" "push" {
   name_prefix = "ecr-push"
   path        = "/it/docker/"
@@ -124,6 +138,13 @@ resource "aws_iam_policy" "cleanup" {
   policy = data.template_file.policy_cleanup.rendered
 }
 
+resource "aws_iam_policy" "deploy" {
+  name_prefix = "codedeploy"
+  path        = "/it/deploy/"
+
+  policy = data.template_file.policy_cleanup.rendered
+}
+
 resource "aws_iam_user_policy_attachment" "github-push" {
   user       = aws_iam_user.github-registration.name
   policy_arn = aws_iam_policy.push.arn
@@ -137,6 +158,11 @@ resource "aws_iam_user_policy_attachment" "github-pull" {
 resource "aws_iam_user_policy_attachment" "github-cleanup" {
   user       = aws_iam_user.github-registration.name
   policy_arn = aws_iam_policy.cleanup.arn
+}
+
+resource "aws_iam_user_policy_attachment" "github-deploy" {
+  user       = aws_iam_user.github-registration.name
+  policy_arn = aws_iam_policy.deploy.arn
 }
 
 resource "aws_ecr_repository" "registration" {

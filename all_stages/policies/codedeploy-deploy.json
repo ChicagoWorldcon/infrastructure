@@ -1,0 +1,28 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "VisualEditor0",
+      "Effect": "Allow",
+      "Action": [
+        "iam:PassRole",
+        "codedeploy:GetDeployment",
+        "codedeploy:GetApplicationRevision",
+        "codedeploy:CreateDeployment",
+        "codedeploy:RegisterApplicationRevision",
+        "codedeploy:GetDeploymentConfig",
+        "codedeploy:GetDeploymentGroup",
+        "codedeploy:UpdateDeploymentGroup",
+        "codedeploy:CreateDeploymentGroup",
+        "S3:PutObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::${bucket_name}",
+        "${codedeploy_service_role_arn}",
+        "arn:aws:codedeploy:${aws_region}:${account_id}:deploymentconfig:*",
+        "arn:aws:codedeploy:${aws_region}:${account_id}:deploymentgroup:*/*",
+        "arn:aws:codedeploy:${aws_region}:${account_id}:application:*"
+      ]
+    }
+  ]
+}
