@@ -17,7 +17,7 @@
         "S3:PutObject"
       ],
       "Resource": [
-        "arn:aws:s3:::${bucket_name}",
+        "arn:aws:s3:::${bucket_name}/*",
         "${codedeploy_service_role_arn}",
         "arn:aws:codedeploy:${aws_region}:${account_id}:deploymentconfig:*",
         "arn:aws:codedeploy:${aws_region}:${account_id}:deploymentgroup:*/*",

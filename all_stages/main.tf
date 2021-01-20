@@ -142,7 +142,7 @@ resource "aws_iam_policy" "deploy" {
   name_prefix = "codedeploy"
   path        = "/it/deploy/"
 
-  policy = data.template_file.policy_cleanup.rendered
+  policy = data.template_file.policy_codedeploy.rendered
 }
 
 resource "aws_iam_user_policy_attachment" "github-push" {
