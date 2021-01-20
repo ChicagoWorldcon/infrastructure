@@ -1,21 +1,3 @@
-# Define our dev API; this is optional
-# module "global" {
-#   source = "./global/"
-
-#   project     = var.project
-#   domain_name = var.domain_name
-#   region      = var.region
-
-#   dev_api_host_prefix      = var.dev_api_prefix
-#   dev_deployment_group     = "ChicagoRegistration-Dev"
-
-#   prod_api_host_prefix      = var.prod_api_prefix
-#   prod_deployment_group     = "ChicagoRegistration-Prod"
-
-#   api_deployment_app_name = "ChicagoRegistration"
-# }
-
-
 module "dev-creds" {
   source  = "./identity"
   project = var.project
@@ -25,7 +7,7 @@ module "dev-creds" {
   route53_zone_id = var.dns_zone_id
 
   codedeploy_bucket   = "aws-codedeploy-us-west-2"
-  codepipeline_bucket = "codepipeline-us-west-2-chicago2022"
+  codepipeline_bucket = var.codedeploy_bucket
 
   common_tags = {
     Project     = var.project
@@ -115,7 +97,7 @@ module "prod-creds" {
   route53_zone_id = var.dns_zone_id
 
   codedeploy_bucket   = "aws-codedeploy-us-west-2"
-  codepipeline_bucket = "codepipeline-us-west-2-chicago2022"
+  codepipeline_bucket = var.codedeploy_bucket
 
   common_tags = {
     Project     = var.project

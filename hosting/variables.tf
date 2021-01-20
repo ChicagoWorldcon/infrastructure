@@ -80,3 +80,7 @@ variable "prod_deployment_group" {
   type    = string
   default = "ChicagoRegistration-Prod"
 }
+
+variable "codedeploy_bucket" {
+  type = string
+}

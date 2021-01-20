@@ -43,6 +43,8 @@ module "hosting" {
   dev_db_name  = var.registration_dev_db_name
   prod_db_name = var.registration_db_name
 
+  codedeploy_bucket = module.global.artifact_bucket
+
 }
 
 module "dns" {

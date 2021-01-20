@@ -18,3 +18,7 @@ output "ecr_push_policy" {
   value = aws_iam_policy.push.arn
 }
 
+
+output "artifact_bucket" {
+  value = aws_s3_bucket.build_artifact_bucket.bucket
+}
