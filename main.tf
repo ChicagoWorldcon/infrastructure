@@ -154,9 +154,6 @@ module "prod-creds" {
 
   route53_zone_id = module.dns.dns_zone_id
 
-  codedeploy_bucket   = "aws-codedeploy-${data.aws_region.current.name}"
-  codepipeline_bucket = "codepipeline.${data.aws_region.current.name}.${var.domain_name}"
-
   common_tags = merge(
     local.common_tags,
     {
@@ -175,9 +172,6 @@ module "dev-creds" {
   db_superuser_username = var.db_superuser_username
 
   route53_zone_id = module.dns.dns_zone_id
-
-  codedeploy_bucket   = "aws-codedeploy-${data.aws_region.current.name}"
-  codepipeline_bucket = "codepipeline.${data.aws_region.current.name}.${var.domain_name}"
 
   common_tags = merge(
     local.common_tags,
