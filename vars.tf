@@ -28,6 +28,8 @@ variable "registration_db_name" {
   default = "registration"
 }
 
+# These two are historically named "dev" because of some early bad decisions.
+# This is not a trivial thing to fix, so I'm not gonna.
 variable "registration_staging_db_name" {
   default = "registration_dev"
 }
