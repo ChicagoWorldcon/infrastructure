@@ -168,7 +168,7 @@ module "staging-creds" {
   source  = "./identity"
   db_name = var.registration_staging_db_name
   project = var.project
-  stage   = "dev"
+  stage   = "staging"
 
   db_site_username      = var.staging_db_site_username
   db_superuser_username = var.db_superuser_username
@@ -178,7 +178,7 @@ module "staging-creds" {
   common_tags = merge(
     local.common_tags,
     {
-      Environment = "dev"
+      Environment = "staging"
     }
   )
 }
