@@ -11,16 +11,16 @@ output "prod" {
   }
 }
 
-output "dev" {
+output "staging" {
   value = {
-    security_group_id = module.dev-site.security_group_id
-    public_dns        = module.dev-site.public_dns
-    private_ip        = module.dev-site.private_ip
-    public_ip         = module.dev-site.public_ip
-    instance_id       = module.dev-site.id
-    www_fqdn          = module.dev-site.site_fqdn
+    security_group_id = module.staging-site.security_group_id
+    public_dns        = module.staging-site.public_dns
+    private_ip        = module.staging-site.private_ip
+    public_ip         = module.staging-site.public_ip
+    instance_id       = module.staging-site.id
+    www_fqdn          = module.staging-site.site_fqdn
 
-    instance_role_name = module.dev-creds.registration_iam_role_name
+    instance_role_name = module.staging-creds.registration_iam_role_name
   }
 }
 

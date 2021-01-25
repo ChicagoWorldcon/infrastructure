@@ -12,36 +12,36 @@ output "db_instance_id" {
 
 output "reg_hostname" {
   value = {
-    dev  = module.hosting.dev.public_dns
-    prod = module.hosting.prod.public_dns
+    staging = module.hosting.staging.public_dns
+    prod    = module.hosting.prod.public_dns
   }
 }
 
 output "reg_private_ip" {
   value = {
-    dev  = module.hosting.dev.private_ip
-    prod = module.hosting.prod.private_ip
+    staging = module.hosting.staging.private_ip
+    prod    = module.hosting.prod.private_ip
   }
 }
 
 output "reg_public_ip" {
   value = {
-    dev  = module.hosting.dev.public_ip
-    prod = module.hosting.prod.public_ip
+    staging = module.hosting.staging.public_ip
+    prod    = module.hosting.prod.public_ip
   }
 }
 
 output "reg_public_dns" {
   value = {
-    dev  = module.hosting.dev.public_dns
-    prod = module.hosting.prod.public_dns
+    staging = module.hosting.staging.public_dns
+    prod    = module.hosting.prod.public_dns
   }
 }
 
 output "reg_instance_id" {
   value = {
-    dev  = module.hosting.dev.instance_id
-    prod = module.hosting.prod.instance_id
+    staging = module.hosting.staging.instance_id
+    prod    = module.hosting.prod.instance_id
   }
 }
 
@@ -51,8 +51,8 @@ output "global_ns" {
 
 output "site" {
   value = {
-    dev  = module.hosting.dev.www_fqdn
-    prod = module.hosting.prod.www_fqdn
+    staging = module.hosting.staging.www_fqdn
+    prod    = module.hosting.prod.www_fqdn
   }
 }
 
@@ -65,9 +65,9 @@ output "rds_superuser" {
 
 output "rds_site_user" {
   value = {
-    dev = {
-      username    = var.dev_db_site_username
-      secret_name = module.dev-creds.db_site_password.name
+    staging = {
+      username    = var.staging_db_site_username
+      secret_name = module.staging-creds.db_site_password.name
     }
     prod = {
       username    = var.prod_db_site_username

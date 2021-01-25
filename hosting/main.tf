@@ -1,8 +1,8 @@
-module "dev-creds" {
+module "staging-creds" {
   source  = "./identity"
   project = var.project
   stage   = "dev"
-  db_name = var.dev_db_name
+  db_name = var.staging_db_name
 
   route53_zone_id = var.dns_zone_id
 
@@ -23,11 +23,11 @@ module "prod-dns" {
 }
 
 
-module "dev-dns" {
+module "staging-dns" {
   source      = "./dns"
   suffix      = ".dev"
   dns_zone_id = var.dns_zone_id
-  infra_host  = module.dev-site.site_fqdn
+  infra_host  = module.staging-site.site_fqdn
 }
 
 module "prod-site" {
@@ -59,7 +59,7 @@ module "prod-site" {
   log_retention = 60
 }
 
-module "dev-site" {
+module "staging-site" {
   source = "./appserver"
 
   project     = var.project
@@ -78,11 +78,11 @@ module "dev-site" {
 
   # instance access
   ssh_key_id           = var.ssh_key_id
-  iam_instance_profile = module.dev-creds.registration_iam_instance_profile_id
-  iam_role_name        = module.dev-creds.registration_iam_role_name
+  iam_instance_profile = module.staging-creds.registration_iam_instance_profile_id
+  iam_role_name        = module.staging-creds.registration_iam_role_name
 
   # remote hosts
-  www_domain_name = "${var.dev_www_prefix}.${var.domain_name}"
+  www_domain_name = "${var.staging_www_prefix}.${var.domain_name}"
 
   # logging
   log_retention = 7

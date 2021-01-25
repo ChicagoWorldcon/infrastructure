@@ -43,7 +43,7 @@ variable "db_site_secret" {
   type = string
 }
 
-variable "dev_db_site_password_arn" {
+variable "staging_db_site_password_arn" {
   type = string
 }
 
@@ -55,7 +55,7 @@ variable "db_superuser_secret_name" {
   type = string
 }
 
-variable "dev_db_site_username" {
+variable "staging_db_site_username" {
   type = string
 }
 
@@ -63,7 +63,7 @@ variable "prod_db_site_username" {
   type = string
 }
 
-variable "dev_db_name" {
+variable "staging_db_name" {
   type = string
 }
 
@@ -71,7 +71,7 @@ variable "prod_db_name" {
   type = string
 }
 
-variable "dev_deployment_group" {
+variable "staging_deployment_group" {
   type    = string
   default = "ChicagoRegistration-Dev"
 }

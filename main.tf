@@ -32,16 +32,16 @@ module "hosting" {
   db_hostname           = module.chicondb.db_instance_address
   db_superuser_username = var.db_superuser_username
 
-  dev_db_site_username  = var.dev_db_site_username
-  prod_db_site_username = var.prod_db_site_username
+  staging_db_site_username = var.staging_db_site_username
+  prod_db_site_username    = var.prod_db_site_username
 
-  db_site_secret            = module.dev-creds.db_site_password.name
-  db_superuser_secret_name  = module.global.db_superuser_password.name
-  dev_db_site_password_arn  = module.dev-creds.db_site_password.arn
-  prod_db_site_password_arn = module.prod-creds.db_site_password.arn
+  db_site_secret               = module.staging-creds.db_site_password.name
+  db_superuser_secret_name     = module.global.db_superuser_password.name
+  staging_db_site_password_arn = module.staging-creds.db_site_password.arn
+  prod_db_site_password_arn    = module.prod-creds.db_site_password.arn
 
-  dev_db_name  = var.registration_dev_db_name
-  prod_db_name = var.registration_db_name
+  staging_db_name = var.registration_staging_db_name
+  prod_db_name    = var.registration_db_name
 
   codedeploy_bucket = module.global.artifact_bucket
 
@@ -136,7 +136,7 @@ resource "aws_iam_group_policy_attachment" "dev-pull" {
 }
 
 resource "aws_iam_role_policy_attachment" "instance-pull-dev" {
-  role       = module.hosting.dev.instance_role_name
+  role       = module.hosting.staging.instance_role_name
   policy_arn = module.global.ecr_pull_policy
 }
 
@@ -164,13 +164,13 @@ module "prod-creds" {
   )
 }
 
-module "dev-creds" {
+module "staging-creds" {
   source  = "./identity"
-  db_name = var.registration_dev_db_name
+  db_name = var.registration_staging_db_name
   project = var.project
   stage   = "dev"
 
-  db_site_username      = var.dev_db_site_username
+  db_site_username      = var.staging_db_site_username
   db_superuser_username = var.db_superuser_username
 
   route53_zone_id = module.dns.dns_zone_id

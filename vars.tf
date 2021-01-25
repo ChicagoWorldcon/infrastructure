@@ -28,11 +28,11 @@ variable "registration_db_name" {
   default = "registration"
 }
 
-variable "registration_dev_db_name" {
+variable "registration_staging_db_name" {
   default = "registration_dev"
 }
 
-variable "dev_db_site_username" {
+variable "staging_db_site_username" {
   default = "registration_dev_admin"
 }
 
