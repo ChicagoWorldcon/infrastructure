@@ -29,7 +29,22 @@ SECRETS = {
         "Chicon8/sidekiq_password/dev": get_pass,
         "Chicon8/stripe_api_key/dev": get_stripe_keys,
     },
-    "prod": [],
+    "staging": {
+        "Chicon8/tokens/session/staging": get_pass,
+        "Chicon8/tokens/jwt/staging": get_pass,
+        "Chicon8/sendgrid_api_key/staging": get_sendgrid_key,
+        "Chicon8/db/registration_dev/registration_dev_admin/staging": get_pass,
+        "Chicon8/sidekiq_password/staging": get_pass,
+        "Chicon8/stripe_api_key/staging": get_stripe_keys,
+    },
+    "prod": {
+        "Chicon8/db/registration/registration_admin/prod": get_pass,
+        "Chicon8/tokens/jwt/prod": get_pass,
+        "Chicon8/sendgrid_api_key/prod": get_pass,
+        "Chicon8/tokens/session/prod": get_pass,
+        "Chicon8/sidekiq_password/prod": get_pass,
+        "Chicon8/stripe_api_key/prod": get_stripe_keys,
+    },
 }
 UNSAFE_SECRETS = []
 
@@ -38,7 +53,7 @@ UNSAFE_SECRETS = []
 def verify_secrets(c, stage):
     """Verify the presence of secrets for all required stage secrets
 
-    --stage <dev|prod>"""
+    --stage <dev|staging|prod>"""
 
     client = boto3.client("secretsmanager")
 
