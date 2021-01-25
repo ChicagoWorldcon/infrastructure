@@ -4,7 +4,7 @@ regions:
 filters:
   tag:Project: Chicon8
   tag:Environment:
-    - staging
+    - dev
     - blog
 
 keyed_groups:
@@ -20,3 +20,5 @@ keyed_groups:
 hostnames:
   - dns-name
   - private-ip-address
+
+

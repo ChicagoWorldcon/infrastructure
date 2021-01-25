@@ -1,7 +1,7 @@
 module "staging-creds" {
   source  = "./identity"
   project = var.project
-  stage   = "dev"
+  stage   = "staging"
   db_name = var.staging_db_name
 
   route53_zone_id = var.dns_zone_id
@@ -11,7 +11,7 @@ module "staging-creds" {
 
   common_tags = {
     Project     = var.project
-    Environment = "dev"
+    Environment = "staging"
   }
 }
 
@@ -25,7 +25,7 @@ module "prod-dns" {
 
 module "staging-dns" {
   source      = "./dns"
-  suffix      = ".dev"
+  suffix      = ".staging"
   dns_zone_id = var.dns_zone_id
   infra_host  = module.staging-site.site_fqdn
 }
@@ -63,7 +63,7 @@ module "staging-site" {
   source = "./appserver"
 
   project     = var.project
-  stage       = "dev"
+  stage       = "staging"
   application = "Registration"
 
   dns_zone_id = var.dns_zone_id

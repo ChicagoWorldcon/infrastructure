@@ -1,0 +1,33 @@
+caddy_architecture: amd64
+caddy_use_test_endpoint: yes
+
+stage: dev
+prompt_color_code: "32"
+prompt_color_hex: "bd93f8"
+
+external_hostname: infra.dev.chicon.org
+heimdall_fqdn: dashboard.dev.chicon.org
+wellington_fqdn: registration.dev.chicon.org
+wellington_docker_version: "staging"
+
+registration_db_name: registration_dev
+registration_db_username: registration_dev
+
+devise_secret: Chicon8/tokens/session/dev
+jwt_secret: Chicon8/tokens/jwt/dev
+sendgrid_secret: Chicon8/sendgrid_api_key/dev
+registration_db_secret: Chicon8/db/registration_dev/registration_dev_admin/dev
+sidekiq_secret: Chicon8/sidekiq_password/dev
+stripe_secret: Chicon8/stripe_api_key/dev
+
+journald_cloudwatch_logs_log_group: Registration/dev
+journald_cloudwatch_logs_units:
+  - wellington
+  - caddy
+
+registration_contacts:
+  registration_email: it+registration@{{ domain_name }}
+  treasurer_email: it+treasurer@{{ domain_name }}
+  maintainer_email: it+maintainer@{{ domain_name }}
+  hugo_help_email: it+hugo@{{ domain_name }}
+  hugo_admin_email: it+hugo-admin@{{ domain_name }}

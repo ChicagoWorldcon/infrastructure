@@ -1,26 +1,26 @@
 caddy_architecture: amd64
 caddy_use_test_endpoint: no
 
-stage: dev
+stage: staging
 prompt_color_code: "34"
 prompt_color_hex: "bd93f8"
 
-external_hostname: infra.dev.chicon.org
-heimdall_fqdn: dashboard.dev.chicon.org
-wellington_fqdn: registration.dev.chicon.org
+external_hostname: infra.staging.chicon.org
+heimdall_fqdn: dashboard.staging.chicon.org
+wellington_fqdn: registration.staging.chicon.org
 wellington_docker_version: "staging"
 
 registration_db_name: registration_dev
 registration_db_username: registration_dev
 
-devise_secret: Chicon8/tokens/session/dev
-jwt_secret: Chicon8/tokens/jwt/dev
-sendgrid_secret: Chicon8/sendgrid_api_key/dev
+devise_secret: Chicon8/tokens/session/staging
+jwt_secret: Chicon8/tokens/jwt/staging
+sendgrid_secret: Chicon8/sendgrid_api_key/staging
 registration_db_secret: Chicon8/db/registration_dev/registration_dev_admin/staging
-sidekiq_secret: Chicon8/sidekiq_password/dev
-stripe_secret: Chicon8/stripe_api_key/dev
+sidekiq_secret: Chicon8/sidekiq_password/staging
+stripe_secret: Chicon8/stripe_api_key/staging
 
-journald_cloudwatch_logs_log_group: Registration/dev
+journald_cloudwatch_logs_log_group: Registration/staging
 journald_cloudwatch_logs_units:
   - wellington
   - caddy

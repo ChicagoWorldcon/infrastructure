@@ -8,6 +8,7 @@
 #       register: infra
 - hosts:
     - stage_dev
+    - stage_staging
     - stage_prod
   roles:
     - role: service-host
@@ -20,7 +21,6 @@
     - app_Registration
   roles:
     - role: heimdall
-      when: stage != 'prod'
+      when: stage == 'staging'
     - role: rds-client
     - role: registration
-      
