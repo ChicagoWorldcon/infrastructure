@@ -83,7 +83,6 @@
     mode: 0640
     group: chicago
   become: yes
-  notify: restart site
 
 - name: Ensure this service's environment file is present
   template:
@@ -94,14 +93,12 @@
     db_name: "{{ registration_db_name }}"
     db_site_username: "{{ registration_db_username }}"
   become: yes
-  notify: restart site
 
 - name: Ensure this service's docker-compose template is present
   template:
     src: docker-compose.yml.j2
     dest: /opt/chicago/app/wellington/docker-compose.yml
   become: yes
-  notify: restart site
 
 - name: Set up a unit file for the service
   template:
@@ -114,11 +111,10 @@
     daemon_reload: yes
   become: yes
 
-- name: Ensure the service container(s) is/are started
+- name: Ensure the service is enabled
   systemd:
     name: wellington
     enabled: yes
-    state: started
   become: yes
 
 - name: Set up caddy forwarder
