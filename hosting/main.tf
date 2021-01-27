@@ -12,6 +12,7 @@ module "staging-creds" {
   common_tags = {
     Project     = var.project
     Environment = "staging"
+    Division    = "Registration"
   }
 }
 
@@ -36,6 +37,7 @@ module "prod-site" {
   project     = var.project
   stage       = "prod"
   application = "Registration"
+  division    = "Registration"
 
   dns_zone_id = var.dns_zone_id
 
@@ -65,6 +67,7 @@ module "staging-site" {
   project     = var.project
   stage       = "staging"
   application = "Registration"
+  division    = "Registration"
 
   dns_zone_id = var.dns_zone_id
 
@@ -102,6 +105,7 @@ module "prod-creds" {
   common_tags = {
     Project     = var.project
     Environment = "prod"
+    Division    = "Registration"
   }
 }
 

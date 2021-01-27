@@ -3,6 +3,7 @@ locals {
     Project     = var.project
     Environment = var.stage
     Application = var.application
+    Division    = var.division
   }
 }
 

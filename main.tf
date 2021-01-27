@@ -159,6 +159,7 @@ module "prod-creds" {
   common_tags = merge(
     local.common_tags,
     {
+      Division    = "IT"
       Environment = "prod"
     }
   )
@@ -178,6 +179,7 @@ module "staging-creds" {
   common_tags = merge(
     local.common_tags,
     {
+      Division    = "IT"
       Environment = "staging"
     }
   )

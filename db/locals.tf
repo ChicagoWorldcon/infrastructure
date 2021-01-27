@@ -1,5 +1,5 @@
 locals {
   common_tags = {
-    Department = "IT"
+    Division = "IT"
   }
 }

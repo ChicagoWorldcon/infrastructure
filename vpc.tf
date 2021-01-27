@@ -20,7 +20,10 @@ module "vpc" {
 
   tags = merge(
     local.common_tags,
-    map("Terraform", "true", "Department", "IT")
+    map(
+      "Terraform", "true",
+      "Division", "IT",
+    )
   )
 }
 
