@@ -126,9 +126,9 @@ module "global" {
   providers = {
     aws.acm = aws.us-east-1
   }
-  project      = var.project
-  domain_name  = var.domain_name
-  deploy_users = module.users.deploy_users
+  project              = var.project
+  domain_name          = var.domain_name
+  developer_group_name = module.users.deploy_group_name
 }
 
 resource "aws_iam_group" "developers" {

@@ -166,6 +166,22 @@ resource "aws_iam_user_policy_attachment" "github-deploy" {
   policy_arn = aws_iam_policy.deploy.arn
 }
 
+# user deployment
+resource "aws_iam_group_policy_attachment" "developer-push" {
+  group      = var.developer_group_name
+  policy_arn = aws_iam_policy.push.arn
+}
+
+resource "aws_iam_group_policy_attachment" "developer-pull" {
+  group      = var.developer_group_name
+  policy_arn = aws_iam_policy.pull.arn
+}
+
+resource "aws_iam_group_policy_attachment" "developer-deploy" {
+  group      = var.developer_group_name
+  policy_arn = aws_iam_policy.deploy.arn
+}
+
 resource "aws_ecr_repository" "registration" {
   name                 = "wellington"
   image_tag_mutability = "MUTABLE"
