@@ -116,13 +116,19 @@ module "chicon-7-site" {
 
 data "aws_region" "current" {}
 
+module "users" {
+  source  = "./users/"
+  project = var.project
+}
+
 module "global" {
   source = "./all_stages/"
   providers = {
     aws.acm = aws.us-east-1
   }
-  project     = var.project
-  domain_name = var.domain_name
+  project      = var.project
+  domain_name  = var.domain_name
+  deploy_users = module.users.deploy_users
 }
 
 resource "aws_iam_group" "developers" {
