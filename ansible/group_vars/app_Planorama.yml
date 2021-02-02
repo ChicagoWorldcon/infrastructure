@@ -1,0 +1,15 @@
+admin_users:
+  - username: offby1
+    public_key: "{{ lookup('file', '~/.ssh/id_ed25519.pub') }}"
+    sudo: yes
+    extra_groups:
+      - docker
+      - chicago
+      - adm
+  - username: rgb
+    public_key: "{{ lookup('file', 'rgb.pub') }}"
+    sudo: yes
+    extra_groups:
+      - docker
+      - chicago
+      - adm

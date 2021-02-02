@@ -24,3 +24,8 @@
       when: stage == 'staging'
     - role: rds-client
     - role: registration
+
+- hosts:
+    - app_Planorama
+  roles:
+    - role: rds-client

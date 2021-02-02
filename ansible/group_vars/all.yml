@@ -5,7 +5,6 @@ wellington_ecr_registry: 666959015006.dkr.ecr.us-west-2.amazonaws.com/wellington
 
 domain_name: chicon.org
 
-
 admin_users:
   - username: offby1
     public_key: "{{ lookup('file', '~/.ssh/id_ed25519.pub') }}"
@@ -14,3 +13,6 @@ admin_users:
       - docker
       - chicago
       - adm
+
+# by default we assume the Ubuntu AMI
+ansible_user: ubuntu
