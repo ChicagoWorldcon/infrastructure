@@ -38,14 +38,7 @@ module "planorama-dev" {
   iam_instance_profile = module.planorama-dev-identity.iam_instance_profile_id
   iam_role_name        = module.planorama-dev-identity.iam_role_name
 
-  www_domain_name = "BOGON"
+  www_domain_name = "planorama.dev"
   log_retention   = 7
 }
 
-resource "aws_route53_record" "planorama-dev" {
-  zone_id = var.dns_zone_id
-  type    = "CNAME"
-  name    = "planorama.dev.${var.domain_name}"
-  ttl     = 300
-  records = [module.planorama-dev.site_fqdn]
-}
