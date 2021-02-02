@@ -18,7 +18,7 @@ module "prod-secrets" {
   }
 }
 
-module "staging-creds" {
+module "registration-staging-identity" {
   source      = "./identity"
   project     = var.project
   stage       = "staging"
@@ -37,7 +37,7 @@ module "staging-creds" {
   }
 }
 
-module "prod-creds" {
+module "registration-prod-identity" {
   source      = "./identity"
   project     = var.project
   stage       = "prod"
@@ -90,8 +90,8 @@ module "staging-site" {
 
   # instance access
   ssh_key_id           = var.ssh_key_id
-  iam_instance_profile = module.staging-creds.iam_instance_profile_id
-  iam_role_name        = module.staging-creds.iam_role_name
+  iam_instance_profile = module.registration-staging-identity.iam_instance_profile_id
+  iam_role_name        = module.registration-staging-identity.iam_role_name
 
   # remote hosts
   www_domain_name = "${var.staging_www_prefix}.${var.domain_name}"
@@ -120,8 +120,8 @@ module "prod-site" {
 
   # instance access
   ssh_key_id           = var.ssh_key_id
-  iam_instance_profile = module.prod-creds.iam_instance_profile_id
-  iam_role_name        = module.prod-creds.iam_role_name
+  iam_instance_profile = module.registration-prod-identity.iam_instance_profile_id
+  iam_role_name        = module.registration-prod-identity.iam_role_name
 
   # remote hosts
   www_domain_name = "${var.prod_www_prefix}.${var.domain_name}"

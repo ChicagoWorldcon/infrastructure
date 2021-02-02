@@ -7,7 +7,7 @@ output "registration-prod" {
     instance_id       = module.prod-site.id
     www_fqdn          = module.prod-site.site_fqdn
 
-    instance_role_name = module.prod-creds.iam_role_name
+    instance_role_name = module.registration-prod-identity.iam_role_name
   }
 }
 
@@ -20,7 +20,7 @@ output "registration-staging" {
     instance_id       = module.staging-site.id
     www_fqdn          = module.staging-site.site_fqdn
 
-    instance_role_name = module.staging-creds.iam_role_name
+    instance_role_name = module.registration-staging-identity.iam_role_name
   }
 }
 
