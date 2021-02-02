@@ -12,36 +12,36 @@ output "db_instance_id" {
 
 output "reg_hostname" {
   value = {
-    staging = module.hosting.staging.public_dns
-    prod    = module.hosting.prod.public_dns
+    staging = module.hosting.registration-staging.public_dns
+    prod    = module.hosting.registration-prod.public_dns
   }
 }
 
 output "reg_private_ip" {
   value = {
-    staging = module.hosting.staging.private_ip
-    prod    = module.hosting.prod.private_ip
+    staging = module.hosting.registration-staging.private_ip
+    prod    = module.hosting.registration-prod.private_ip
   }
 }
 
 output "reg_public_ip" {
   value = {
-    staging = module.hosting.staging.public_ip
-    prod    = module.hosting.prod.public_ip
+    staging = module.hosting.registration-staging.public_ip
+    prod    = module.hosting.registration-prod.public_ip
   }
 }
 
 output "reg_public_dns" {
   value = {
-    staging = module.hosting.staging.public_dns
-    prod    = module.hosting.prod.public_dns
+    staging = module.hosting.registration-staging.public_dns
+    prod    = module.hosting.registration-prod.public_dns
   }
 }
 
 output "reg_instance_id" {
   value = {
-    staging = module.hosting.staging.instance_id
-    prod    = module.hosting.prod.instance_id
+    staging = module.hosting.registration-staging.instance_id
+    prod    = module.hosting.registration-prod.instance_id
   }
 }
 
@@ -51,8 +51,8 @@ output "global_ns" {
 
 output "site" {
   value = {
-    staging = module.hosting.staging.www_fqdn
-    prod    = module.hosting.prod.www_fqdn
+    staging = module.hosting.registration-staging.www_fqdn
+    prod    = module.hosting.registration-prod.www_fqdn
   }
 }
 

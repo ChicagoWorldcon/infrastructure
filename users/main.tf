@@ -11,6 +11,10 @@ data "aws_iam_user" "chrisr" {
   user_name = "chris.rose"
 }
 
+data "aws_iam_user" "victoria" {
+  user_name = "victoria.garcia"
+}
+
 resource "aws_iam_user" "gail" {
   name = "gail.terman"
   path = "/people/program/"
@@ -32,6 +36,7 @@ resource "aws_iam_group_membership" "deployers" {
 
   users = [
     data.aws_iam_user.chrisr.user_name,
+    data.aws_iam_user.victoria.user_name,
     aws_iam_user.gail.name,
     aws_iam_user.henry.name,
   ]

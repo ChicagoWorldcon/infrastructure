@@ -131,23 +131,13 @@ module "global" {
   developer_group_name = module.users.deploy_group_name
 }
 
-resource "aws_iam_group" "developers" {
-  name = "developers"
-  path = "/it/users/"
-}
-
-resource "aws_iam_group_policy_attachment" "dev-pull" {
-  group      = aws_iam_group.developers.name
-  policy_arn = module.global.ecr_pull_policy
-}
-
 resource "aws_iam_role_policy_attachment" "instance-pull-dev" {
-  role       = module.hosting.staging.instance_role_name
+  role       = module.hosting.registration-staging.instance_role_name
   policy_arn = module.global.ecr_pull_policy
 }
 
 resource "aws_iam_role_policy_attachment" "instance-pull-prod" {
-  role       = module.hosting.prod.instance_role_name
+  role       = module.hosting.registration-prod.instance_role_name
   policy_arn = module.global.ecr_pull_policy
 }
 

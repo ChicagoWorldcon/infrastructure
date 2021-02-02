@@ -1,5 +1,5 @@
 resource "aws_iam_role" "registration" {
-  name               = "${var.project}-registration-${var.stage}"
+  name               = "${var.project}-${var.application}-${var.stage}"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -18,7 +18,7 @@ EOF
 }
 
 resource "aws_iam_instance_profile" "registration" {
-  name = "${var.project}-registration-instance-profile-${var.stage}"
+  name = "${var.project}-${var.application}-instance-profile-${var.stage}"
   role = aws_iam_role.registration.name
 }
 
@@ -34,7 +34,7 @@ data "template_file" "hosting-role-policy" {
 }
 
 resource "aws_iam_role_policy" "registration" {
-  name   = "${var.project}-registration-policy-${var.stage}"
+  name   = "${var.project}-${var.application}-policy-${var.stage}"
   role   = aws_iam_role.registration.name
   policy = data.template_file.hosting-role-policy.rendered
 }
