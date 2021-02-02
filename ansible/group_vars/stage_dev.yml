@@ -5,9 +5,8 @@ stage: dev
 prompt_color_code: "32"
 prompt_color_hex: "bd93f8"
 
-external_hostname: infra.dev.chicon.org
 heimdall_fqdn: dashboard.dev.chicon.org
-wellington_fqdn: registration.dev.chicon.org
+fqdn_suffix: ".dev"
 wellington_docker_version: "staging"
 
 registration_db_name: registration_dev

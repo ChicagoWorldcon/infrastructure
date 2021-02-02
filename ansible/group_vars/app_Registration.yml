@@ -1,1 +1,4 @@
 ansible_user: ubuntu
+application_fqdn: "registration{{fqdn_suffix}}.chicon.org"
+external_hostname: "infra{{fqdn_suffix}}.chicon.org"
+external_destination: "https://chicagoworldconbid.org"

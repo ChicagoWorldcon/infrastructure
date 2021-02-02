@@ -5,11 +5,11 @@
   become: yes
 
 - name: set up Caddy paths
-  file: path={{ item }} state=directory owner=root group=chicago mode=0755   
+  file: path={{ item }} state=directory owner=root group=chicago mode=0755
   with_items:
     - "{{ caddy_conf_dir }}/sites-enabled"
   become: yes
-    
+
 - name: setup Caddyfile
   template:
     src: Caddyfile.j2
@@ -18,7 +18,14 @@
   notify: restart webserver
   become: yes
 
+- name: clear default redirect
+  file: path=/opt/chicago/etc/sites-enabled/00-redirect.conf state=absent
+  become: yes
+  notify: restart webserver
+  when: external_destination is undefined
+
 - name: setup default redirect
   template: src=redirect.conf.j2 dest=/opt/chicago/etc/sites-enabled/00-redirect.conf owner=root group=chicago mode=0644
   become: yes
   notify: restart webserver
+  when: external_destination is defined

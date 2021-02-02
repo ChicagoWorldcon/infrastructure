@@ -14,9 +14,8 @@ stage: prod
 prompt_color_code: "31"
 prompt_color_hex: "f85454"
 
-external_hostname: infra.chicon.org
 heimdall_fqdn: dashboard.chicon.org
-wellington_fqdn: registration.chicon.org
+fqdn_suffix: ""
 wellington_docker_version: "staging"
 
 registration_db_name: registration_prod

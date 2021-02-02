@@ -13,3 +13,4 @@ admin_users:
       - docker
       - chicago
       - adm
+application_fqdn: "planorama{{fqdn_suffix}}.chicon.org"
