@@ -29,6 +29,11 @@ resource "aws_instance" "web" {
     local.common_tags,
     map("Name", "${var.stage} ${var.application}")
   )
+
+  volume_tags = merge(
+    local.common_tags,
+    map("Name", "${var.stage} ${var.application}")
+  )
 }
 
 resource "aws_ebs_volume" "web" {
