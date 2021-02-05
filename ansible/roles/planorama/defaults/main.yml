@@ -1,0 +1,7 @@
+---
+planorama_additional_volumes: []
+planorama_additional_environment_variables: {}
+
+# The public port for the Planorama server
+planorama_public_port: REPLACE_ME
+planorama_insecure_public_port: REPLACE_ME

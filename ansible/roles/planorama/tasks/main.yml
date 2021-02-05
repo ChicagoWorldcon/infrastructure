@@ -1,0 +1,124 @@
+---
+- name: "[planorama] Create the service user"
+  user:
+    name: planorama
+    groups:
+      - chicago
+      - docker
+  register: service_user
+  become: yes
+
+- name: get chicago gid
+  getent:
+    database: group
+    key: chicago
+  check_mode: no
+
+- name: Ensure the config directories are present
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+    owner: planorama
+    group: chicago
+  with_items:
+    - /opt/chicago/etc/planorama
+  become: yes
+
+- name: Define the default service Docker volumes
+  set_fact:
+    _planorama_docker_volumes:
+      - "/opt/chicago/etc/planorama:/config"
+
+- name: Append any additional volume mounts
+  set_fact:
+    _planorama_docker_volumes: "{{ _planorama_docker_volumes }} + {{ planorama_additional_volumes }}"
+
+- name: Define the default Docker environment variables
+  set_fact:
+    _planorama_environment_vars:
+      PGID: "{{ service_user.uid }}"
+      PUID: "{{ getent_group.chicago[1] }}"
+
+- name: Append any additional environment variables
+  set_fact:
+    _planorama_environment_vars: "{{ _planorama_environment_vars | combine(planorama_additional_environment_variables) }}"
+
+- name: Ensure the docker-compose template directory exists
+  file:
+    state: directory
+    path: "/opt/chicago/app/planorama"
+  become: yes
+
+- name: get the db endpoint
+  rds_instance_info:
+    aws_region: "{{ lookup('env', 'AWS_REGION') }}"
+    db_instance_identifier: chicon-shared
+  register: chicon_db
+
+- name: set the DB enpoint
+  set_fact:
+    chicon_db_endpoint: "{{ chicon_db.instances[0].endpoint.address }}"
+
+- name: create the admin psql script
+  template: src=psql.sh.j2 dest=/usr/local/bin/psql.plan mode=0755 owner=root group=chicago
+  vars:
+    db_username: "{{ planorama_db_username }}"
+    db_secret: "{{ planorama_db_secret }}"
+    db_name: "{{ planorama_db_name }}"
+  become: yes
+
+- name: create the admin db script
+  template: src=db.sh.j2 dest=/usr/local/bin/db.plan mode=0755 owner=root group=chicago
+  vars:
+    db_username: "{{ planorama_db_username }}"
+    db_secret: "{{ planorama_db_secret }}"
+    db_name: "{{ planorama_db_name }}"
+  become: yes
+
+- name: Ensure an override file is present
+  template:
+    src: tag.env.j2
+    dest: /opt/chicago/etc/planorama/tag.env
+    mode: 0644
+    owner: root
+    group: chicago
+  become: yes
+
+- name: Ensure this service's environment file is present
+  template:
+    src: service.env.j2
+    dest: /opt/chicago/etc/planorama.env
+  vars:
+    db_hostname: "{{ chicon_db_endpoint }}"
+    db_name: "{{ planorama_db_name }}"
+    db_site_username: "{{ planorama_db_username }}"
+  become: yes
+
+- name: Ensure this service's docker-compose template is present
+  template:
+    src: docker-compose.yml.j2
+    dest: /opt/chicago/app/planorama/docker-compose.yml
+  become: yes
+
+- name: Set up a unit file for the service
+  template:
+    src: systemd.service.j2
+    dest: /etc/systemd/system/planorama.service
+  become: yes
+
+- name: reload services
+  systemd:
+    daemon_reload: yes
+  become: yes
+
+- name: Ensure the service is enabled
+  systemd:
+    name: planorama
+    enabled: yes
+  become: yes
+
+- name: Set up caddy forwarder
+  template: src=planorama.conf.j2 dest=/opt/chicago/etc/sites-enabled/planorama.conf owner=root group=chicago mode=0644
+  become: yes
+  notify: reload webserver

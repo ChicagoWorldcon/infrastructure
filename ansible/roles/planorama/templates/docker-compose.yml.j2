@@ -1,0 +1,56 @@
+version: '3.7'
+services:
+  redis:
+    image: redis:alpine
+    restart: always
+    volumes:
+      - redis-data:/data
+
+  web:
+    image: {{ planorama_ecr_registry }}:${PLANORAMA_DOCKER_TAG}
+    ports:
+      - "{{ planorama_public_port }}:443"
+      - "127.0.0.1:{{ planorama_insecure_public_port}}:3000"
+    volumes:
+      - type: tmpfs
+        target: /app/tmp
+{% for vol in _planorama_docker_volumes %}
+      - {{ vol }}
+{% endfor %}
+{% if _planorama_environment_vars %}
+    environment:
+{% for k, v in _planorama_environment_vars.items() %}
+      - {{ k }}={{ v }}
+{% endfor %}
+{% endif %}
+    env_file:
+      - /opt/chicago/etc/hostname.env
+      - /opt/chicago/etc/planorama.env
+      - /opt/chicago/etc/planorama-overrides.env
+      - /opt/chicago/etc/creds.env
+    restart: always
+
+  worker:
+    entrypoint: "script/docker_sidekiq_entry.sh"
+    image: {{ planorama_ecr_registry }}:${PLANORAMA_DOCKER_TAG}
+    volumes:
+      - type: tmpfs
+        target: /app/tmp
+{% for vol in _planorama_docker_volumes %}
+      - {{ vol }}
+{% endfor %}
+{% if _planorama_environment_vars %}
+    environment:
+{% for k, v in _planorama_environment_vars.items() %}
+      - {{ k }}={{ v }}
+{% endfor %}
+{% endif %}
+    env_file:
+      - /opt/chicago/etc/hostname.env
+      - /opt/chicago/etc/planorama.env
+      - /opt/chicago/etc/planorama-overrides.env
+      - /opt/chicago/etc/creds.env
+    restart: always
+
+volumes:
+  redis-data:
