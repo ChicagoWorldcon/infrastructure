@@ -1,0 +1,7 @@
+{{ application_fqdn }} {
+	import logging
+{% if stage != "prod" %}
+	import passworded
+{% endif %}
+	reverse_proxy localhost:{{ planorama_insecure_public_port }}
+}

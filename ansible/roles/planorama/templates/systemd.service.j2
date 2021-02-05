@@ -1,0 +1,20 @@
+[Unit]
+Requires=docker.service
+Requires=rotate-creds.timer
+Description=Run planorama docker container
+
+[Service]
+User=planorama
+
+WorkingDirectory=/opt/chicago/app/planorama
+
+EnvironmentFile=/opt/chicago/etc/planorama/tag.env
+
+ExecStart=/usr/bin/docker-compose --no-ansi up 
+
+ExecStop=/usr/bin/docker-compose down -v
+
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
