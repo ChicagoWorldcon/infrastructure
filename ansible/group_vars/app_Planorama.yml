@@ -13,4 +13,12 @@ admin_users:
       - docker
       - chicago
       - adm
+  - username: balen
+    public_key: "{{ lookup('file', 'henry.pub') }}"
+    sudo: yes
+    extra_groups:
+      - docker
+      - chicago
+      - adm
+
 application_fqdn: "planorama{{fqdn_suffix}}.chicon.org"
