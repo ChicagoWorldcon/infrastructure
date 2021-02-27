@@ -3,3 +3,4 @@ journald_cloudwatch_logs_url: https://github.com/codemonauts/journald-cloudwatch
 journald_cloudwatch_logs_binary: /usr/local/bin/journald-cloudwatch-logs
 journald_cloudwatch_logs_config_file: /etc/journald-cloudwatch-logs.conf
 journald_cloudwatch_logs_state_dir: /var/lib/journald-cloudwatch-logs
+aws_region: "{{ lookup('env', 'AWS_REGION') }}"

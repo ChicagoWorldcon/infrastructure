@@ -1,0 +1,13 @@
+[Unit]
+Description=Maintain ECR access
+Requires=ecr-login.service
+
+[Timer]
+Unit=ecr-login.service
+OnBootSec=1min
+OnUnitInactiveSec=6h
+RandomizedDelaySec=15m
+AccuracySec=1s
+
+[Install]
+WantedBy=timers.target

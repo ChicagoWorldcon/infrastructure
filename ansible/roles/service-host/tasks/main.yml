@@ -13,6 +13,28 @@
   notify: reload services
   become: yes
 
+- name: install ecr login
+  template: src=ecr-login.service.j2 dest=/etc/systemd/system/ecr-login.service owner=root group=root mode=0644
+  notify: reload services
+  become: yes
+
+- name: install ecr login timer
+  template: src=ecr-login.timer.j2 dest=/etc/systemd/system/ecr-login.timer owner=root group=root mode=0644
+  notify: reload services
+  become: yes
+
+- name: reload services
+  systemd:
+    daemon_reload: yes
+  become: yes
+
+- name: enable the ecr login timer
+  systemd:
+    name: ecr-login.timer
+    state: started
+    enabled: yes
+  become: yes
+
 - name: enable journald-cloudwatch-logs
   systemd:
     name: journald-cloudwatch-logs
@@ -45,15 +67,12 @@
     dest: "/usr/local/bin"
     extra_opts:
       - --wildcards
-      - 'journald-cloudwatch-logs'
+      - "journald-cloudwatch-logs"
   become: yes
   when: not ansible_check_mode
-
 
 - name: start journald-cloudwatch-logs
   systemd:
     name: journald-cloudwatch-logs
     state: started
   become: yes
-
-

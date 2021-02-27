@@ -1,0 +1,11 @@
+[Unit]
+Description=Log in to ECR
+Wants=ecr-login.timer
+
+[Service]
+Environment=AWS_DEFAULT_REGION={{ aws_region }}
+Type=oneshot
+ExecStart=/usr/bin/bash -c '$$(/usr/bin/aws ecr get-login --no-include-email)'
+
+[Install]
+WantedBy=multi-user.target
