@@ -69,7 +69,7 @@ resource "aws_security_group" "web_server_sg" {
   tags = merge(
     local.common_tags,
     map(
-      "Name", "${var.stage} web-server",
+      "Name", "${var.stage} ${var.application} server",
       "Description", "Security group for web-server with HTTP ports open within VPC",
     )
   )
@@ -81,6 +81,7 @@ data "dns_a_record_set" "sendgrid" {
 
 resource "aws_security_group_rule" "appserver-outbound-smtp" {
   security_group_id = aws_security_group.web_server_sg.id
+  description       = "Email server return"
   type              = "egress"
   from_port         = 465
   to_port           = 465
@@ -90,6 +91,7 @@ resource "aws_security_group_rule" "appserver-outbound-smtp" {
 
 resource "aws_security_group_rule" "appserver-inbound-smtp" {
   security_group_id = aws_security_group.web_server_sg.id
+  description       = "Email server return"
   type              = "ingress"
   from_port         = 465
   to_port           = 465
@@ -99,6 +101,7 @@ resource "aws_security_group_rule" "appserver-inbound-smtp" {
 
 resource "aws_security_group_rule" "web-inbound-http" {
   security_group_id = aws_security_group.web_server_sg.id
+  description       = "Insecure app server - only for https redirect"
   type              = "ingress"
   from_port         = 80
   to_port           = 80
@@ -108,6 +111,7 @@ resource "aws_security_group_rule" "web-inbound-http" {
 
 resource "aws_security_group_rule" "web-inbound-https" {
   security_group_id = aws_security_group.web_server_sg.id
+  description       = "Secure app server"
   type              = "ingress"
   from_port         = 443
   to_port           = 443
@@ -117,6 +121,7 @@ resource "aws_security_group_rule" "web-inbound-https" {
 
 resource "aws_security_group_rule" "web-inbound-ssh" {
   security_group_id = aws_security_group.web_server_sg.id
+  description       = "Admin access"
   type              = "ingress"
   from_port         = 22
   to_port           = 22
@@ -126,6 +131,7 @@ resource "aws_security_group_rule" "web-inbound-ssh" {
 
 resource "aws_security_group_rule" "web-outbound-db" {
   security_group_id        = aws_security_group.web_server_sg.id
+  description              = "Access to DB via security group"
   type                     = "egress"
   from_port                = 5432
   to_port                  = 5432
@@ -135,6 +141,7 @@ resource "aws_security_group_rule" "web-outbound-db" {
 
 resource "aws_security_group_rule" "web-outbound-http" {
   security_group_id = aws_security_group.web_server_sg.id
+  description       = "Access to port 80 for services"
   type              = "egress"
   from_port         = 80
   to_port           = 80
@@ -144,6 +151,7 @@ resource "aws_security_group_rule" "web-outbound-http" {
 
 resource "aws_security_group_rule" "web-outbound-https" {
   security_group_id = aws_security_group.web_server_sg.id
+  description       = "Access to port 443 for services"
   type              = "egress"
   from_port         = 443
   to_port           = 443
