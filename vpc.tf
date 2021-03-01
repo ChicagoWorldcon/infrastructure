@@ -1,5 +1,6 @@
 module "vpc" {
-  source = "terraform-aws-modules/vpc/aws"
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "2.70.0"
 
   name = "chicon-vpc"
   cidr = "172.42.0.0/16"
