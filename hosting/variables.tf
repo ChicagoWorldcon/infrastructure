@@ -31,6 +31,11 @@ variable "security_group_id" {
   type = string
 }
 
+variable "db_security_group_id" {
+  type        = string
+  description = "the DB security group to use for egress rules to the DB"
+}
+
 variable "db_hostname" {
   type = string
 }

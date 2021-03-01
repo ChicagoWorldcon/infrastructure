@@ -110,6 +110,17 @@ module "staging-site" {
   log_retention = 7
 }
 
+# security groups for the DB
+resource "aws_security_group_rule" "db-from-registration-staging" {
+  security_group_id        = var.db_security_group_id
+  description              = "Staging access to DB via security group"
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  source_security_group_id = module.staging-site.security_group_id
+}
+
 module "prod-site" {
   source = "./appserver"
 
@@ -140,3 +151,13 @@ module "prod-site" {
   log_retention = 60
 }
 
+# security groups for the DB
+resource "aws_security_group_rule" "db-from-registration-prod" {
+  security_group_id        = var.db_security_group_id
+  description              = "Staging access to DB via security group"
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  source_security_group_id = module.prod-site.security_group_id
+}

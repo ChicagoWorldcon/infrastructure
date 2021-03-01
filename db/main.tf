@@ -26,7 +26,7 @@ module "db" {
   password = var.db_superuser_password
   port     = "5432"
 
-  vpc_security_group_ids = [var.security_group_id, aws_security_group.postgresql.id]
+  vpc_security_group_ids = [aws_security_group.postgresql.id]
 
   maintenance_window = "sun:04:30-sun:05:30"
   backup_window      = "04:00-04:30"

@@ -13,7 +13,6 @@ module "chicondb" {
   db_subnet_group_name    = module.vpc.database_subnet_group
   db_engine_major_version = "12"
   db_engine_version       = "12.3"
-  security_group_id       = module.vpc.default_security_group_id
 }
 
 module "hosting" {
@@ -29,6 +28,7 @@ module "hosting" {
   ssh_key_id = var.ssh_key_id
 
   security_group_id     = module.vpc.default_security_group_id
+  db_security_group_id  = module.chicondb.db_security_group_id
   db_hostname           = module.chicondb.db_instance_address
   db_superuser_username = var.db_superuser_username
 

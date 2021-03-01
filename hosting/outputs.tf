@@ -24,3 +24,15 @@ output "registration-staging" {
   }
 }
 
+output "planorama-dev" {
+  value = {
+    security_group_id = module.planorama-dev.security_group_id
+    public_dns        = module.planorama-dev.public_dns
+    private_ip        = module.planorama-dev.private_ip
+    public_ip         = module.planorama-dev.public_ip
+    instance_id       = module.planorama-dev.id
+    www_fqdn          = module.planorama-dev.site_fqdn
+
+    instance_role_name = module.planorama-dev-identity.iam_role_name
+  }
+}

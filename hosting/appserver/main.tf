@@ -129,16 +129,6 @@ resource "aws_security_group_rule" "web-inbound-ssh" {
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
-resource "aws_security_group_rule" "web-outbound-db" {
-  security_group_id        = aws_security_group.web_server_sg.id
-  description              = "Access to DB via security group"
-  type                     = "egress"
-  from_port                = 5432
-  to_port                  = 5432
-  protocol                 = "tcp"
-  source_security_group_id = var.security_group_id
-}
-
 resource "aws_security_group_rule" "web-outbound-http" {
   security_group_id = aws_security_group.web_server_sg.id
   description       = "Access to port 80 for services"

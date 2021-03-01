@@ -42,3 +42,12 @@ module "planorama-dev" {
   log_retention   = 7
 }
 
+resource "aws_security_group_rule" "db-from-planorama-dev" {
+  security_group_id        = var.db_security_group_id
+  description              = "Planorama dev access to DB via security group"
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  source_security_group_id = module.planorama-dev.security_group_id
+}

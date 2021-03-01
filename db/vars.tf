@@ -4,6 +4,5 @@ variable "db_superuser_password" {}
 variable "tags" {}
 variable "vpc_id" {}
 variable "db_subnet_group_name" {}
-variable "security_group_id" {}
 variable "db_engine_major_version" {}
 variable "db_engine_version" {}
