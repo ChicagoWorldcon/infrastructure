@@ -47,7 +47,7 @@ invoke==1.4.1
     # via -r requirements.in
 isort==5.6.4
     # via -r requirements.in
-jinja2==2.11.2
+jinja2==2.11.3
     # via ansible-base
 jmespath==0.10.0
     # via
