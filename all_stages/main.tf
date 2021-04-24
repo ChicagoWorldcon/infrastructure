@@ -23,10 +23,6 @@ resource "aws_secretsmanager_secret" "db_superuser_password" {
   )
 }
 
-provider "aws" {
-  alias = "acm"
-}
-
 // Use the AWS Certificate Manager to create an SSL cert for our domain.
 resource "aws_acm_certificate" "certificate" {
   provider = aws.acm
