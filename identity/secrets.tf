@@ -3,10 +3,10 @@ resource "aws_secretsmanager_secret" "db_site_password" {
 
   tags = merge(
     var.common_tags,
-    map(
-      "Name", "${var.stage} DB Admin",
-      "ServiceName", "ChicagoAdmin"
-    )
+    tomap({
+      "Name"        = "${var.stage} DB Admin",
+      "ServiceName" = "ChicagoAdmin"
+    })
   )
 }
 

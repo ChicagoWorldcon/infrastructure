@@ -27,12 +27,12 @@ resource "aws_instance" "web" {
 
   tags = merge(
     local.common_tags,
-    map("Name", "${var.stage} ${var.application}")
+    tomap({ "Name" = "${var.stage} ${var.application}" })
   )
 
   volume_tags = merge(
     local.common_tags,
-    map("Name", "${var.stage} ${var.application}")
+    tomap({ "Name" = "${var.stage} ${var.application}" })
   )
 }
 
@@ -42,7 +42,7 @@ resource "aws_ebs_volume" "web" {
 
   tags = merge(
     local.common_tags,
-    map("Name", "${var.stage} ${var.application}")
+    tomap({ "Name" = "${var.stage} ${var.application}" })
   )
 }
 
@@ -57,9 +57,9 @@ resource "aws_eip" "web" {
   vpc      = true
   tags = merge(
     local.common_tags,
-    map(
-      "Name", "${var.stage} API server"
-    )
+    tomap({
+      "Name" = "${var.stage} API server"
+    })
   )
 }
 
@@ -68,10 +68,10 @@ resource "aws_security_group" "web_server_sg" {
 
   tags = merge(
     local.common_tags,
-    map(
-      "Name", "${var.stage} ${var.application} server",
-      "Description", "Security group for web-server with HTTP ports open within VPC",
-    )
+    tomap({
+      "Name"        = "${var.stage} ${var.application} server",
+      "Description" = "Security group for web-server with HTTP ports open within VPC",
+    })
   )
 }
 
@@ -164,10 +164,10 @@ resource "aws_cloudwatch_log_group" "registration_group" {
 
   tags = merge(
     local.common_tags,
-    map(
-      "Name", "${var.stage} hosting logs",
-      "Description", "${var.application} ${var.stage} hosting logs",
-    )
+    tomap({
+      "Name"        = "${var.stage} hosting logs",
+      "Description" = "${var.application} ${var.stage} hosting logs",
+    })
   )
 }
 

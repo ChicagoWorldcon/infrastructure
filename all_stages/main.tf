@@ -16,10 +16,10 @@ resource "aws_secretsmanager_secret" "db_superuser_password" {
   tags = merge(
     var.common_tags,
     local.common_tags,
-    map(
-      "Name", "DB Superuser",
-      "ServiceName", "ChicagoAdmin"
-    )
+    tomap({
+      "Name"        = "DB Superuser",
+      "ServiceName" = "ChicagoAdmin"
+    })
   )
 }
 
@@ -87,7 +87,7 @@ resource "aws_iam_user" "github-registration" {
   tags = merge(
     var.common_tags,
     local.common_tags,
-    map("Client", "github")
+    tomap({ "Client" = "github" })
   )
 }
 
@@ -193,7 +193,7 @@ resource "aws_ecr_repository" "registration" {
   tags = merge(
     local.common_tags,
     var.common_tags,
-    map("Application", "web")
+    tomap({ "Application" = "web" })
   )
 }
 

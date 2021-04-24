@@ -4,9 +4,9 @@ resource "aws_security_group" "postgresql" {
   tags = merge(
     var.tags,
     local.common_tags,
-    map(
-      "Name", "DB Security Group"
-    )
+    tomap({
+      "Name" = "DB Security Group"
+    })
   )
 }
 
@@ -36,7 +36,7 @@ module "db" {
   tags = merge(
     var.tags,
     local.common_tags,
-    map("Name", "DatabaseServer")
+    tomap({ "Name" = "DatabaseServer" })
   )
 
   # DB subnet group
