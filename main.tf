@@ -12,7 +12,7 @@ module "chicondb" {
   db_superuser_password   = data.aws_secretsmanager_secret_version.db_superuser_password.secret_string
   db_subnet_group_name    = module.vpc.database_subnet_group
   db_engine_major_version = "12"
-  db_engine_version       = "12.3"
+  db_engine_version       = "12.5"
 }
 
 module "hosting" {
