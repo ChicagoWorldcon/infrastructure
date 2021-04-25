@@ -21,3 +21,7 @@ output "site_fqdn" {
 output "security_group_id" {
   value = aws_security_group.web_server_sg.id
 }
+
+output "cloud_init_script" {
+  value = data.template_file.script.rendered
+}

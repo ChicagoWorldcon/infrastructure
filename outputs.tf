@@ -79,3 +79,10 @@ output "rds_site_user" {
 output "ecr_urls" {
   value = module.global.ecr_urls
 }
+
+output "cloud-init" {
+  value = {
+    registration-staging = module.hosting.registration-staging.instance_cloud_init_script
+    registration-prod    = module.hosting.registration-prod.instance_cloud_init_script
+  }
+}
