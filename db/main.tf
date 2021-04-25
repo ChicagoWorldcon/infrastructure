@@ -40,7 +40,8 @@ module "db" {
   )
 
   # DB subnet group
-  db_subnet_group_name = var.db_subnet_group_name
+  create_db_subnet_group = false
+  db_subnet_group_name   = var.db_subnet_group_name
 
   # DB parameter group
   family = "postgres${var.db_engine_major_version}"
