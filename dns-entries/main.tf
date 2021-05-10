@@ -38,9 +38,25 @@ resource "aws_route53_record" "staff_wiki_cname" {
   records = ["ghs.googlehosted.com"]
 }
 
+resource "aws_route53_record" "staff_site_cname" {
+  zone_id = var.dns_zone_id
+  name    = "staff"
+  type    = "CNAME"
+  ttl     = 300
+  records = ["ghs.googlehosted.com"]
+}
+
 resource "aws_route53_record" "dh_wiki_cname" {
   zone_id = var.dns_zone_id
   name    = "dh-wiki"
+  type    = "CNAME"
+  ttl     = 300
+  records = ["ghs.googlehosted.com"]
+}
+
+resource "aws_route53_record" "dh_site_cname" {
+  zone_id = var.dns_zone_id
+  name    = "dh"
   type    = "CNAME"
   ttl     = 300
   records = ["ghs.googlehosted.com"]
