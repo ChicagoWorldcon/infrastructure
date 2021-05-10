@@ -82,3 +82,35 @@ def rotate_secret(c, stage, secret_name):
     client = boto3.client("secretsmanager")
     secret_string = secret_method(secret_name, stage)
     client.put_secret_value(SecretId=secret_name, SecretString=secret_string)
+
+
+@task
+def plan_site(c):
+    """Generate a plan for the main site"""
+    c.run("terraform plan -out main-site.plan")
+
+
+@task
+def apply_site(c):
+    """Execute an update to the main infrastructure"""
+    c.run("terraform apply main-site.plan")
+
+
+@task(plan_site, apply_site)
+def update_site(c):
+    """Perform a full update of the site"""
+    ...
+
+
+@task
+def plan_dns(c):
+    """Plan DNS changes"""
+    with c.cd("dns"):
+        c.run("terraform plan -out dns.plan")
+
+
+@task
+def apply_dns(c):
+    """Apply DNS changes"""
+    with c.cd("dsn"):
+        c.run("terraform apply dns.plan")
