@@ -8,5 +8,7 @@ terraform/
 /db.auto.tfvars
 /ssh.auto.tfvars
 plan
+*.plan
 /data/*.json
 .vault-password
+/.vagrant/

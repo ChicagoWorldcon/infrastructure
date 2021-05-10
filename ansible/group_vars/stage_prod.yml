@@ -1,12 +1,3 @@
-admin_users:
-  - username: offby1
-    public_key: "{{ lookup('file', '~/.ssh/id_ed25519.pub') }}"
-    sudo: yes
-    extra_groups:
-      - docker
-      - chicago
-      - adm
-
 caddy_architecture: amd64
 caddy_use_test_endpoint: no
 

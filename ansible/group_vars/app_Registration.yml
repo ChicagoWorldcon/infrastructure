@@ -1,3 +1,20 @@
+admin_users:
+  - username: offby1
+    public_key: "{{ lookup('file', '~/.ssh/id_ed25519.pub') }}"
+    sudo: yes
+    extra_groups:
+      - docker
+      - chicago
+      - adm
+
+  - username: lasiorhine
+    public_key: "{{ lookup('file', 'victoria.pub')}}"
+    sudo: yes
+    extra_groups:
+      - docker
+      - chicago
+      - adm
+
 ansible_user: ubuntu
 application_fqdn: "registration{{fqdn_suffix}}.chicon.org"
 external_hostname: "infra{{fqdn_suffix}}.chicon.org"
