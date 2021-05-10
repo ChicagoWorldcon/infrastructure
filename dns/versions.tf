@@ -10,3 +10,33 @@ terraform {
     }
   }
 }
+
+provider "aws" {
+  profile = "chicago"
+  region  = "us-east-1"
+}
+
+variable "namecheaptoken" {
+  description = "namecheap API token"
+  type        = string
+  sensitive   = true
+}
+
+variable "namecheapip" {
+  description = "namecheap API IP"
+  type        = string
+  sensitive   = true
+}
+
+variable "namecheapuser" {
+  description = "namecheap username"
+  type        = string
+  sensitive   = true
+}
+
+provider "namecheap" {
+  username = var.namecheapuser
+  api_user = var.namecheapuser
+  token    = var.namecheaptoken
+  ip       = var.namecheapip
+}

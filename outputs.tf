@@ -46,7 +46,7 @@ output "reg_instance_id" {
 }
 
 output "global_ns" {
-  value = module.dns.name_servers
+  value = data.aws_route53_zone.chicon.name_servers
 }
 
 output "site" {

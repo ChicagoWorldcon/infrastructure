@@ -19,7 +19,7 @@ module "hosting" {
   source      = "./hosting/"
   project     = var.project
   region      = var.region
-  dns_zone_id = module.dns.dns_zone_id
+  dns_zone_id = data.aws_route53_zone.chicon.zone_id
   domain_name = var.domain_name
 
   vpc_id               = module.vpc.vpc_id
@@ -47,22 +47,19 @@ module "hosting" {
 
 }
 
-module "dns" {
-  source      = "./dns/"
-  domain_name = var.domain_name
-  project     = var.project
-  role        = "IT"
+data "aws_route53_zone" "chicon" {
+  name = var.domain_name
 }
 
 module "chicon-email" {
   source      = "./email/"
   domain_name = var.domain_name
-  dns_zone_id = module.dns.dns_zone_id
+  dns_zone_id = data.aws_route53_zone.chicon.zone_id
 }
 
 module "chicon-dns-entries" {
   source                = "./dns-entries/"
-  dns_zone_id           = module.dns.dns_zone_id
+  dns_zone_id           = data.aws_route53_zone.chicon.zone_id
   google_dns_validation = "2qv7hpi7tzfqzcwnjq77zd6qyt5uq43ovh4sg42lh4ixnl6c7bua.mx-verification.google.com."
   sendgrid_records = [
     # three DKIM tokens
@@ -88,17 +85,19 @@ module "chicon-dns-entries" {
       value = "sendgrid.net"
     }
   ]
+  stripe_records = [
+  ]
   chicon_org_A_records = var.chicon_org_A_records
 }
 
 module "chicon-legacy-dns-entries" {
   source      = "./legacy-dns/"
-  dns_zone_id = module.dns.dns_zone_id
+  dns_zone_id = data.aws_route53_zone.chicon.zone_id
 }
 
 module "chicon-2000-site" {
   source              = "./legacy-site/"
-  dns_zone_id         = module.dns.dns_zone_id
+  dns_zone_id         = data.aws_route53_zone.chicon.zone_id
   bucket_name         = "2000.chicon.org"
   aws_region          = var.region
   aliases             = ["2000.chicon.org"]
@@ -107,7 +106,7 @@ module "chicon-2000-site" {
 
 module "chicon-7-site" {
   source              = "./legacy-site/"
-  dns_zone_id         = module.dns.dns_zone_id
+  dns_zone_id         = data.aws_route53_zone.chicon.zone_id
   bucket_name         = "7.chicon.org"
   aws_region          = var.region
   aliases             = ["7.chicon.org"]
@@ -150,7 +149,7 @@ module "prod-creds" {
   db_site_username      = var.prod_db_site_username
   db_superuser_username = var.db_superuser_username
 
-  route53_zone_id = module.dns.dns_zone_id
+  route53_zone_id = data.aws_route53_zone.chicon.zone_id
 
   common_tags = merge(
     local.common_tags,
@@ -170,7 +169,7 @@ module "staging-creds" {
   db_site_username      = var.staging_db_site_username
   db_superuser_username = var.db_superuser_username
 
-  route53_zone_id = module.dns.dns_zone_id
+  route53_zone_id = data.aws_route53_zone.chicon.zone_id
 
   common_tags = merge(
     local.common_tags,
