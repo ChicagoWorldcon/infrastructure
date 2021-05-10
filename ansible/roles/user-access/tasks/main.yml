@@ -79,7 +79,7 @@
 
 - name: download rbenv installer
   get_url:
-    url: https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-installer
+    url: https://github.com/rbenv/rbenv-installer/raw/HEAD/bin/rbenv-installer
     dest: /opt/chicago/bin/rbenv-installer
 
 - name: install rbenv for admin users
