@@ -85,8 +85,6 @@ module "chicon-dns-entries" {
       value = "sendgrid.net"
     }
   ]
-  stripe_records = [
-  ]
   chicon_org_A_records = var.chicon_org_A_records
 }
 
