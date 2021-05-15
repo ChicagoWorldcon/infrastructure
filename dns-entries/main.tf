@@ -30,6 +30,7 @@ resource "aws_route53_record" "site_www_cname" {
   records = ["chicon.org"]
 }
 
+# These are modified at https://admin.google.com/ac/apps/sites/address
 resource "aws_route53_record" "staff_wiki_cname" {
   zone_id = var.dns_zone_id
   name    = "wiki"

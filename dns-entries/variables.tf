@@ -3,7 +3,7 @@ variable "dns_zone_id" {
 }
 
 variable "sendgrid_records" {
-  type = list
+  type = list(any)
 }
 
 variable "google_dns_validation" {
