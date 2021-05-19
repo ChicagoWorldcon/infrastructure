@@ -20,5 +20,12 @@ admin_users:
       - docker
       - chicago
       - adm
+  - username: mike
+    public_key: "{{ lookup('file', 'mike.pub') }}"
+    sudo: yes
+    extra_groups:
+      - docker
+      - chicago
+      - adm
 
 application_fqdn: "planorama{{fqdn_suffix}}.chicon.org"
