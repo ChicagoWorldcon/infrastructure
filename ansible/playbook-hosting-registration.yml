@@ -1,0 +1,9 @@
+# note - requires the roles in the bootstrap playbook
+
+- hosts:
+    - app_Registration
+  roles:
+    - role: heimdall
+      when: stage == 'staging'
+    - role: rds-client
+    - role: registration

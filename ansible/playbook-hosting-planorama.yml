@@ -1,0 +1,7 @@
+# note - requires the roles in the bootstrap playbook
+
+- hosts:
+    - app_Planorama
+  roles:
+    - role: rds-client
+    - role: planorama

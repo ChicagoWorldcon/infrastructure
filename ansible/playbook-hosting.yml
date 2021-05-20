@@ -1,32 +1,9 @@
 ---
-# - hosts: localhost
-#   tasks:
-#     - name: "get Terraform networking variables"
-#       fetch_terraform_backend_outputs:
-#         bucket: "terraform.offby1.net"
-#         object: "chicago/state.tfstate"
-#       register: infra
-- hosts:
-    - stage_dev
-    - stage_staging
-    - stage_prod
-  roles:
-    - role: service-host
-    - role: chicago-host
-    - role: caddy
-    - role: user-access
-      become: yes
+- name: Bootstrap
+  import_playbook: playbook-hosting-bootstrap.yml
 
-- hosts:
-    - app_Registration
-  roles:
-    - role: heimdall
-      when: stage == 'staging'
-    - role: rds-client
-    - role: registration
+- name: Configure the Reg server
+  import_playbook: playbook-hosting-registration.yml
 
-- hosts:
-    - app_Planorama
-  roles:
-    - role: rds-client
-    - role: planorama
+- name: Configure the Planorama server
+  import_playbook: playbook-hosting-planorama.yml

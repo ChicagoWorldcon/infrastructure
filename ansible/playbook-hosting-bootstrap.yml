@@ -1,0 +1,10 @@
+- hosts:
+    - stage_dev
+    - stage_staging
+    - stage_prod
+  roles:
+    - role: service-host
+    - role: chicago-host
+    - role: caddy
+    - role: user-access
+      become: yes
