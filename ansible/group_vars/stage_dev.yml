@@ -8,14 +8,19 @@ prompt_color_hex: "bd93f8"
 heimdall_fqdn: dashboard.dev.chicon.org
 fqdn_suffix: ".dev"
 wellington_docker_version: "staging"
+planorama_docker_version: "staging"
 
 registration_db_name: registration_dev
 registration_db_username: registration_dev
+
+planorama_db_name: planorama_dev
+planorama_db_username: planorama_dev
 
 devise_secret: Chicon8/tokens/session/dev
 jwt_secret: Chicon8/tokens/jwt/dev
 sendgrid_secret: Chicon8/sendgrid_api_key/dev
 registration_db_secret: Chicon8/db/registration_dev/registration_dev_admin/dev
+planorama_db_secret: Chicon8/db/planorama_dev/planorama_dev_admin/dev
 sidekiq_secret: Chicon8/sidekiq_password/dev
 stripe_secret: Chicon8/stripe_api_key/dev
 
@@ -30,3 +35,7 @@ registration_contacts:
   maintainer_email: it+maintainer@{{ domain_name }}
   hugo_help_email: it+hugo@{{ domain_name }}
   hugo_admin_email: it+hugo-admin@{{ domain_name }}
+
+programming_contacts:
+  maintainer_email: it+maintainer@{{ domain_name }}
+  programming_email: it+programming@{{ domain_name }}
