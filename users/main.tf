@@ -30,6 +30,16 @@ resource "aws_iam_group" "deployers" {
   path = "/people/it/"
 }
 
+resource "aws_iam_group" "wellington" {
+  name = "wellington"
+  path = "/people/it/"
+}
+
+resource "aws_iam_group" "planorama" {
+  name = "planorama"
+  path = "/people/it/"
+}
+
 resource "aws_iam_group_membership" "deployers" {
   name  = "chicon-deployers"
   group = aws_iam_group.deployers.name
@@ -40,4 +50,41 @@ resource "aws_iam_group_membership" "deployers" {
     aws_iam_user.gail.name,
     aws_iam_user.henry.name,
   ]
+}
+
+resource "aws_iam_group_membership" "planorama" {
+  name  = "chicon-planorama"
+  group = aws_iam_group.planorama.name
+
+  users = [
+    aws_iam_user.gail.name,
+    aws_iam_user.henry.name,
+  ]
+}
+
+resource "aws_iam_group_membership" "wellington" {
+  name  = "chicon-wellington"
+  group = aws_iam_group.wellington.name
+
+  users = [
+    data.aws_iam_user.victoria.user_name,
+  ]
+}
+
+resource "aws_iam_group_policy" "planorama-access" {
+  name  = "planorama-instance-access-policy"
+  group = aws_iam_group.planorama.name
+
+  policy = templatefile("${path.module}/policies/instance-access.json", {
+    application = "Planorama"
+  })
+}
+
+resource "aws_iam_group_policy" "wellington-access" {
+  name  = "wellington-instance-access-policy"
+  group = aws_iam_group.wellington.name
+
+  policy = templatefile("${path.module}/policies/instance-access.json", {
+    application = "Registration"
+  })
 }
