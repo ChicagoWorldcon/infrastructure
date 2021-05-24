@@ -114,3 +114,26 @@ def apply_dns(c):
     """Apply DNS changes"""
     with c.cd("dsn"):
         c.run("terraform apply dns.plan")
+
+
+def stage_inventory(stages: List[str]) -> List[str]:
+    ansible = Path("ansible")
+    if stages == "all":
+        return list((ansible / "inventory").glob("*"))
+    else:
+        return [ansible / "inventory" / s for s in stages.split(",")]
+
+
+def ansible(playbook: str, inventory_files: List[str], check=False) -> None:
+    ansible = Path("ansible")
+    playbook_file = ansible / playbook
+    inventory = " ".join(f"-i {ifile}" for ifile in inventory_files)
+    check_flag = "--check" if check else ""
+    command = f"ansible-playbook --diff {check_flag} {inventory} {playbook}"
+    c.run(command, env={"ANSIBLE_FORCE_COLOR": "1"})
+
+
+@task
+def bootstrap(c, stages):
+    """Bootstrap the stages of the service"""
+    ansible("playbook-hosting-bootstrap.yml", stage_inventory(stages))
