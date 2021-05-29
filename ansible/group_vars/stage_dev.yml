@@ -16,9 +16,14 @@ registration_db_username: registration_dev
 planorama_db_name: planorama_dev
 planorama_db_username: planorama_dev
 
+# sendgrid config
+smtp_server: smtp.sendgrid.net
+smtp_user_name: apikey
+smtp_port: 465
+
 devise_secret: Chicon8/tokens/session/dev
 jwt_secret: Chicon8/tokens/jwt/dev
-sendgrid_secret: Chicon8/sendgrid_api_key/dev
+smtp_provider_secret: Chicon8/sendgrid_api_key/dev
 registration_db_secret: Chicon8/db/registration_dev/registration_dev_admin/dev
 planorama_db_secret: Chicon8/db/planorama_dev/planorama_dev_admin/dev
 sidekiq_secret: Chicon8/sidekiq_password/dev

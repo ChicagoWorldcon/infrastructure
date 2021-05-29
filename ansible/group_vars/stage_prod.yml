@@ -13,9 +13,14 @@ registration_db_name: registration_prod
 registration_db_username: registration_prod
 registration_preview: no
 
+# sendgrid config
+smtp_server: smtp.sendgrid.net
+smtp_user_name: apikey
+smtp_port: 465
+
 devise_secret: Chicon8/tokens/session/prod
 jwt_secret: Chicon8/tokens/jwt/prod
-sendgrid_secret: Chicon8/sendgrid_api_key/prod
+smtp_provider_secret: Chicon8/sendgrid_api_key/prod
 registration_db_secret: Chicon8/db/registration/registration_admin/prod
 sidekiq_secret: Chicon8/sidekiq_password/prod
 stripe_secret: Chicon8/stripe_api_key/prod
