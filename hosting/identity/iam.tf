@@ -30,6 +30,7 @@ data "template_file" "hosting-role-policy" {
     zone_id             = var.route53_zone_id
     codepipeline_bucket = var.codepipeline_bucket
     codedeploy_bucket   = var.codedeploy_bucket
+    allow_global_access = var.allow_global_access
   }
 }
 

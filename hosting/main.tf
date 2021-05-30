@@ -35,6 +35,8 @@ module "registration-staging-identity" {
   application = "Registration"
   db_name     = var.staging_db_name
 
+  allow_global_access = true
+
   route53_zone_id = var.dns_zone_id
 
   codedeploy_bucket   = "aws-codedeploy-us-west-2"

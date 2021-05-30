@@ -9,11 +9,19 @@
                 "secretsmanager:DescribeSecret"
             ],
             "Resource": "*",
+%{if allow_global_access }
+            "Condition": {
+                "StringEquals": {
+                    "secretsmanager:ResourceTag/Environment": ["${stage}", "global"]
+                }
+            }
+%{ else }
             "Condition": {
                 "StringEquals": {
                     "secretsmanager:ResourceTag/Environment": "${stage}"
                 }
             }
+%{ endif }
         },
         {
             "Sid": "ListSecretsForStage${stage}",
