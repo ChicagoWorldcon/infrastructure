@@ -189,7 +189,7 @@ resource "aws_ecr_repository" "registration" {
   tags = merge(
     local.common_tags,
     var.common_tags,
-    tomap({ "Application" = "web" })
+    tomap({ "Application" = "Registration" })
   )
 }
 

@@ -32,7 +32,7 @@ module "registration-staging-identity" {
   source      = "./identity"
   project     = var.project
   stage       = "staging"
-  application = "registration"
+  application = "Registration"
   db_name     = var.staging_db_name
 
   route53_zone_id = var.dns_zone_id

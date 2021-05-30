@@ -3,7 +3,7 @@ module "planorama-dev-identity" {
   project     = var.project
   stage       = "dev"
   db_name     = var.prod_db_name
-  application = "planorama"
+  application = "Planorama"
 
   route53_zone_id = var.dns_zone_id
 

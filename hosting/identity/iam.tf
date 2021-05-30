@@ -1,5 +1,5 @@
 resource "aws_iam_role" "instance" {
-  name               = "${var.project}-${var.application}-${var.stage}"
+  name               = "${var.project}-${lower(var.application)}-${lower(var.stage)}"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -18,7 +18,7 @@ EOF
 }
 
 resource "aws_iam_instance_profile" "instance" {
-  name = "${var.project}-${var.application}-instance-profile-${var.stage}"
+  name = "${var.project}-${lower(var.application)}-instance-profile-${lower(var.stage)}"
   role = aws_iam_role.instance.name
 }
 
@@ -26,7 +26,7 @@ data "template_file" "hosting-role-policy" {
   template = file("${path.module}/policies/instance-policy.json")
 
   vars = {
-    stage               = var.stage
+    stage               = lower(var.stage)
     zone_id             = var.route53_zone_id
     codepipeline_bucket = var.codepipeline_bucket
     codedeploy_bucket   = var.codedeploy_bucket
@@ -34,7 +34,7 @@ data "template_file" "hosting-role-policy" {
 }
 
 resource "aws_iam_role_policy" "instance" {
-  name   = "${var.project}-${var.application}-policy-${var.stage}"
+  name   = "${var.project}-${lower(var.application)}-policy-${lower(var.stage)}"
   role   = aws_iam_role.instance.name
   policy = data.template_file.hosting-role-policy.rendered
 }
