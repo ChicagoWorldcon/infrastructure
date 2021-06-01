@@ -4,9 +4,9 @@
 #
 #    pip-compile --no-emit-index-url --no-emit-trusted-host requirements.in
 #
-ansible-base==2.10.3
+ansible-base==2.10.10
     # via ansible
-ansible==2.10.3
+ansible==2.10.7
     # via -r requirements.in
 boto3==1.16.23
     # via -r requirements.in
