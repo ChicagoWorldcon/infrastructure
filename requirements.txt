@@ -37,7 +37,7 @@ google-auth==1.23.0
     #   google-auth-httplib2
 googleapis-common-protos==1.52.0
     # via google-api-core
-httplib2==0.18.1
+httplib2==0.19.1
     # via
     #   google-api-python-client
     #   google-auth-httplib2
@@ -72,18 +72,20 @@ pycparser==2.20
 pyhcl==0.4.4
     # via -r requirements.in
 pyparsing==2.4.7
-    # via packaging
+    # via
+    #   httplib2
+    #   packaging
 python-dateutil==2.8.1
     # via botocore
 python-terraform==0.10.1
     # via -r requirements.in
 pytz==2020.4
     # via google-api-core
-pyyaml==5.3.1
+pyyaml==5.4.1
     # via ansible-base
 requests==2.25.0
     # via google-api-core
-rsa==4.6
+rsa==4.7.2
     # via google-auth
 s3transfer==0.3.3
     # via boto3
@@ -103,6 +105,8 @@ urllib3==1.26.5
     # via
     #   botocore
     #   requests
+wheel==0.36.2
+    # via -r requirements.in
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

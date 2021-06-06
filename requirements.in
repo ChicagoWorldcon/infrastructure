@@ -5,3 +5,5 @@ python-terraform
 pyhcl
 isort
 ansible
+# including "wheel" so that ansible will use it
+wheel
