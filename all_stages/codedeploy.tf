@@ -2,6 +2,9 @@ resource "aws_codedeploy_app" "registration" {
   name = "Wellington"
 }
 
+resource "aws_codedeploy_app" "planorama" {
+  name = "Planorama"
+}
 
 resource "aws_s3_bucket" "build_artifact_bucket" {
   bucket = "deploy.${var.domain_name}"
@@ -37,106 +40,18 @@ resource "aws_iam_role" "codedeploy_role" {
 
 }
 
-resource "aws_codedeploy_deployment_group" "dev" {
-  deployment_group_name  = "dev"
-  app_name               = aws_codedeploy_app.registration.name
-  service_role_arn       = aws_iam_role.codedeploy_role.arn
-  deployment_config_name = "CodeDeployDefault.AllAtOnce"
-
-  deployment_style {
-    deployment_option = "WITHOUT_TRAFFIC_CONTROL"
-    deployment_type   = "IN_PLACE"
-  }
-
-  ec2_tag_set {
-    ec2_tag_filter {
-      key   = "Environment"
-      type  = "KEY_AND_VALUE"
-      value = "dev"
-    }
-  }
-  ec2_tag_set {
-    ec2_tag_filter {
-      key   = "Application"
-      type  = "KEY_AND_VALUE"
-      value = "Registration"
-    }
-  }
-  ec2_tag_set {
-    ec2_tag_filter {
-      key   = "Project"
-      type  = "KEY_AND_VALUE"
-      value = var.project
-    }
-  }
+module "registration-group" {
+  source       = "./deployment-groups/"
+  app_name     = aws_codedeploy_app.registration.name
+  service_role = aws_iam_role.codedeploy_role.arn
+  app_tag      = "Registration"
+  project      = var.project
 }
 
-
-resource "aws_codedeploy_deployment_group" "staging" {
-  deployment_group_name  = "staging"
-  app_name               = aws_codedeploy_app.registration.name
-  service_role_arn       = aws_iam_role.codedeploy_role.arn
-  deployment_config_name = "CodeDeployDefault.AllAtOnce"
-
-  deployment_style {
-    deployment_option = "WITHOUT_TRAFFIC_CONTROL"
-    deployment_type   = "IN_PLACE"
-  }
-
-  ec2_tag_set {
-    ec2_tag_filter {
-      key   = "Environment"
-      type  = "KEY_AND_VALUE"
-      value = "staging"
-    }
-  }
-  ec2_tag_set {
-    ec2_tag_filter {
-      key   = "Application"
-      type  = "KEY_AND_VALUE"
-      value = "Registration"
-    }
-  }
-  ec2_tag_set {
-    ec2_tag_filter {
-      key   = "Project"
-      type  = "KEY_AND_VALUE"
-      value = var.project
-    }
-  }
-}
-
-
-resource "aws_codedeploy_deployment_group" "prod" {
-  deployment_group_name  = "prod"
-  app_name               = aws_codedeploy_app.registration.name
-  service_role_arn       = aws_iam_role.codedeploy_role.arn
-  deployment_config_name = "CodeDeployDefault.AllAtOnce"
-
-  deployment_style {
-    deployment_option = "WITHOUT_TRAFFIC_CONTROL"
-    deployment_type   = "IN_PLACE"
-  }
-
-  ec2_tag_set {
-    ec2_tag_filter {
-      key   = "Environment"
-      type  = "KEY_AND_VALUE"
-      value = "prod"
-    }
-  }
-  ec2_tag_set {
-    ec2_tag_filter {
-      key   = "Application"
-      type  = "KEY_AND_VALUE"
-      value = "Registration"
-    }
-  }
-  ec2_tag_set {
-    ec2_tag_filter {
-      key   = "Project"
-      type  = "KEY_AND_VALUE"
-      value = var.project
-    }
-  }
+module "planorama-group" {
+  source       = "./deployment-groups/"
+  app_name     = aws_codedeploy_app.planorama.name
+  service_role = aws_iam_role.codedeploy_role.arn
+  app_tag      = "Planorama"
+  project      = var.project
 }
