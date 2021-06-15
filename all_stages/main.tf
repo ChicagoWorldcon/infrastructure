@@ -77,15 +77,31 @@ resource "aws_acm_certificate_validation" "cert" {
   validation_record_fqdns = [aws_route53_record.cert_validation[var.domain_name].fqdn]
 }
 
-resource "aws_iam_user" "github-registration" {
-  name = "github-registration"
-  path = "/it/github/"
-  tags = merge(
-    var.common_tags,
-    local.common_tags,
-    tomap({ "Client" = "github" })
-  )
+module "registration" {
+  source  = "./github/"
+  service = "registration"
+  tags    = merge(var.common_tags, local.common_tags)
+  policies = [
+    aws_iam_policy.push.arn,
+    aws_iam_policy.pull.arn,
+    aws_iam_policy.cleanup.arn,
+    aws_iam_policy.deploy.arn,
+  ]
 }
+
+
+module "planorama" {
+  source  = "./github/"
+  service = "planorama"
+  tags    = merge(var.common_tags, local.common_tags)
+  policies = [
+    aws_iam_policy.push.arn,
+    aws_iam_policy.pull.arn,
+    aws_iam_policy.cleanup.arn,
+    aws_iam_policy.deploy.arn,
+  ]
+}
+
 
 data "template_file" "policy_push" {
   template = file("${path.module}/policies/ecr-push.json")
@@ -140,26 +156,6 @@ resource "aws_iam_policy" "deploy" {
   path        = "/it/deploy/"
 
   policy = data.template_file.policy_codedeploy.rendered
-}
-
-resource "aws_iam_user_policy_attachment" "github-push" {
-  user       = aws_iam_user.github-registration.name
-  policy_arn = aws_iam_policy.push.arn
-}
-
-resource "aws_iam_user_policy_attachment" "github-pull" {
-  user       = aws_iam_user.github-registration.name
-  policy_arn = aws_iam_policy.pull.arn
-}
-
-resource "aws_iam_user_policy_attachment" "github-cleanup" {
-  user       = aws_iam_user.github-registration.name
-  policy_arn = aws_iam_policy.cleanup.arn
-}
-
-resource "aws_iam_user_policy_attachment" "github-deploy" {
-  user       = aws_iam_user.github-registration.name
-  policy_arn = aws_iam_policy.deploy.arn
 }
 
 # user deployment
