@@ -128,7 +128,13 @@ module "global" {
   developer_group_name = module.users.deploy_group_name
 }
 
-resource "aws_iam_role_policy_attachment" "instance-pull-dev" {
+# This is ugly af, but it sorta makes sense?
+resource "aws_iam_role_policy_attachment" "instance-pull-planorama-dev" {
+  role       = module.hosting.planorama-dev.instance_role_name
+  policy_arn = module.global.ecr_pull_policy
+}
+
+resource "aws_iam_role_policy_attachment" "instance-pull-staging" {
   role       = module.hosting.registration-staging.instance_role_name
   policy_arn = module.global.ecr_pull_policy
 }
