@@ -5,16 +5,16 @@ Description=Run wellington docker container
 
 [Service]
 User=wellington
-
 WorkingDirectory={{ app_dir }}
-
 EnvironmentFile={{ etc_dir }}/tag.env
-
-ExecStart=/usr/bin/docker-compose --no-ansi up 
-
+ExecStart=/usr/bin/docker-compose --no-ansi up
 ExecStop=/usr/bin/docker-compose down -v
-
 Restart=always
+ProtectSystem=true
+ProtectHome=true
+PrivateUsers=true
+PrivateTmp=true
+
 
 [Install]
 WantedBy=multi-user.target
