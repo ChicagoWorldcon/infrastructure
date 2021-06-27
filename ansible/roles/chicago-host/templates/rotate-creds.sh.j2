@@ -1,6 +1,6 @@
 #!/bin/bash
 export AWS_DEFAULT_REGION=us-west-2
-cat<<EOF > /opt/chicago/etc/creds.env
+cat<<EOF > {{ chicon_home }}/etc/creds.env
 DEVISE_SECRET=$(aws secretsmanager get-secret-value --secret-id {{ devise_secret }} | jq -r .SecretString)
 JWT_SECRET=$(aws secretsmanager get-secret-value --secret-id {{ jwt_secret }} | jq -r .SecretString)
 SMTP_PASSWORD=$(aws secretsmanager get-secret-value --secret-id {{ smtp_provider_secret }} | jq -r .SecretString)
@@ -9,5 +9,5 @@ SIDEKIQ_PASSWORD=$(aws secretsmanager get-secret-value --secret-id {{ sidekiq_se
 STRIPE_PUBLIC_KEY=$(aws secretsmanager get-secret-value --secret-id {{ stripe_secret }} | jq -r '.SecretString | fromjson | .pk')
 STRIPE_PRIVATE_KEY=$(aws secretsmanager get-secret-value --secret-id {{ stripe_secret }} | jq -r '.SecretString | fromjson | .sk')
 EOF
-chown root:chicago /opt/chicago/etc/creds.env
-chmod 640 /opt/chicago/etc/creds.env
+chown root:chicago {{ chicon_home }}/etc/creds.env
+chmod 640 {{ chicon_home }}/etc/creds.env

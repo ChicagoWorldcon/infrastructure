@@ -19,13 +19,13 @@
   become: yes
 
 - name: clear default redirect
-  file: path=/opt/chicago/etc/sites-enabled/00-redirect.conf state=absent
+  file: path={{ chicon_home }}/etc/sites-enabled/00-redirect.conf state=absent
   become: yes
   notify: restart webserver
   when: external_destination is undefined
 
 - name: setup default redirect
-  template: src=redirect.conf.j2 dest=/opt/chicago/etc/sites-enabled/00-redirect.conf owner=root group=chicago mode=0644
+  template: src=redirect.conf.j2 dest={{ chicon_home }}/etc/sites-enabled/00-redirect.conf owner=root group=chicago mode=0644
   become: yes
   notify: restart webserver
   when: external_destination is defined

@@ -6,7 +6,7 @@ Description=Run wordpress docker container
 User=wordpress
 
 [Service]
-WorkingDirectory=/opt/chicago/app/wordpress
+WorkingDirectory={{ chicon_home }}/app/wordpress
 
 ExecStart=/usr/bin/docker-compose up
 

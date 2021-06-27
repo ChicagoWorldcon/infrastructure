@@ -24,10 +24,10 @@ services:
 {% endfor %}
 {% endif %}
     env_file:
-      - /opt/chicago/etc/hostname.env
-      - /opt/chicago/etc/wellington.env
-      - /opt/chicago/etc/wellington-overrides.env
-      - /opt/chicago/etc/creds.env
+      - "{{ chicon_home }}/etc/hostname.env"
+      - "{{ chicon_home }}/etc/{{ app_name }}.env"
+      - "{{ chicon_home }}/etc/{{ app_name }}-overrides.env"
+      - "{{ chicon_home }}/etc/creds.env"
     restart: always
 
   worker:
@@ -46,10 +46,10 @@ services:
 {% endfor %}
 {% endif %}
     env_file:
-      - /opt/chicago/etc/hostname.env
-      - /opt/chicago/etc/wellington.env
-      - /opt/chicago/etc/wellington-overrides.env
-      - /opt/chicago/etc/creds.env
+      - "{{ chicon_home }}/etc/hostname.env"
+      - "{{ chicon_home }}/etc/{{ app_name }}.env"
+      - "{{ chicon_home }}/etc/{{ app_name }}-overrides.env"
+      - "{{ chicon_home }}/etc/creds.env"
     restart: always
 
 volumes:

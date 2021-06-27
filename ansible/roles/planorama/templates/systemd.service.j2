@@ -6,9 +6,9 @@ Description=Run planorama docker container
 [Service]
 User=planorama
 
-WorkingDirectory=/opt/chicago/app/planorama
+WorkingDirectory={{ app_dir }}
 
-EnvironmentFile=/opt/chicago/etc/planorama/tag.env
+EnvironmentFile={{ etc_dir }}/tag.env
 
 ExecStart=/usr/bin/docker-compose --no-ansi up 
 

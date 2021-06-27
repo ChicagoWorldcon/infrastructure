@@ -17,3 +17,5 @@ admin_users:
 
 # by default we assume the Ubuntu AMI
 ansible_user: ubuntu
+
+chicon_home: /opt/chicago

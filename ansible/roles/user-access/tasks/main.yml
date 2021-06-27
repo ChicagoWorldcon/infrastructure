@@ -63,7 +63,7 @@
 
 - name: Set up source checkout location
   file:
-    path: /opt/chicago/src
+    path: "{{ chicon_home }}/src"
     state: directory
     mode: 0770
     owner: "{{ admin_users[0].username }}"
@@ -72,7 +72,7 @@
 - name: Set up the .envrc file in the checkout with postgres support
   template:
     src: src.envrc.j2
-    dest: /opt/chicago/src/.envrc
+    dest: "{{ chicon_home }}/src/.envrc"
     mode: 0660
     owner: "{{ admin_users[0].username }}"
     group: chicago
@@ -80,13 +80,13 @@
 - name: download rbenv installer
   get_url:
     url: https://github.com/rbenv/rbenv-installer/raw/HEAD/bin/rbenv-installer
-    dest: /opt/chicago/bin/rbenv-installer
+    dest: "{{ chicon_home }}/bin/rbenv-installer"
 
 - name: install rbenv for admin users
   become: yes
   become_user: "{{ item.username }}"
   shell:
-    cmd: "cat /opt/chicago/bin/rbenv-installer | bash"
+    cmd: "cat {{ chicon_home }}/bin/rbenv-installer | bash"
     creates: "/home/{{ item.username }}/.rbenv/bin/rbenv"
   with_items: "{{ admin_users }}"
   ignore_errors: yes

@@ -6,9 +6,9 @@ Description=Run wellington docker container
 [Service]
 User=wellington
 
-WorkingDirectory=/opt/chicago/app/wellington
+WorkingDirectory={{ app_dir }}
 
-EnvironmentFile=/opt/chicago/etc/wellington/tag.env
+EnvironmentFile={{ etc_dir }}/tag.env
 
 ExecStart=/usr/bin/docker-compose --no-ansi up 
 

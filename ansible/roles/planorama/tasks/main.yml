@@ -22,13 +22,13 @@
     owner: planorama
     group: chicago
   with_items:
-    - /opt/chicago/etc/planorama
+    - "{{ etc_dir }}"
   become: yes
 
 - name: Define the default service Docker volumes
   set_fact:
     _planorama_docker_volumes:
-      - "/opt/chicago/etc/planorama:/config"
+      - "{{ etc_dir }}:/config"
 
 - name: Append any additional volume mounts
   set_fact:
@@ -47,7 +47,7 @@
 - name: Ensure the docker-compose template directory exists
   file:
     state: directory
-    path: "/opt/chicago/app/planorama"
+    path: "{{ app_dir }}"
   become: yes
 
 - name: get the db endpoint
@@ -79,7 +79,7 @@
 - name: Ensure an override file is present
   template:
     src: tag.env.j2
-    dest: /opt/chicago/etc/planorama/tag.env
+    dest: "{{ etc_dir }}/tag.env"
     mode: 0644
     owner: root
     group: chicago
@@ -88,7 +88,7 @@
 - name: Ensure this service's environment file is present
   template:
     src: service.env.j2
-    dest: /opt/chicago/etc/planorama.env
+    dest: "{{ chicon_home }}/etc/{{ app_name }}.env"
   vars:
     db_hostname: "{{ chicon_db_endpoint }}"
     db_name: "{{ planorama_db_name }}"
@@ -98,7 +98,7 @@
 - name: Ensure this service's docker-compose template is present
   template:
     src: docker-compose.yml.j2
-    dest: /opt/chicago/app/planorama/docker-compose.yml
+    dest: "{{ app_dir }}/docker-compose.yml"
   become: yes
 
 - name: Set up a unit file for the service
@@ -119,6 +119,6 @@
   become: yes
 
 - name: Set up caddy forwarder
-  template: src=planorama.conf.j2 dest=/opt/chicago/etc/sites-enabled/planorama.conf owner=root group=chicago mode=0644
+  template: src=planorama.conf.j2 dest={{ chicon_home }}/etc/sites-enabled/planorama.conf owner=root group=chicago mode=0644
   become: yes
   notify: reload webserver

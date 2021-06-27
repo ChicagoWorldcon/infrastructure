@@ -4,7 +4,7 @@ Wants=prune-images.timer
 
 [Service]
 ExecStart=/usr/bin/docker image prune --force --all
-WorkingDirectory=/opt/chicago
+WorkingDirectory={{ chicon_home }}
 
 [Install]
 WantedBy=multi-user.target

@@ -27,7 +27,7 @@
 - name: set the default paths
   lineinfile:
     path: /etc/profile.d/chicago-paths.sh
-    line: export PATH=/opt/chicago/bin:$PATH
+    line: export PATH={{ chicon_home }}/bin:$PATH
     state: present
     create: yes
   become: yes
@@ -43,7 +43,7 @@
   become: yes
 
 - name: Install the credential rotation script
-  template: src=rotate-creds.sh.j2 dest=/opt/chicago/sbin/rotate-creds.sh owner=root group=root mode=0700
+  template: src=rotate-creds.sh.j2 dest={{ chicon_home }}/sbin/rotate-creds.sh owner=root group=root mode=0700
   become: yes
 
 - name: Install the credential rotation service
@@ -67,7 +67,7 @@
   become: yes
 
 - name: Install the hostname env script
-  template: src=hostname.env.j2 dest=/opt/chicago/etc/hostname.env owner=root group=chicago mode=0644
+  template: src=hostname.env.j2 dest={{ chicon_home }}/etc/hostname.env owner=root group=chicago mode=0644
   become: yes
 
 - name: reload services

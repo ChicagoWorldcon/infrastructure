@@ -21,13 +21,13 @@
     owner: wordpress
     group: chicago
   with_items:
-    - /opt/chicago/etc/wordpress
+    - "{{ chicon_home }}/etc/wordpress"
   become: yes
 
 - name: Define the default service Docker volumes
   set_fact:
     _wordpress_docker_volumes:
-      - "/opt/chicago/etc/wordpress:/config"
+      - "{{ chicon_home }}/etc/wordpress:/config"
 
 - name: Append any additional volume mounts
   set_fact:
@@ -46,13 +46,13 @@
 - name: Ensure the docker-compose template directory exists
   file:
     state: directory
-    path: "/opt/chicago/app/wordpress"
+    path: "{{ chicon_home }}/app/wordpress"
   become: yes
 
 - name: Ensure this service's docker-compose template is present
   template:
     src: docker-compose.yml.j2
-    dest: /opt/chicago/app/wordpress/docker-compose.yml
+    dest: "{{ chicon_home }}/app/wordpress/docker-compose.yml"
   become: yes
   notify: restart site
 
@@ -75,6 +75,6 @@
   become: yes
 
 - name: Set up caddy forwarder
-  template: src=wordpress.conf.j2 dest=/opt/chicago/etc/sites-enabled/wordpress.conf owner=root group=chicago mode=0644
+  template: src=wordpress.conf.j2 dest={{ chicon_home }}/etc/sites-enabled/wordpress.conf owner=root group=chicago mode=0644
   become: yes
   notify: reload webserver

@@ -1,2 +1,6 @@
 ---
 # vars file for registration
+app_name: wellington
+app_dir: "{{ chicon_home }}/app/{{ app_name }}"
+src_dir: "{{ chicon_home }}/src/{{ app_name }}"
+etc_dir: "{{ chicon_home }}/etc/{{ app_name }}"

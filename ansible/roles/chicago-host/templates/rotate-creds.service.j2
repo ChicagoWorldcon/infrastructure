@@ -3,8 +3,8 @@ Description=Runs credential rotator
 Wants=rorate-creds.timer
 
 [Service]
-ExecStart=/opt/chicago/sbin/rotate-creds.sh
-WorkingDirectory=/opt/chicago
+ExecStart={{ chicon_home }}/sbin/rotate-creds.sh
+WorkingDirectory={{ chicon_home }}
 
 [Install]
 WantedBy=multi-user.target
