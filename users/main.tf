@@ -20,6 +20,11 @@ resource "aws_iam_user" "gail" {
   path = "/people/program/"
 }
 
+resource "aws_iam_user" "mike" {
+  name = "mike.tatroe"
+  path = "/people/program/"
+}
+
 resource "aws_iam_user" "henry" {
   name = "henry.balen"
   path = "/people/program/"
@@ -49,6 +54,7 @@ resource "aws_iam_group_membership" "deployers" {
     data.aws_iam_user.victoria.user_name,
     aws_iam_user.gail.name,
     aws_iam_user.henry.name,
+    aws_iam_user.mike.name,
   ]
 }
 
@@ -59,6 +65,7 @@ resource "aws_iam_group_membership" "planorama" {
   users = [
     aws_iam_user.gail.name,
     aws_iam_user.henry.name,
+    aws_iam_user.mike.name,
   ]
 }
 
