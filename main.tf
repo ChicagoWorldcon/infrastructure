@@ -88,6 +88,12 @@ module "chicon-dns-entries" {
   chicon_org_A_records = var.chicon_org_A_records
 }
 
+module "mailgun" {
+  source      = "./mailgun/"
+  dns_zone_id = data.aws_route53_zone.chicon.zone_id
+  mail_domain = "comms.chicon.org"
+}
+
 module "chicon-legacy-dns-entries" {
   source      = "./legacy-dns/"
   dns_zone_id = data.aws_route53_zone.chicon.zone_id

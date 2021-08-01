@@ -54,6 +54,20 @@ resource "aws_secretsmanager_secret" "sendgrid_api_key" {
   )
 }
 
+resource "aws_secretsmanager_secret" "mailgun_smtp" {
+  name = "${var.project}/mailgun_smtp/${var.stage}"
+
+  tags = merge(
+    var.common_tags,
+    tomap({
+      "Name"        = "${var.stage} mail password for Mailgun",
+      "Project"     = var.project,
+      "Environment" = var.stage,
+      "ServiceName" = "ChicagoRegistration"
+    })
+  )
+}
+
 resource "aws_secretsmanager_secret" "sidekiq_password" {
   name = "${var.project}/sidekiq_password/${var.stage}"
 

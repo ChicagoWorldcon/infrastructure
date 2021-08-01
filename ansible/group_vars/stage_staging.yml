@@ -13,13 +13,14 @@ registration_db_name: registration_dev
 registration_db_username: registration_dev
 
 # sendgrid config
-smtp_server: smtp.sendgrid.net
-smtp_user_name: apikey
-smtp_port: 465
+smtp_server: smtp.mailgun.org
+smtp_user_name: postmaster@comms.chicon.org
+smtp_port: 587
 
 devise_secret: Chicon8/tokens/session/staging
 jwt_secret: Chicon8/tokens/jwt/staging
-smtp_provider_secret: Chicon8/sendgrid_api_key/staging
+# smtp_provider_secret: Chicon8/sendgrid_api_key/staging
+smtp_provider_secret: Chicon8/mailgun_smtp/staging
 registration_db_secret: Chicon8/db/registration_dev/registration_dev_admin/staging
 sidekiq_secret: Chicon8/sidekiq_password/staging
 stripe_secret: Chicon8/stripe_api_key/staging
