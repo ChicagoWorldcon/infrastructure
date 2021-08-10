@@ -170,6 +170,26 @@ module "prod-creds" {
   )
 }
 
+module "prod-planorama-creds" {
+  source  = "./identity"
+  db_name = var.planorama_prod_db_name
+  project = var.project
+  stage   = "prod"
+
+  db_site_username      = var.planorama_prod_db_site_username
+  db_superuser_username = var.db_superuser_username
+
+  route53_zone_id = data.aws_route53_zone.chicon.zone_id
+
+  common_tags = merge(
+    local.common_tags,
+    {
+      Division    = "Registration"
+      Environment = "prod"
+    }
+  )
+}
+
 module "staging-creds" {
   source  = "./identity"
   db_name = var.registration_staging_db_name

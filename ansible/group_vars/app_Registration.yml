@@ -22,3 +22,4 @@ external_destination: "https://chicagoworldconbid.org"
 
 registration_instalment_min: 3000
 registration_instalment_increment: 3000
+role_db_secret: "{{ registration_db_secret}}"

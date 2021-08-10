@@ -29,3 +29,4 @@ admin_users:
       - adm
 
 application_fqdn: "planorama{{fqdn_suffix}}.chicon.org"
+role_db_secret: "{{ planorama_db_secret}}"

@@ -8,10 +8,15 @@ prompt_color_hex: "f85454"
 heimdall_fqdn: dashboard.chicon.org
 fqdn_suffix: ""
 wellington_docker_version: "release"
+planorama_docker_version: "release"
 
 registration_db_name: registration_prod
 registration_db_username: registration_prod
 registration_preview: no
+
+planorama_db_name: planorama_prod
+planorama_db_username: planorama_prod
+planorama_preview: yes
 
 # sendgrid config
 smtp_server: smtp.mailgun.org
@@ -23,6 +28,7 @@ jwt_secret: Chicon8/tokens/jwt/prod
 # smtp_provider_secret: Chicon8/sendgrid_api_key/prod
 smtp_provider_secret: Chicon8/mailgun_smtp/prod
 registration_db_secret: Chicon8/db/registration/registration_admin/prod
+planorama_db_secret: Chicon8/db/planorama_prod/planorama_prod/prod
 sidekiq_secret: Chicon8/sidekiq_password/prod
 stripe_secret: Chicon8/stripe_api_key/prod
 
@@ -37,3 +43,7 @@ registration_contacts:
   maintainer_email: it@{{ domain_name }}
   hugo_help_email: hugo-help@{{ domain_name }}
   hugo_admin_email: hugo-admin@{{ domain_name }}
+
+programming_contacts:
+  maintainer_email: henry.balen@{{ domain_name }}
+  programming_email: programming@{{ domain_name }}

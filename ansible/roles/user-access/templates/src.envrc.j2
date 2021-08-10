@@ -1,1 +1,1 @@
-export POSTGRES_PASSWORD=$(aws secretsmanager get-secret-value --secret-id {{ registration_db_secret }} | jq -r .SecretString)
+export POSTGRES_PASSWORD=$(aws secretsmanager get-secret-value --secret-id {{ role_db_secret }} | jq -r .SecretString)
