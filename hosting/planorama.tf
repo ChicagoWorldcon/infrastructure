@@ -92,7 +92,7 @@ module "planorama-prod" {
   iam_instance_profile = module.planorama-prod-identity.iam_instance_profile_id
   iam_role_name        = module.planorama-prod-identity.iam_role_name
 
-  www_domain_name = "planorama.prod"
+  www_domain_name = "planorama"
   log_retention   = 7
 }
 
