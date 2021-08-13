@@ -5,8 +5,8 @@ terraform {
       version = ">= 3.10.0"
     }
     namecheap = {
-      source  = "terraform.offby1.net/adamdecaf/namecheap"
-      version = "~> 1.5.0"
+      source  = "namecheap/namecheap"
+      version = "~> 2.0.0"
     }
   }
 }
@@ -35,8 +35,8 @@ variable "namecheapuser" {
 }
 
 provider "namecheap" {
-  username = var.namecheapuser
-  api_user = var.namecheapuser
-  token    = var.namecheaptoken
-  ip       = var.namecheapip
+  user_name = var.namecheapuser
+  api_user  = var.namecheapuser
+  api_key   = var.namecheaptoken
+  client_ip = var.namecheapip
 }

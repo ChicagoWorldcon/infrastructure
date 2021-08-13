@@ -24,9 +24,10 @@ resource "aws_route53_record" "redirect_cname_www" {
   records = [var.target_domain_name]
 }
 
-resource "namecheap_ns" "redirect_zone" {
-  domain  = var.domain_name
-  servers = sort(aws_route53_zone.redirect_zone.name_servers)
+resource "namecheap_domain_records" "redirect_zone" {
+  domain      = var.domain_name
+  mode        = "OVERWRITE"
+  nameservers = sort(aws_route53_zone.redirect_zone.name_servers)
 }
 
 output "this_zone_id" {
