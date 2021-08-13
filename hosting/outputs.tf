@@ -38,3 +38,16 @@ output "planorama-dev" {
     instance_role_name = module.planorama-dev-identity.iam_role_name
   }
 }
+
+output "planorama-prod" {
+  value = {
+    security_group_id = module.planorama-prod.security_group_id
+    public_dns        = module.planorama-prod.public_dns
+    private_ip        = module.planorama-prod.private_ip
+    public_ip         = module.planorama-prod.public_ip
+    instance_id       = module.planorama-prod.id
+    www_fqdn          = module.planorama-prod.site_fqdn
+
+    instance_role_name = module.planorama-prod-identity.iam_role_name
+  }
+}

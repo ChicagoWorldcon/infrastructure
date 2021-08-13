@@ -140,6 +140,11 @@ resource "aws_iam_role_policy_attachment" "instance-pull-planorama-dev" {
   policy_arn = module.global.ecr_pull_policy
 }
 
+resource "aws_iam_role_policy_attachment" "instance-pull-planorama-prod" {
+  role       = module.hosting.planorama-prod.instance_role_name
+  policy_arn = module.global.ecr_pull_policy
+}
+
 resource "aws_iam_role_policy_attachment" "instance-pull-staging" {
   role       = module.hosting.registration-staging.instance_role_name
   policy_arn = module.global.ecr_pull_policy
