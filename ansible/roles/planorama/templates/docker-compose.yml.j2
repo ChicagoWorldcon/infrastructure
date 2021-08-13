@@ -7,6 +7,7 @@ services:
       - redis-data:/data
 
   web:
+    entrypoint: "script/planorama_start.sh"
     image: {{ planorama_ecr_registry }}:${PLANORAMA_DOCKER_TAG}
     ports:
       - "{{ planorama_public_port }}:443"
@@ -19,6 +20,8 @@ services:
 {% endfor %}
 {% if _planorama_environment_vars %}
     environment:
+      - RAILS_ENV=production
+      - NODE_ENV=production
 {% for k, v in _planorama_environment_vars.items() %}
       - {{ k }}={{ v }}
 {% endfor %}
@@ -28,9 +31,13 @@ services:
       - "{{ chicon_home }}/etc/{{ app_name }}.env"
       - "{{ chicon_home }}/etc/{{ app_name }}-overrides.env"
       - "{{ chicon_home }}/etc/creds.env"
+    depends_on:
+      - redis
+    links:
+      - redis
     restart: always
 
-  worker:
+  planorama-sidekiq:
     entrypoint: "script/docker_sidekiq_entry.sh"
     image: {{ planorama_ecr_registry }}:${PLANORAMA_DOCKER_TAG}
     volumes:
@@ -41,6 +48,8 @@ services:
 {% endfor %}
 {% if _planorama_environment_vars %}
     environment:
+      - RAILS_ENV=production
+      - NODE_ENV=production
 {% for k, v in _planorama_environment_vars.items() %}
       - {{ k }}={{ v }}
 {% endfor %}
@@ -50,6 +59,10 @@ services:
       - "{{ chicon_home }}/etc/{{ app_name }}.env"
       - "{{ chicon_home }}/etc/{{ app_name }}-overrides.env"
       - "{{ chicon_home }}/etc/creds.env"
+    depends_on:
+      - redis
+    links:
+      - redis
     restart: always
 
 volumes:
