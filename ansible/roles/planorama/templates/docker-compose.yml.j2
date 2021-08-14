@@ -10,7 +10,6 @@ services:
     entrypoint: "script/planorama_start.sh"
     image: {{ planorama_ecr_registry }}:${PLANORAMA_DOCKER_TAG}
     ports:
-      - "{{ planorama_public_port }}:443"
       - "127.0.0.1:{{ planorama_insecure_public_port}}:3000"
     volumes:
       - type: tmpfs
