@@ -94,6 +94,7 @@
     db_name: "{{ registration_db_name }}"
     db_site_username: "{{ registration_db_username }}"
   become: yes
+  notify: restart site
 
 - name: Ensure this service's docker-compose template is present
   template:
