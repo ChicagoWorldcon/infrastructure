@@ -32,11 +32,6 @@ planorama_db_secret: Chicon8/db/planorama_prod/planorama_prod/prod
 sidekiq_secret: Chicon8/sidekiq_password/prod
 stripe_secret: Chicon8/stripe_api_key/prod
 
-journald_cloudwatch_logs_log_group: Registration/prod
-journald_cloudwatch_logs_units:
-  - wellington
-  - caddy
-
 registration_contacts:
   registration_email: registration@{{ domain_name }}
   treasurer_email: treasurer@{{ domain_name }}

@@ -25,11 +25,6 @@ registration_db_secret: Chicon8/db/registration_dev/registration_dev_admin/stagi
 sidekiq_secret: Chicon8/sidekiq_password/staging
 stripe_secret: Chicon8/stripe_api_key/staging
 
-journald_cloudwatch_logs_log_group: Registration/staging
-journald_cloudwatch_logs_units:
-  - wellington
-  - caddy
-
 registration_contacts:
   registration_email: it+registration@{{ domain_name }}
   treasurer_email: it+treasurer@{{ domain_name }}

@@ -30,3 +30,8 @@ admin_users:
 
 application_fqdn: "planorama{{fqdn_suffix}}.chicon.org"
 role_db_secret: "{{ planorama_db_secret}}"
+
+journald_cloudwatch_logs_log_group: "Planorama/{{ stage }}"
+journald_cloudwatch_logs_units:
+  - planorama
+  - caddy

@@ -23,3 +23,8 @@ external_destination: "https://chicagoworldconbid.org"
 registration_instalment_min: 5000
 registration_instalment_increment: 3000
 role_db_secret: "{{ registration_db_secret}}"
+
+journald_cloudwatch_logs_log_group: "Registration/{{ stage }}"
+journald_cloudwatch_logs_units:
+  - wellington
+  - caddy
