@@ -19,3 +19,6 @@ admin_users:
 ansible_user: ubuntu
 
 chicon_home: /opt/chicago
+
+motd_sysadmins_signature: Chris R
+motd_sysadmins_email: it@chicon.org

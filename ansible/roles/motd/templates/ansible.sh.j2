@@ -1,0 +1,17 @@
+#!/bin/bash
+#echo
+cat <<EOF
+--------------------------------------------------------------------------
+                      This system is managed by Ansible
+--------------------------------------------------------------------------
+This is {{ ansible_fqdn }} running {{ ansible_distribution }}.
+NOTE: System and application configuration for this host is managed by
+automated systems. To ensure that any changes you make here are not lost,
+please contact with your system administrators.
+
+Yours,
+  {{ motd_sysadmins_signature }}
+  email: {{ motd_sysadmins_email }}
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Last ansible run: {{ ansible_date_time.iso8601 }}
+EOF

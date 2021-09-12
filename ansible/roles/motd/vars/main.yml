@@ -1,0 +1,7 @@
+---
+motd_destination: /etc/update-motd.d
+motd_templates:
+  - name: chicon-apps
+    order: "60.1"
+  - name: ansible
+    order: "60.2"

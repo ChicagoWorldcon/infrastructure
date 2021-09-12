@@ -1,0 +1,33 @@
+---
+- name: Install the MOTD templates
+  template:
+    src: "{{ item.name }}.sh.j2"
+    dest: "{{ motd_destination }}/{{ item.order}}-{{ item.name }}"
+  become: yes
+  with_items: "{{ motd_templates}}"
+
+- name: Ensure the MOTD templates' permissions are correct
+  file:
+    path: "{{ motd_destination }}/{{ item.order}}-{{ item.name }}"
+    owner: root
+    group: root
+    mode: 0755
+  become: yes
+  with_items: "{{ motd_templates}}"
+
+- name: Remove some MOTD cruft
+  file:
+    path: "{{ motd_destination}}/{{ item }}"
+    state: absent
+  become: yes
+  with_items:
+    - 50-motd-news
+
+- name: Remove our old and busted
+  file:
+    path: "{{ motd_destination }}/{{ item }}"
+    state: absent
+  become: yes
+  with_items:
+    - 11-ansible
+    - 12-chicon-apps

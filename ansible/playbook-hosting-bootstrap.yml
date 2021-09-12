@@ -8,3 +8,4 @@
     - role: caddy
     - role: user-access
       become: yes
+    - role: motd
