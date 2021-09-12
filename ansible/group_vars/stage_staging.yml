@@ -13,6 +13,9 @@ planorama_docker_version: "manual-ci"
 registration_db_name: registration_dev
 registration_db_username: registration_dev
 
+planorama_db_name: planorama_staging
+planorama_db_username: planorama_staging
+
 # sendgrid config
 smtp_server: smtp.mailgun.org
 smtp_user_name: postmaster@comms.chicon.org
@@ -23,6 +26,7 @@ jwt_secret: Chicon8/tokens/jwt/staging
 # smtp_provider_secret: Chicon8/sendgrid_api_key/staging
 smtp_provider_secret: Chicon8/mailgun_smtp/staging
 registration_db_secret: Chicon8/db/registration_dev/registration_dev_admin/staging
+planorama_db_secret: Chicon8/db/planorama_staging/planorama_staging/staging
 sidekiq_secret: Chicon8/sidekiq_password/staging
 stripe_secret: Chicon8/stripe_api_key/staging
 
@@ -32,3 +36,7 @@ registration_contacts:
   maintainer_email: it+maintainer@{{ domain_name }}
   hugo_help_email: it+hugo@{{ domain_name }}
   hugo_admin_email: it+hugo-admin@{{ domain_name }}
+
+programming_contacts:
+  maintainer_email: henry.balen@{{ domain_name }}
+  programming_email: programming@{{ domain_name }}

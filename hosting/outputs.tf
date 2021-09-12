@@ -39,6 +39,19 @@ output "planorama-dev" {
   }
 }
 
+output "planorama-staging" {
+  value = {
+    security_group_id = module.planorama-staging.security_group_id
+    public_dns        = module.planorama-staging.public_dns
+    private_ip        = module.planorama-staging.private_ip
+    public_ip         = module.planorama-staging.public_ip
+    instance_id       = module.planorama-staging.id
+    www_fqdn          = module.planorama-staging.site_fqdn
+
+    instance_role_name = module.planorama-staging-identity.iam_role_name
+  }
+}
+
 output "planorama-prod" {
   value = {
     security_group_id = module.planorama-prod.security_group_id
