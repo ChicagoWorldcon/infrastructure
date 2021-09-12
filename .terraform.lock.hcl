@@ -104,6 +104,7 @@ provider "registry.terraform.io/namecheap/namecheap" {
   version     = "2.0.1"
   constraints = "~> 2.0.0"
   hashes = [
+    "h1:95rYaDCKI578oHBOxhgTL9vIKPq8Dowt4czc4rXe52g=",
     "h1:X4umxSq2w6KqEbtZELk8aCdDNb8NkVTF6UCDXBxWXUE=",
     "zh:033a147edc25bcd006a20873cca16646e5da382afb0be6927296530030783d62",
     "zh:6389cb829091b1e1558b0b4283c828d31007592f41496db1ba77fa86b95660ee",
