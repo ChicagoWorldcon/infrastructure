@@ -8,6 +8,7 @@ prompt_color_hex: "bd93f8"
 heimdall_fqdn: dashboard.staging.chicon.org
 fqdn_suffix: ".staging"
 wellington_docker_version: "staging"
+planorama_docker_version: "manual-ci"
 
 registration_db_name: registration_dev
 registration_db_username: registration_dev

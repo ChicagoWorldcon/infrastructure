@@ -8,7 +8,7 @@ prompt_color_hex: "f85454"
 heimdall_fqdn: dashboard.chicon.org
 fqdn_suffix: ""
 wellington_docker_version: "release"
-planorama_docker_version: "release"
+planorama_docker_version: "latest"
 
 registration_db_name: registration_prod
 registration_db_username: registration_prod
