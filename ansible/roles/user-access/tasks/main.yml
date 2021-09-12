@@ -10,6 +10,14 @@
       - mosh
     state: present
 
+- name: "[admin] enable passwordless sudo"
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: "^%sudo"
+    line: "%sudo ALL=(ALL) NOPASSWD: ALL"
+    validate: "visudo -cf %s"
+
 - name: "[admin] override our skel files"
   copy:
     src: dot_bashrc
