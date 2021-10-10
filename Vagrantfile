@@ -78,8 +78,8 @@ Vagrant.configure("2") do |config|
 
     # get the staging c-i script from terraform
     stdout, _, status = Open3.capture3("terraform", "output", "-json", "cloud-init")
-    if status != 0
-      exit(status)
+    if status.exitstatus != 0
+      exit(status.exitstatus)
     end
     
     ci_hash = JSON.parse(stdout)
