@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+set -eu -o pipefail
+
+# Use GAM to create a shared mailbox. Assumes that GAM is configured and can
+# operate in the domain. It also assumes that this directory is on PATH.
+
+SHARED_MAILBOX="$1"
+DESCRIPTION="$2"
+OWNER="$3"
+
+NOTIFICATION_GROUP="notification-$SHARED_MAILBOX"
+
+gam create user "$SHARED_MAILBOX" \
+    firstname "$DESCRIPTION" \
+    lastname "Mailbox" \
+    password "$1-temppassword"
+
+gam create group "$NOTIFICATION_GROUP" \
+    name "Notification $DESCRIPTION"
+
+wait-for group "$NOTIFICATION_GROUP"
+
+gam update group "$NOTIFICATION_GROUP" add owner user "$OWNER"
+gam update group "$NOTIFICATION_GROUP" is_archived true
+gam update group "$NOTIFICATION_GROUP" include_in_global_address_list false
+gam update group "$NOTIFICATION_GROUP" who_can_join invited_can_join
+gam update group "$NOTIFICATION_GROUP" who_can_post_message anyone_can_post
+gam update group "$NOTIFICATION_GROUP" who_can_view_membership all_in_domain_can_view
+gam update group "$NOTIFICATION_GROUP" who_can_view_group all_members_can_view
+gam update group "$NOTIFICATION_GROUP" who_can_leave_group NONE_CAN_LEAVE
+gam update group "$NOTIFICATION_GROUP" reply_to reply_to_ignore
+gam update user "$SHARED_MAILBOX" password random
+gam user "$SHARED_MAILBOX" add forwardingaddress "$NOTIFICATION_GROUP"
+
+# This might fail or require external configuration. If it does, follow the
+# printed instructions
+if ! gam user "$SHARED_MAILBOX" forward on "$NOTIFICATION_GROUP" keep; then
+    group_name=$(gam info group notification-shared-mbox-test@chicon.org | awk '/ email:/ { print $2 }' | awk -F'@' '{print $1}')
+    cat <<EOF
+Unable to configure forwarding, probably due to a propagation delay.
+You need to accept the forwarding request at https://groups.google.com/a/chicon.org/g/${group_name}
+
+Once you do that, you can run this command:
+
+gam user "$SHARED_MAILBOX" forward on "$NOTIFICATION_GROUP" keep
+EOF
+fi
+
+gam user "$SHARED_MAILBOX" delegate to "$OWNER"
+echo sign in and add additonal delegates
+echo remember to add the rest of the notification group members

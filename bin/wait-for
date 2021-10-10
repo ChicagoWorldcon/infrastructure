@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+set -eu -o pipefail
+
+MAX_ATTEMPTS=10
+ATTEMPTS=0
+
+while [[ $ATTEMPTS -lt $MAX_ATTEMPTS ]]; do
+    if gam info "$1" "$2" >/dev/null 2>&1; then
+        exit 0
+    fi
+    ATTEMPTS=$((ATTEMPTS + 1))
+    echo "$1 $2 does not yet exist, trying again..."
+    sleep 5
+done
+
+exit 1

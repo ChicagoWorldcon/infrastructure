@@ -12,3 +12,4 @@ plan
 /data/*.json
 .vault-password
 /.vagrant/
+/.gam/

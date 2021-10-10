@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -eu -o pipefail
+
+# Use GAM to add an owner a shared mailbox. Assumes that GAM is configured and
+# can operate in the domain. It also assumes that this directory is on PATH.
+
+SHARED_MAILBOX="$1"
+OWNER="$2"
+
+NOTIFICATION_GROUP="notification-$SHARED_MAILBOX"
+
+gam update group "$NOTIFICATION_GROUP" add owner user "$OWNER"
+gam user "$SHARED_MAILBOX" delegate to "$OWNER"
