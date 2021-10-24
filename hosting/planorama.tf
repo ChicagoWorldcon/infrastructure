@@ -31,7 +31,7 @@ module "planorama-dev" {
   security_group_id = var.security_group_id
   public_subnet_id  = var.vpc_public_subnet_id
 
-  instance_type = "t2.micro"
+  instance_type = "t2.medium"
   volume_size   = 20
 
   ssh_key_id           = var.ssh_key_id
@@ -85,7 +85,7 @@ module "planorama-staging" {
   security_group_id = var.security_group_id
   public_subnet_id  = var.vpc_public_subnet_id
 
-  instance_type = "t2.micro"
+  instance_type = "t2.medium"
   volume_size   = 20
 
   ssh_key_id           = var.ssh_key_id
