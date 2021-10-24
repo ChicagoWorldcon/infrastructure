@@ -1,11 +1,10 @@
-variable "aliases" {
-  description = "List of hostnames to serve site on. E.g. with and without www"
-  type        = list
+variable "common_tags" {
+  default = {}
 }
 
-variable "aws_region" {
-  type    = string
-  default = "us-east-1"
+variable "aliases" {
+  description = "List of hostnames to serve site on. E.g. with and without www"
+  type        = list(any)
 }
 
 variable "bucket_name" {

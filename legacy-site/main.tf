@@ -1,3 +1,7 @@
+locals {
+  tags = var.common_tags
+}
+
 data "template_file" "bucket_policy" {
   template = file("${path.module}/templates/bucket-policy.json")
 
@@ -16,6 +20,8 @@ resource "aws_s3_bucket" "site" {
     index_document = "index.html"
     error_document = "index.html"
   }
+
+  tags = local.tags
 }
 
 resource "aws_cloudfront_distribution" "site" {
@@ -86,6 +92,8 @@ resource "aws_cloudfront_distribution" "site" {
       restriction_type = "none"
     }
   }
+
+  tags = local.tags
 }
 
 resource "aws_route53_record" "bucket_cname" {

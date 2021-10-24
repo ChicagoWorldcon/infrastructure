@@ -103,18 +103,30 @@ module "chicon-2000-site" {
   source              = "./legacy-site/"
   dns_zone_id         = data.aws_route53_zone.chicon.zone_id
   bucket_name         = "2000.chicon.org"
-  aws_region          = var.region
   aliases             = ["2000.chicon.org"]
   acm_certificate_arn = module.global.acm_certificate_arn
+  common_tags = merge(
+    local.common_tags,
+    {
+      Application = "Legacy"
+      Environment = "prod"
+      Division    = "IT"
+  })
 }
 
 module "chicon-7-site" {
   source              = "./legacy-site/"
   dns_zone_id         = data.aws_route53_zone.chicon.zone_id
   bucket_name         = "7.chicon.org"
-  aws_region          = var.region
   aliases             = ["7.chicon.org"]
   acm_certificate_arn = module.global.acm_certificate_arn
+  common_tags = merge(
+    local.common_tags,
+    {
+      Application = "Legacy"
+      Environment = "prod"
+      Division    = "IT"
+  })
 }
 
 data "aws_region" "current" {}
