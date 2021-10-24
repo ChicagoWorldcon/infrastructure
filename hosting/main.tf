@@ -173,6 +173,17 @@ module "registration-chatbot" {
   ]
 }
 
+module "registration-host-alarm" {
+  source      = "./host-alarm/"
+  project     = var.project
+  application = "Registration"
+  instance_map = {
+    staging = module.staging-site.id
+    prod    = module.prod-site.id
+  }
+  sns_topic_arn = module.registration-chatbot.sns_topic_arn
+}
+
 # security groups for the DB
 resource "aws_security_group_rule" "db-from-registration-prod" {
   security_group_id        = var.db_security_group_id

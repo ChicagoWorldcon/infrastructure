@@ -41,3 +41,7 @@ resource "aws_cloudwatch_event_target" "sns-target" {
   rule = aws_cloudwatch_event_rule.rule.name
   arn  = aws_sns_topic.topic.arn
 }
+
+output "sns_topic_arn" {
+  value = aws_sns_topic.topic.arn
+}

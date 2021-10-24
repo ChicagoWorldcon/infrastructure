@@ -179,3 +179,15 @@ module "planorama-chatbot" {
     "#program-software"
   ]
 }
+
+module "planorama-host-alarm" {
+  source      = "./host-alarm/"
+  project     = var.project
+  application = "Planorama"
+  instance_map = {
+    prod    = module.planorama-prod.id
+    staging = module.planorama-staging.id
+    dev     = module.planorama-dev.id
+  }
+  sns_topic_arn = module.planorama-chatbot.sns_topic_arn
+}
