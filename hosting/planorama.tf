@@ -159,3 +159,23 @@ resource "aws_security_group_rule" "db-from-planorama-prod" {
   protocol                 = "tcp"
   source_security_group_id = module.planorama-prod.security_group_id
 }
+
+data "aws_instances" "planorama_instances" {
+  instance_tags = {
+    Application = "Planorama"
+  }
+}
+
+module "planorama-chatbot" {
+  source      = "../chatbot"
+  project     = var.project
+  application = "Planorama"
+  instance_ids = sort(distinct(concat([
+    module.planorama-prod.id,
+    module.planorama-staging.id,
+    module.planorama-dev.id,
+  ], data.aws_instances.planorama_instances.ids)))
+  channels = [
+    "#program-software"
+  ]
+}

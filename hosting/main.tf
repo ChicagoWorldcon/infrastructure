@@ -153,6 +153,26 @@ module "prod-site" {
   log_retention = 60
 }
 
+data "aws_instances" "registration_instances" {
+  instance_tags = {
+    Application = "Registration"
+  }
+}
+
+# Chatbot for reg
+module "registration-chatbot" {
+  source      = "../chatbot/"
+  project     = var.project
+  application = "Registration"
+  instance_ids = sort(distinct(concat([
+    module.staging-site.id,
+    module.prod-site.id,
+  ], data.aws_instances.registration_instances.ids)))
+  channels = [
+    "#registration-operations"
+  ]
+}
+
 # security groups for the DB
 resource "aws_security_group_rule" "db-from-registration-prod" {
   security_group_id        = var.db_security_group_id
