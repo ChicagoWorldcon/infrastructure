@@ -1,6 +1,6 @@
 {
   email it@chicon.org
-  http_port 52889
+  http_port {% caddy_insecure_port %}
 {% if caddy_use_test_endpoint %}
   acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
 {% endif %}

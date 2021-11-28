@@ -6,3 +6,5 @@ caddy_conf_dir: "{{ chicon_home }}/etc"
 caddy_architecture: "{{ ansible_architecture }}"
 
 caddy_use_test_endpoint: false
+
+caddy_insecure_port: "52889"
