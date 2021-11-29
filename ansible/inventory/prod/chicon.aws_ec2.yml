@@ -17,7 +17,11 @@ keyed_groups:
   #   key: tags
 
 hostnames:
+  - tag:Name
   - dns-name
   - private-ip-address
 
-
+compose:
+  # Use the public IP address to connect to the host
+  # (note: this does not modify inventory_hostname, which is set via I(hostnames))
+  ansible_host: public_ip_address
