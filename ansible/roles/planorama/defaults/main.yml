@@ -5,3 +5,6 @@ planorama_additional_environment_variables: {}
 # The public port for the Planorama server
 planorama_public_port: "3000"
 planorama_insecure_public_port: "3000"
+
+# stage level overrides
+planorama_rails_env: production

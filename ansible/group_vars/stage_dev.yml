@@ -15,6 +15,7 @@ registration_db_username: registration_dev
 
 planorama_db_name: planorama_dev
 planorama_db_username: planorama_dev
+planorama_rails_env: staging
 
 # sendgrid config
 smtp_server: smtp.sendgrid.net
