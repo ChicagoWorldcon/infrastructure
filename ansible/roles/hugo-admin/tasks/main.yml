@@ -1,0 +1,109 @@
+---
+- name: prepare packages
+  package:
+    name:
+      - npm
+    state: present
+  become: yes
+
+- name: prepare user
+  user:
+    name: kansa
+    groups:
+      - chicago
+      - docker
+  register: service_user
+  become: yes
+
+- name: prepare directories
+  file:
+    path: /opt/chicago/app/kansa
+    state: directory
+    owner: root
+    mode: 0755
+  become: yes
+
+- name: get the db endpoint
+  rds_instance_info:
+    aws_region: "{{ lookup('env', 'AWS_REGION') }}"
+    db_instance_identifier: chicon-shared
+  register: chicon_db
+
+- name: set the DB enpoint
+  set_fact:
+    chicon_db_endpoint: "{{ chicon_db.instances[0].endpoint.address }}"
+
+- name: check out code
+  git:
+    repo: "{{ item.repo }}"
+    dest: "/opt/chicago/app/kansa/{{ item.path }}"
+    version: djm4-chicon
+    force: yes
+  with_items:
+    - repo: https://github.com/djm4/api
+      path: api
+    - repo: https://github.com/djm4/client
+      path: client
+  become: yes
+
+- name: install the overlay docker compose
+  template:
+    src: docker-compose.yml.j2
+    dest: "/opt/chicago/app/kansa/api/config/docker-compose.{{ site.shortname }}.yml"
+  become: yes
+  loop: "{{ hugo_admin_endpoints }}"
+  loop_control:
+    loop_var: site
+
+# FIXME - disabling this in favor of the CLI flag in the service unit
+# ... however, I don't know if it works.
+# - name: configure the client
+#   patch:
+#     src: webpack-hostname.patch
+#     dest: /opt/chicago/app/kansa/client/webpack.config.js
+#   become: yes
+
+- name: install the client support modules
+  npm:
+    path: /opt/chicago/app/kansa/client
+  become: yes
+
+- name: install the client environment files
+  template:
+    src: client.env.j2
+    dest: "/opt/chicago/etc/kansa-client-env-{{ site.client_port }}"
+    owner: kansa
+  become: yes
+  loop: "{{ hugo_admin_endpoints }}"
+  loop_control:
+    loop_var: site
+
+- name: install the service template for the client
+  copy:
+    src: kansa-client.service
+    dest: /etc/systemd/system/kansa-client@.service
+    owner: root
+    mode: 0644
+  become: yes
+  notify:
+    - reload systemd
+
+- name: ensure our clients are all started
+  systemd:
+    daemon_reload: yes
+    name: "kansa-client@{{ site.client_port }}.service"
+    state: restarted
+  become: yes
+  loop: "{{ hugo_admin_endpoints }}"
+  loop_control:
+    loop_var: site
+
+- name: install the caddy site definition
+  template:
+    src: site.conf.j2
+    dest: "/opt/chicago/etc/sites-enabled/{{ site.hostname }}.conf"
+  notify: reload caddy
+  become: yes
+  loop: "{{ hugo_admin_endpoints }}"
+  loop_control:
+    loop_var: site

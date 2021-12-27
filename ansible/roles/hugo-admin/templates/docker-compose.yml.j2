@@ -1,0 +1,60 @@
+version: "2"
+
+# {{ ansible_managed }}: from {{ template_path }}
+# docker-compose overlay for production mode
+#
+# To use, run `make prod` in the project root or directly:
+#   docker-compose -f config/docker-compose.base.yaml -f config/docker-compose.prod.yaml up -d
+# DO NOT COMMIT PRODUCTION SECRETS TO ANY REPOSITORY
+
+services:
+  nginx:
+    env_file:
+      - /opt/chicago/etc/creds.env
+    environment:
+      SERVER_NAME: {{ site.hostname }}
+      SSL_CERTIFICATE: /ssl/localhost.cert
+      SSL_CERTIFICATE_KEY: /ssl/localhost.key
+    ports:
+      - "{{ site.api_port }}:443"
+    volumes:
+      - ../nginx/ssl:/ssl:ro
+    restart: always
+
+  hugo:
+    env_file:
+      - /opt/chicago/etc/creds.env
+    environment:
+      DATABASE_URL: postgres://{{ site.db_user }}:{{ site.db_password }}@{{ chicon_db_endpoint }}:5432/{{ site.db_name }}
+      SESSION_SECRET: {{ site.session_secret }}
+      CORS_ORIGIN: https://{{ site.hostname }}/
+    restart: always
+
+  kansa:
+    env_file:
+      - /opt/chicago/etc/creds.env
+    environment:
+      DATABASE_URL: postgres://{{ site.db_user }}:{{ site.db_password }}@{{ chicon_db_endpoint }}:5432/{{ site.db_name }}
+      DEBUG: kansa:errors
+      SESSION_SECRET: {{ site.session_secret }}
+      STRIPE_SECRET_APIKEY: sk_test_wyv72AmQeP60LSBEyrftCmWR
+      CORS_ORIGIN: https://{{ site.hostname }}/
+    restart: always
+
+  raami:
+    env_file:
+      - /opt/chicago/etc/creds.env
+    environment:
+      DATABASE_URL: postgres://{{ site.db_user }}:{{ site.db_password }}@{{ chicon_db_endpoint }}:5432/{{ site.db_name }}
+      SESSION_SECRET: {{ site.session_secret }}
+      CORS_ORIGIN: https://{{ site.hostname }}/
+
+  kyyhky:
+    env_file:
+      - /opt/chicago/etc/creds.env
+    environment:
+      API_URI_ROOT: https://{{ site.hostname }}/api
+      LOGIN_URI_ROOT: https://{{ site.hostname }}/#/login
+      SENDGRID_APIKEY:
+      CORS_ORIGIN: https://{{ site.hostname }}/
+    restart: always

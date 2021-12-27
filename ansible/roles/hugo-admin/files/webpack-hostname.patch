@@ -1,0 +1,16 @@
+diff --git a/webpack.config.js b/webpack.config.js
+index 3326a7c..26d697e 100644
+--- a/webpack.config.js
++++ b/webpack.config.js
+@@ -14,7 +14,10 @@ const cfg = {
+     filename: '[name].js'
+   },
+   devServer: {
+-    contentBase: './dist'
++    contentBase: './dist',
++    allowedHosts: [
++       '.chicon.org'
++    ]
+   },
+   module: {
+     rules: [

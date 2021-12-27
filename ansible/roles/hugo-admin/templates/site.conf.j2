@@ -1,0 +1,6 @@
+# {{ ansible_managed }}: from {{ template_path }}
+{{ site.hostname }} {
+	import logging
+	reverse_proxy /api/* https://localhost:{{ site.api_port }}
+    reverse_proxy localhost:{{ site.client_port }}
+}

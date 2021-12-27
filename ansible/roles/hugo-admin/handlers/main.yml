@@ -1,0 +1,19 @@
+---
+- name: reload caddy
+  shell:
+    cmd: |
+      set -e
+      /usr/bin/caddy validate -config /etc/caddy/Caddyfile
+      /usr/bin/caddy reload -config /etc/caddy/Caddyfile
+
+  become: yes
+
+- name: reload systemd
+  systemd:
+    daemon_reload: yes
+  become: yes
+
+- name: restart client
+  systemd:
+    name: kansa-client
+    state: restarted

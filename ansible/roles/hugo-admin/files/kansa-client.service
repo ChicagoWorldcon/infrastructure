@@ -1,0 +1,15 @@
+[Unit]
+Requires=docker.service
+Requires=rotate-creds.timer
+Description=Run kansa docker container on %i
+
+[Service]
+User=kansa
+
+WorkingDirectory=/opt/chicago/app/kansa/client
+ExecStart=/opt/chicago/app/kansa/client/node_modules/.bin/webpack-dev-server --mode production --port %i -o /opt/chicago/var/kansa-%i --allowed-hosts localhost,.chicon.org
+EnvironmentFile=/opt/chicago/etc/kansa-client-env-%i
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

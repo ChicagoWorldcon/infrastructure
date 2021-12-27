@@ -1,0 +1,7 @@
+# note - requires the roles in the bootstrap playbook
+
+- hosts:
+    - app_Registration
+  roles:
+    - role: hugo-admin
+      hugo_admin_url: hugo-admin.staging.chicon.org

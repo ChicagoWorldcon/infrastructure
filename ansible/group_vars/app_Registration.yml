@@ -15,6 +15,13 @@ admin_users:
       - chicago
       - adm
 
+  - username: davidm
+    public_key: "{{ lookup('file', 'davidm.pub')}}"
+    sudo: yes
+    extra_groups:
+      - docker
+      - chicago
+
 ansible_user: ubuntu
 application_fqdn: "registration{{fqdn_suffix}}.chicon.org"
 external_hostname: "infra{{fqdn_suffix}}.chicon.org"
