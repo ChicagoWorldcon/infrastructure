@@ -4,4 +4,9 @@
 	import passworded
 {% endif %}
 	reverse_proxy localhost:{{ wellington_insecure_public_port }}
+	root * {{ www_dir }}
+	handle_errors {
+		rewrite * /{http.error.status_code}.html
+		file_server
+	}
 }

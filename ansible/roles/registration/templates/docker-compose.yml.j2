@@ -28,6 +28,7 @@ services:
       - "{{ chicon_home }}/etc/{{ app_name }}.env"
       - "{{ chicon_home }}/etc/{{ app_name }}-overrides.env"
       - "{{ chicon_home }}/etc/creds.env"
+      - "{{ chicon_home }}/etc/{{ app_name }}/tag.env"
     restart: always
 
   worker:
@@ -50,6 +51,7 @@ services:
       - "{{ chicon_home }}/etc/{{ app_name }}.env"
       - "{{ chicon_home }}/etc/{{ app_name }}-overrides.env"
       - "{{ chicon_home }}/etc/creds.env"
+      - "{{ chicon_home }}/etc/{{ app_name }}/tag.env"
     restart: always
 
 volumes:

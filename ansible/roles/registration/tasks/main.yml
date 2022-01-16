@@ -23,6 +23,7 @@
     group: chicago
   with_items:
     - "{{ etc_dir }}"
+    - "{{ www_dir }}"
   become: yes
 
 - name: Define the default service Docker volumes
@@ -76,6 +77,11 @@
     db_name: "{{ registration_db_name }}"
   become: yes
 
+- name: check for the existence of the tag file
+  stat:
+    path: "{{ etc_dir }}/tag.env"
+  register: tag_stat
+
 - name: Ensure an override file is present
   template:
     src: tag.env.j2
@@ -84,6 +90,7 @@
     owner: root
     group: chicago
   become: yes
+  when: not tag_stat.stat.exists
 
 - name: Ensure this service's environment file is present
   template:
@@ -117,6 +124,15 @@
   systemd:
     name: wellington
     enabled: yes
+  become: yes
+
+- name: install the error pages for caddy
+  copy:
+    src: 502.html
+    dest: "{{ www_dir }}/502.html"
+    mode: 0644
+    owner: caddy
+    group: chicago
   become: yes
 
 - name: Set up caddy forwarder
