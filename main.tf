@@ -16,11 +16,12 @@ module "chicondb" {
 }
 
 module "hosting" {
-  source      = "./hosting/"
-  project     = var.project
-  region      = var.region
-  dns_zone_id = data.aws_route53_zone.chicon.zone_id
-  domain_name = var.domain_name
+  source              = "./hosting/"
+  project             = var.project
+  region              = var.region
+  dns_zone_id         = data.aws_route53_zone.chicon.zone_id
+  domain_name         = var.domain_name
+  acm_certificate_arn = module.global.acm_certificate_arn
 
   vpc_id               = module.vpc.vpc_id
   vpc_public_subnet_id = module.vpc.public_subnets[0]
@@ -86,6 +87,11 @@ module "chicon-dns-entries" {
     }
   ]
   chicon_org_A_records = var.chicon_org_A_records
+}
+
+module "chicon8-org-dns-entries" {
+  source      = "./gsuite/"
+  dns_zone_id = module.chicon8_org.this_zone_id
 }
 
 module "mailgun" {
@@ -318,3 +324,10 @@ resource "aws_route53_record" "gsuite-txt" {
   records = ["google-site-verification=MvUZPt3UXJHTY_cMjARPhtxyaJd_4aH5KAWZrywfHRA"]
 }
 
+resource "aws_route53_record" "gsuite-txt-chicon8-org" {
+  zone_id = module.chicon8_org.this_zone_id
+  name    = "chicon8.org"
+  type    = "TXT"
+  ttl     = "300"
+  records = ["google-site-verification=RKhlA_VPVB1SAIqW_mrCcD-Osr-g6kKNXFGRUzfvbBY"]
+}
