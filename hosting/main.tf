@@ -33,7 +33,6 @@ module "registration-staging-identity" {
   project     = var.project
   stage       = "staging"
   application = "Registration"
-  db_name     = var.staging_db_name
 
   allow_global_access = true
 
@@ -53,7 +52,6 @@ module "registration-prod-identity" {
   source      = "./identity"
   project     = var.project
   stage       = "prod"
-  db_name     = var.prod_db_name
   application = "registration"
 
   route53_zone_id = var.dns_zone_id

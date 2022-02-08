@@ -41,9 +41,6 @@ module "hosting" {
   staging_db_site_password_arn = module.staging-creds.db_site_password.arn
   prod_db_site_password_arn    = module.prod-creds.db_site_password.arn
 
-  staging_db_name = var.registration_staging_db_name
-  prod_db_name    = var.registration_db_name
-
   codedeploy_bucket = module.global.artifact_bucket
 
 }

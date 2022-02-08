@@ -2,7 +2,6 @@ module "planorama-dev-identity" {
   source      = "./identity"
   project     = var.project
   stage       = "dev"
-  db_name     = var.prod_db_name
   application = "Planorama"
 
   route53_zone_id = var.dns_zone_id
@@ -56,7 +55,6 @@ module "planorama-staging-identity" {
   source      = "./identity"
   project     = var.project
   stage       = "staging"
-  db_name     = var.prod_db_name
   application = "Planorama"
 
   route53_zone_id = var.dns_zone_id
@@ -110,7 +108,6 @@ module "planorama-prod-identity" {
   source      = "./identity"
   project     = var.project
   stage       = "prod"
-  db_name     = var.prod_db_name
   application = "Planorama"
 
   route53_zone_id = var.dns_zone_id

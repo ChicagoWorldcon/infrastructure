@@ -68,14 +68,6 @@ variable "prod_db_site_username" {
   type = string
 }
 
-variable "staging_db_name" {
-  type = string
-}
-
-variable "prod_db_name" {
-  type = string
-}
-
 variable "staging_deployment_group" {
   type    = string
   default = "ChicagoRegistration-Dev"
