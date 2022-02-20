@@ -6,25 +6,6 @@ Ensure you have AWS credentials for your target account. You need AWS_REGION, AW
 
 This site requires terraform 0.14. You'll want to initialize the state:
 
-### namecheap provider
-
-The DNS provider for namecheap needs to be installed in order to manage the
-site. You'll need to get the module from
-https://github.com/adamdecaf/terraform-provider-namecheap and then install the
-binary in the right place on your local machine to use it.
-
-On macOS, you'll need to create
-`~/.terraform.d/plugins/terraform.offby1.net/adamdecaf/namecheap/1.5.0/darwin_amd64/`
-and then install the binary you download into that directory, as an executable
-named `terraform-provider-namecheap_v1.5.0`
-
-In order to use this, you'll need three terraform variables, which you can set
-any way you like:
-
-namecheaptoken - your NameCheap API token (get from Chris)
-namecheapip - your NameCheap caller IP (get using whatever method you prefer)
-namecheapuser - your NameCheap username
-
 ### modules
 
 ```

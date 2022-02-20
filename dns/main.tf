@@ -8,8 +8,3 @@ resource "aws_route53_zone" "main" {
   }
 }
 
-resource "namecheap_domain_records" "main" {
-  domain      = var.domain_name
-  mode        = "OVERWRITE"
-  nameservers = sort(aws_route53_zone.main.name_servers)
-}
