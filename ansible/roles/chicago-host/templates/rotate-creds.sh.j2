@@ -1,13 +1,9 @@
 #!/bin/bash
 export AWS_DEFAULT_REGION=us-west-2
-cat<<EOF > {{ chicon_home }}/etc/creds.env
-DEVISE_SECRET=$(aws secretsmanager get-secret-value --secret-id {{ devise_secret }} | jq -r .SecretString)
-JWT_SECRET=$(aws secretsmanager get-secret-value --secret-id {{ jwt_secret }} | jq -r .SecretString)
-SMTP_PASSWORD=$(aws secretsmanager get-secret-value --secret-id {{ smtp_provider_secret }} | jq -r .SecretString)
-POSTGRES_PASSWORD=$(aws secretsmanager get-secret-value --secret-id {{ role_db_secret }} | jq -r .SecretString)
-SIDEKIQ_PASSWORD=$(aws secretsmanager get-secret-value --secret-id {{ sidekiq_secret }} | jq -r .SecretString)
-STRIPE_PUBLIC_KEY=$(aws secretsmanager get-secret-value --secret-id {{ stripe_secret }} | jq -r '.SecretString | fromjson | .pk')
-STRIPE_PRIVATE_KEY=$(aws secretsmanager get-secret-value --secret-id {{ stripe_secret }} | jq -r '.SecretString | fromjson | .sk')
+cat <<EOF > {{ chicon_home }}/etc/creds.env
+{% for cv in chicon_credentials %}
+{{ cv.env_var }}={{ cv.command }}
+{% endfor %}
 EOF
 chown root:chicago {{ chicon_home }}/etc/creds.env
 chmod 640 {{ chicon_home }}/etc/creds.env

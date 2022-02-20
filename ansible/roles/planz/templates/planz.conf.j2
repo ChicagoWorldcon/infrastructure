@@ -1,0 +1,9 @@
+{{ application_fqdn }} {
+	import logging
+    handle_path "/adminer/*" {
+        uri strip_prefix /adminer
+        reverse_proxy localhost:5050
+    }
+
+	reverse_proxy localhost:{{ planz_insecure_public_port }}
+}

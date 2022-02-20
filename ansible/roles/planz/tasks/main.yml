@@ -1,0 +1,121 @@
+---
+- name: "[planz] Create the service user"
+  user:
+    name: planz
+    groups:
+      - chicago
+      - docker
+  register: service_user
+  become: yes
+
+- name: get chicago gid
+  getent:
+    database: group
+    key: chicago
+  check_mode: no
+
+- name: Ensure the config directories are present
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+    owner: planz
+    group: chicago
+  with_items:
+    - "{{ etc_dir }}"
+  become: yes
+
+- name: Define the default service Docker volumes
+  set_fact:
+    _planz_docker_volumes:
+      - "{{ etc_dir }}/db.php:/etc/db.php"
+      - "{{ src_dir }}/webpages:/var/www/html"
+
+- name: Append any additional volume mounts
+  set_fact:
+    _planz_docker_volumes: "{{ _planz_docker_volumes }} + {{ planz_additional_volumes }}"
+
+- name: Define the default Docker environment variables
+  set_fact:
+    _planz_environment_vars:
+      PGID: "{{ service_user.uid }}"
+      PUID: "{{ getent_group.chicago[1] }}"
+
+- name: Append any additional environment variables
+  set_fact:
+    _planz_environment_vars: "{{ _planz_environment_vars | combine(planz_additional_environment_variables) }}"
+
+- name: Ensure the docker-compose template directory exists
+  file:
+    state: directory
+    path: "{{ app_dir }}"
+  become: yes
+
+- name: get the db endpoint
+  rds_instance_info:
+    aws_region: "{{ lookup('env', 'AWS_REGION') }}"
+    db_instance_identifier: chicon-shared
+  register: chicon_db
+
+- name: set the DB enpoint
+  set_fact:
+    chicon_db_endpoint: "{{ chicon_db.instances[0].endpoint.address }}"
+
+- name: install the db config
+  template: src=db.php.j2 dest={{ etc_dir }}/db.php mode=0644 owner=root group=root
+
+- name: Ensure an override file is present
+  template:
+    src: tag.env.j2
+    dest: "{{ etc_dir }}/{{ app_name}}-override.env"
+    mode: 0644
+    owner: root
+    group: chicago
+  become: yes
+
+- name: Ensure a tag file is present
+  template:
+    src: tag.env.j2
+    dest: "{{ etc_dir }}/tag.env"
+    mode: 0644
+    owner: root
+    group: chicago
+  become: yes
+
+- name: Ensure this service's environment file is present
+  template:
+    src: service.env.j2
+    dest: "{{ chicon_home }}/etc/{{ app_name }}.env"
+  vars:
+    db_hostname: "{{ chicon_db_endpoint }}"
+    db_name: "{{ planz_db_name }}"
+    db_site_username: "{{ planz_db_username }}"
+  become: yes
+
+- name: Ensure this service's docker-compose template is present
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ app_dir }}/docker-compose.yml"
+  become: yes
+
+- name: Set up a unit file for the service
+  template:
+    src: systemd.service.j2
+    dest: /etc/systemd/system/planz.service
+  become: yes
+
+- name: reload services
+  systemd:
+    daemon_reload: yes
+  become: yes
+
+- name: Ensure the service is enabled
+  systemd:
+    name: planz
+    enabled: yes
+  become: yes
+
+- name: Set up caddy forwarder
+  template: src=planz.conf.j2 dest={{ chicon_home }}/etc/sites-enabled/planz.conf owner=root group=chicago mode=0644
+  become: yes
+  notify: reload webserver

@@ -9,6 +9,7 @@ heimdall_fqdn: dashboard.dev.chicon.org
 fqdn_suffix: ".dev"
 wellington_docker_version: "staging"
 planorama_docker_version: "manual-ci"
+planz_docker_version: "latest"
 
 registration_db_name: registration_dev
 registration_db_username: registration_dev
@@ -16,6 +17,9 @@ registration_db_username: registration_dev
 planorama_db_name: planorama_dev
 planorama_db_username: planorama_dev
 planorama_rails_env: staging
+
+planz_db_name: planz_dev
+planz_db_username: planz_dev
 
 # sendgrid config
 smtp_server: smtp.sendgrid.net
@@ -27,6 +31,7 @@ jwt_secret: Chicon8/tokens/jwt/dev
 smtp_provider_secret: Chicon8/sendgrid_api_key/dev
 registration_db_secret: Chicon8/db/registration_dev/registration_dev_admin/dev
 planorama_db_secret: Chicon8/db/planorama_dev/planorama_dev_admin/dev
+planz_db_secret: Chicon8/db/planz_dev/planz_dev/dev
 sidekiq_secret: Chicon8/sidekiq_password/dev
 stripe_secret: Chicon8/stripe_api_key/dev
 
