@@ -30,6 +30,11 @@ resource "aws_iam_user" "henry" {
   path = "/people/program/"
 }
 
+resource "aws_iam_user" "leane" {
+  name = "leane.verhulst"
+  path = "/people/program/"
+}
+
 resource "aws_iam_group" "deployers" {
   name = "deployers"
   path = "/people/it/"
@@ -45,6 +50,11 @@ resource "aws_iam_group" "planorama" {
   path = "/people/it/"
 }
 
+resource "aws_iam_group" "planz" {
+  name = "planz"
+  path = "/people/it/"
+}
+
 resource "aws_iam_group_membership" "deployers" {
   name  = "chicon-deployers"
   group = aws_iam_group.deployers.name
@@ -55,6 +65,7 @@ resource "aws_iam_group_membership" "deployers" {
     aws_iam_user.gail.name,
     aws_iam_user.henry.name,
     aws_iam_user.mike.name,
+    aws_iam_user.leane.name,
   ]
 }
 
@@ -66,6 +77,19 @@ resource "aws_iam_group_membership" "planorama" {
     aws_iam_user.gail.name,
     aws_iam_user.henry.name,
     aws_iam_user.mike.name,
+    aws_iam_user.leane.name,
+  ]
+}
+
+resource "aws_iam_group_membership" "planz" {
+  name  = "chicon-planz"
+  group = aws_iam_group.planz.name
+
+  users = [
+    aws_iam_user.gail.name,
+    aws_iam_user.henry.name,
+    aws_iam_user.mike.name,
+    aws_iam_user.leane.name,
   ]
 }
 
@@ -93,5 +117,14 @@ resource "aws_iam_group_policy" "wellington-access" {
 
   policy = templatefile("${path.module}/policies/instance-access.json", {
     application = "Registration"
+  })
+}
+
+resource "aws_iam_group_policy" "planz-access" {
+  name  = "planz-instance-access-policy"
+  group = aws_iam_group.planz.name
+
+  policy = templatefile("${path.module}/policies/instance-access.json", {
+    application = "PlanZ"
   })
 }
