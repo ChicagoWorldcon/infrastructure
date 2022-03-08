@@ -1,0 +1,7 @@
+- hosts:
+    - stage_dev
+    - stage_staging
+    - stage_prod
+  roles:
+    - role: heimdall
+      when: stage == 'staging'

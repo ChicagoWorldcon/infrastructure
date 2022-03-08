@@ -4,3 +4,4 @@ app_name: planz
 app_dir: "{{ chicon_home }}/app/{{ app_name }}"
 src_dir: "{{ chicon_home }}/src/{{ app_name }}"
 etc_dir: "{{ chicon_home }}/etc/{{ app_name }}"
+caddy_use_test_endpoint: no

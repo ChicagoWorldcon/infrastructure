@@ -1,5 +1,5 @@
 caddy_architecture: amd64
-caddy_use_test_endpoint: yes
+caddy_use_test_endpoint: no
 
 stage: dev
 prompt_color_code: "32"
@@ -21,10 +21,10 @@ planorama_rails_env: staging
 planz_db_name: planz_dev
 planz_db_username: planz_dev
 
-# sendgrid config
-smtp_server: smtp.sendgrid.net
-smtp_user_name: apikey
-smtp_port: 465
+# mail config
+smtp_server: smtp.mailgun.org
+smtp_user_name: postmaster@comms.chicon.org
+smtp_port: 587
 
 devise_secret: Chicon8/tokens/session/dev
 jwt_secret: Chicon8/tokens/jwt/dev

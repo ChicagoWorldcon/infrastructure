@@ -31,3 +31,7 @@ chicon_credentials:
     command: "$(aws secretsmanager get-secret-value --secret-id {{ role_db_secret }} | jq -r .SecretString)"
   - env_var: MYSQL_USER
     command: planz
+  - env_var: SMTP_PASSWORD
+    command: "$(aws secretsmanager get-secret-value --secret-id Chicon8/mailgun_smtp/dev | jq -r .SecretString)"
+
+caddy_use_test_endpoint: no

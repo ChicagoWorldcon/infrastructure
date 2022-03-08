@@ -1,0 +1,47 @@
+version: "3.7"
+services:
+  mysql:
+    image: mysql:8.0
+    restart: always
+    env_file:
+      - "/opt/chicago/etc/hostname.env"
+      - "/opt/chicago/etc/planz.env"
+      - "/opt/chicago/etc/planz-overrides.env"
+      - "/opt/chicago/etc/creds.env"
+    environment:
+      MYSQL_DATABASE: planz
+    volumes:
+      - data-volume:/var/lib/mysql
+
+  web:
+    # this image enables mysql in PHP
+    image: chrisr/php-mysql:latest
+    ports:
+      - "127.0.0.1:3000:80"
+    volumes:
+      - /opt/chicago/etc/planz/db.php:/etc/db.php
+      - /opt/chicago/src/planz/webpages:/var/www/html
+    environment:
+      - PGID=1003
+      - PUID=1001
+    env_file:
+      - "/opt/chicago/etc/hostname.env"
+      - "/opt/chicago/etc/planz.env"
+      - "/opt/chicago/etc/planz-overrides.env"
+      - "/opt/chicago/etc/creds.env"
+    depends_on:
+      - mysql
+    links:
+      - mysql:db
+    restart: always
+
+  adminer:
+    image: adminer:4
+    restart: always
+    links:
+      - mysql:db
+    ports:
+      - 5050:8080
+
+volumes:
+  data-volume:

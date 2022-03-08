@@ -1,3 +1,12 @@
+# NOTICE: This file is managed by Ansible and may be overwritten
+# without notice by updates to the system.
+#
+# If you need to make changes to this file, please do so by modifying
+# the ansible/roles/planz/templates/docker-compose.yml.j2 in the
+# ChicagoWorldcon/infrastructure repository
+#
+# Last ansible run: {{ ansible_date_time.iso8601 }}
+
 version: "3.7"
 services:
   mysql:
@@ -10,7 +19,8 @@ services:
       - "{{ chicon_home }}/etc/creds.env"
     environment:
       MYSQL_DATABASE: {{ app_name }}
-
+    volumes:
+      - data-volume:/var/lib/mysql
 
   web:
     # this image enables mysql in PHP
@@ -45,3 +55,6 @@ services:
       - mysql:db
     ports:
       - 5050:8080
+
+volumes:
+  data-volume:

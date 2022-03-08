@@ -63,6 +63,7 @@
 
 - name: install the db config
   template: src=db.php.j2 dest={{ etc_dir }}/db.php mode=0644 owner=root group=root
+  become: yes
 
 - name: Ensure an override file is present
   template:
