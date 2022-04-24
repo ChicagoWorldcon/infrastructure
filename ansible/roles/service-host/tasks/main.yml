@@ -34,45 +34,44 @@
     state: started
     enabled: yes
   become: yes
+# - name: enable journald-cloudwatch-logs
+#   systemd:
+#     name: journald-cloudwatch-logs
+#     enabled: yes
+#     daemon_reload: yes
+#   become: yes
 
-- name: enable journald-cloudwatch-logs
-  systemd:
-    name: journald-cloudwatch-logs
-    enabled: yes
-    daemon_reload: yes
-  become: yes
+# - name: install service logging publication config
+#   template: src=journald.conf.j2 dest={{ journald_cloudwatch_logs_config_file }} owner=root group=root mode=0644
+#   notify: restart log emitter
+#   become: yes
 
-- name: install service logging publication config
-  template: src=journald.conf.j2 dest={{ journald_cloudwatch_logs_config_file }} owner=root group=root mode=0644
-  notify: restart log emitter
-  become: yes
+# - name: create temporary file
+#   tempfile:
+#     state: directory
+#     suffix: temp
+#   register: jcl_tempdir
+#   check_mode: no
+#   notify: clean up tempdir
 
-- name: create temporary file
-  tempfile:
-    state: directory
-    suffix: temp
-  register: jcl_tempdir
-  check_mode: no
-  notify: clean up tempdir
+# - name: download journald-cloudwatch-logs binary
+#   get_url:
+#     url: "{{ journald_cloudwatch_logs_url }}"
+#     dest: "{{ jcl_tempdir.path }}/journald-cloudwatch-logs.tar.gz"
 
-- name: download journald-cloudwatch-logs binary
-  get_url:
-    url: "{{ journald_cloudwatch_logs_url }}"
-    dest: "{{ jcl_tempdir.path }}/journald-cloudwatch-logs.tar.gz"
+# - name: install journald-cloudwatch-logs binary
+#   unarchive:
+#     src: "{{ jcl_tempdir.path }}/journald-cloudwatch-logs.tar.gz"
+#     remote_src: yes
+#     dest: "/usr/local/bin"
+#     extra_opts:
+#       - --wildcards
+#       - "journald-cloudwatch-logs"
+#   become: yes
+#   when: not ansible_check_mode
 
-- name: install journald-cloudwatch-logs binary
-  unarchive:
-    src: "{{ jcl_tempdir.path }}/journald-cloudwatch-logs.tar.gz"
-    remote_src: yes
-    dest: "/usr/local/bin"
-    extra_opts:
-      - --wildcards
-      - "journald-cloudwatch-logs"
-  become: yes
-  when: not ansible_check_mode
-
-- name: start journald-cloudwatch-logs
-  systemd:
-    name: journald-cloudwatch-logs
-    state: started
-  become: yes
+# - name: start journald-cloudwatch-logs
+#   systemd:
+#     name: journald-cloudwatch-logs
+#     state: started
+#   become: yes
