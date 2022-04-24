@@ -8,7 +8,21 @@
       - python3-venv
       - libssl-dev
       - mosh
+      - software-properties-common
     state: present
+
+- name: Add Ansible PPA
+  apt_repository: repo="ppa:jgmath2000/et" update_cache=no
+
+- name: Update APT cache
+  apt: update_cache=yes
+
+- name: Install system packages
+  apt:
+    pkg:
+      - et
+    state: latest
+    install_recommends: no
 
 - name: "[admin] enable passwordless sudo"
   lineinfile:

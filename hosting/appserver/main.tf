@@ -105,6 +105,16 @@ resource "aws_security_group_rule" "web-inbound-ssh" {
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
+resource "aws_security_group_rule" "web-inbound-et" {
+  security_group_id = aws_security_group.web_server_sg.id
+  description       = "Admin access"
+  type              = "ingress"
+  from_port         = 2022
+  to_port           = 2022
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
 resource "aws_security_group_rule" "web-outbound-http" {
   security_group_id = aws_security_group.web_server_sg.id
   description       = "Access to port 80 for services"
