@@ -1,7 +1,0 @@
-# note - requires the roles in the bootstrap playbook
-
-- hosts:
-    - app_PlanZ
-  roles:
-    - role: rds-client
-    - role: planz
