@@ -9,6 +9,7 @@ DESCRIPTION="$2"
 OWNER="$3"
 
 NOTIFICATION_GROUP="notification-$SHARED_MAILBOX"
+group_name=$(gam info group notification-shared-mbox-test@chicon.org | awk '/ email:/ { print $2 }' | awk -F'@' '{print $1}')
 
 gam create user "$SHARED_MAILBOX" \
     firstname "$DESCRIPTION" \
@@ -19,6 +20,9 @@ gam create group "$NOTIFICATION_GROUP" \
     name "Notification $DESCRIPTION"
 
 wait-for group "$NOTIFICATION_GROUP"
+
+group_name=$(gam info group notification-blocked-senders@chicon.org | awk '/ email:/ { print $2 }' | awk -F'@' '{print $1}')
+group_link="https://groups.google.com/a/chicon.org/g/${group_name}"
 
 gam update group "$NOTIFICATION_GROUP" add owner user "$OWNER"
 gam update group "$NOTIFICATION_GROUP" is_archived true
@@ -34,17 +38,16 @@ gam user "$SHARED_MAILBOX" add forwardingaddress "$NOTIFICATION_GROUP"
 
 # This might fail or require external configuration. If it does, follow the
 # printed instructions
-if ! gam user "$SHARED_MAILBOX" forward on "$NOTIFICATION_GROUP" keep; then
-    group_name=$(gam info group notification-shared-mbox-test@chicon.org | awk '/ email:/ { print $2 }' | awk -F'@' '{print $1}')
-    cat <<EOF
-Unable to configure forwarding, probably due to a propagation delay.
-You need to accept the forwarding request at https://groups.google.com/a/chicon.org/g/${group_name}
+gam user "$SHARED_MAILBOX" forward on "$NOTIFICATION_GROUP" keep
+
+cat <<EOF
+If the preceding command resulted in an error, you need to accept
+the forwarding request at $group_link
 
 Once you do that, you can run this command:
 
 gam user "$SHARED_MAILBOX" forward on "$NOTIFICATION_GROUP" keep
 EOF
-fi
 
 gam user "$SHARED_MAILBOX" delegate to "$OWNER"
 echo sign in and add additonal delegates
