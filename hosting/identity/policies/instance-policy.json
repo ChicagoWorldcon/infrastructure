@@ -53,6 +53,16 @@
             "Resource": [
                 "*"
             ]
+        },
+        {
+            "Sid": "GetInstanceMetadataForLogging",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DescribeInstances"
+            ],
+            "Resource": [
+                "*"
+            ]
         }
     ]
 }
