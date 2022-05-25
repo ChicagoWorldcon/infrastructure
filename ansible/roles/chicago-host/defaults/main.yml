@@ -14,3 +14,7 @@ chicon_credentials:
     command: "$(aws secretsmanager get-secret-value --secret-id {{ stripe_secret }} | jq -r '.SecretString | fromjson | .pk')"
   - env_var: STRIPE_PRIVATE_KEY
     command: "$(aws secretsmanager get-secret-value --secret-id {{ stripe_secret }} | jq -r '.SecretString | fromjson | .sk')"
+  - env_var: AWS_SECRET_ACCESS_KEY
+    command: "$(aws secretsmanager get-secret-value --secret-id {{ spaces_secret }} | jq -r '.SecretString | fromjson | .SecretAccessKey')"
+  - env_var: AWS_ACCESS_KEY_ID
+    command: "$(aws secretsmanager get-secret-value --secret-id {{ spaces_secret }} | jq -r '.SecretString | fromjson | .AccessKeyID')"

@@ -89,6 +89,10 @@ output "planorama_site_user" {
   }
 }
 
+output "hugo_packet_secrets" {
+  value = module.hugo-packet.api_secrets
+}
+
 output "ecr_urls" {
   value = module.global.ecr_urls
 }

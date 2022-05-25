@@ -44,6 +44,11 @@ module "hosting" {
 
 }
 
+module "hugo-packet" {
+  source  = "./hugo-bucket/"
+  project = var.project
+}
+
 data "aws_route53_zone" "chicon" {
   name = var.domain_name
 }

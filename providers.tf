@@ -4,6 +4,10 @@ terraform {
       source  = "aws"
       version = ">= 3.50.0"
     }
+    digitalocean = {
+      source  = "digitalocean/digitalocean"
+      version = "~> 2.0"
+    }
     local = {
       source  = "local"
       version = "~> 1.4"
@@ -26,3 +30,8 @@ provider "aws" {
   alias   = "us-east-1"
 }
 
+variable "do_token" {}
+
+provider "digitalocean" {
+  token = var.do_token
+}
