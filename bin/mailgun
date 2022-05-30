@@ -1,0 +1,95 @@
+#!/usr/bin/env python
+from __future__ import annotations
+from datetime import datetime, timedelta
+from email import utils
+from typing import Any, Dict
+from urllib.parse import urlencode
+
+import attr
+import click
+import httpx
+import tenacity
+
+START_TIME = datetime.utcnow() - timedelta(days=4)
+
+
+@attr.s(auto_attribs=True)
+class MailgunAPIConfig:
+    api_key: str = attr.ib(repr=False)
+    base_url: str = attr.ib(default="https://api.mailgun.net")
+    domain: str = attr.ib(default="comms.chicon.org")
+    domain_url: str = attr.ib(init=False)
+
+    def __attrs_post_init__(self):
+        self.domain_url = f"{self.base_url}/v3/{self.domain}"
+
+    def url(self, operation: str, **query_args):
+        encoded_args = urlencode(query_args)
+        return f"{self.domain_url}/{operation}?{encoded_args}"
+
+
+@click.group()
+@click.option("--api-key", required=True)
+@click.pass_context
+def main(ctx, api_key):
+    ctx.obj = MailgunAPIConfig(api_key=api_key)
+
+
+@main.group()
+def events():
+    ...
+
+
+@events.command()
+@click.option("--start-date", default=START_TIME, type=click.DateTime())
+@click.option("--end-date", default=None, type=click.DateTime())
+@click.pass_obj
+def get(mailgun: MailgunAPIConfig, start_date: datetime, end_date: datetime | None):
+    if end_date is None:
+        end_date = datetime.utcnow()
+
+    with httpx.Client(
+        auth=("api", mailgun.api_key), headers={"Accept": "message/rfc2822"}
+    ) as client:
+        resp = client.get(
+            mailgun.url(
+                "events",
+                limit=300,
+                begin=utils.format_datetime(end_date),
+                end=utils.format_datetime(start_date),
+                event="failed OR rejected OR complained",
+            )
+        )
+        resp.raise_for_status()
+
+    print(resp.url)
+    events = resp.json()["items"]
+    print(f"{len(events)} items")
+    for event in events:
+        {
+            "failed": handle_failed,
+            "rejected": handle_rejected,
+            "complained": handle_complained,
+        }[event["event"]](event)
+
+
+def event_ts(event: Dict[str, Any]) -> datetime:
+    return datetime.fromtimestamp(event["timestamp"])
+
+
+def handle_failed(event: Dict[str, Any]):
+    print(
+        f"{event['event']}: {event_ts(event)}\t{event['recipient']}\t{event['severity']}"
+    )
+
+
+def handle_rejected(event: Dict[str, Any]):
+    print(f"{event['event']}: {event_ts(event)}\t", event)
+
+
+def handle_complained(event: Dict[str, Any]):
+    print(f"{event['event']}: {event_ts(event)}\t{event['recipient']}\t{event['']}")
+
+
+if __name__ == "__main__":
+    main(auto_envvar_prefix="MAILGUN")
