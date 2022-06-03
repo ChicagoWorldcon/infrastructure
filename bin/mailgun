@@ -4,11 +4,12 @@ from datetime import datetime, timedelta
 from email import utils
 from typing import Any, Dict
 from urllib.parse import urlencode
+from pprint import pprint
+from textwrap import indent, fill, wrap
 
 import attr
 import click
 import httpx
-import tenacity
 
 START_TIME = datetime.utcnow() - timedelta(days=4)
 
@@ -73,13 +74,64 @@ def get(mailgun: MailgunAPIConfig, start_date: datetime, end_date: datetime | No
         }[event["event"]](event)
 
 
+@events.command()
+@click.argument("address_search")
+@click.pass_obj
+def recipient_events(mailgun: MailgunAPIConfig, address_search: str):
+    end_date = datetime.utcnow()
+    start_date = START_TIME
+
+    with httpx.Client(
+        auth=("api", mailgun.api_key), headers={"Accept": "message/rfc2822"}
+    ) as client:
+        resp = client.get(
+            mailgun.url(
+                "events",
+                limit=100,
+                begin=utils.format_datetime(end_date),
+                end=utils.format_datetime(start_date),
+                to=address_search,
+            )
+        )
+
+    events = resp.json()["items"]
+    print(f"{len(events)} items")
+    for event in events:
+        handler = {
+            "failed": handle_failed,
+            "rejected": handle_rejected,
+            "complained": handle_complained,
+        }.get(event["event"], handle_delivered)
+        try:
+            handler(event)
+        except Exception as e:
+            print(e)
+            print(event)
+            break
+
+
 def event_ts(event: Dict[str, Any]) -> datetime:
     return datetime.fromtimestamp(event["timestamp"])
 
 
+def handle_delivered(event: Dict[str, Any]):
+    print(f"{event['event']}: {event_ts(event)}\t{event['recipient']}")
+
+
 def handle_failed(event: Dict[str, Any]):
+    try:
+        detail: str = event["delivery-status"]["message"]
+        detail_lines = detail.splitlines()
+        wrapped_lines = [
+            fill(line, width=80, initial_indent="    ", subsequent_indent="    ")
+            for line in detail_lines
+        ]
+        detail_text = "\n" + "\n".join(wrapped_lines)
+    except KeyError:
+        detail_text = ""
+
     print(
-        f"{event['event']}: {event_ts(event)}\t{event['recipient']}\t{event['severity']}"
+        f"{event['event']}: {event_ts(event)}\t{event['recipient']}\t{event['severity']}{detail_text}"
     )
 
 
