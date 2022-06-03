@@ -13,6 +13,16 @@
   notify: reload services
   become: yes
 
+- name: install journald-to-cloudwatch binary from my local build.
+  # Note that this requires you to have
+  # https://github.com/offbyone/journald-to-cloudwatch checked out beside
+  # infrastrcuture, and built with the release settings
+  copy:
+    src: ../../journald-to-cloudwatch/target/release/journald-to-cloudwatch
+    dest: "{{ journald_cloudwatch_logs_binary }}"
+    mode: 0755
+  become: yes
+
 - name: install ecr login
   template: src=ecr-login.service.j2 dest=/etc/systemd/system/ecr-login.service owner=root group=root mode=0644
   notify: reload services
@@ -34,12 +44,13 @@
     state: started
     enabled: yes
   become: yes
-# - name: enable journald-cloudwatch-logs
-#   systemd:
-#     name: journald-cloudwatch-logs
-#     enabled: yes
-#     daemon_reload: yes
-#   become: yes
+
+- name: enable journald-cloudwatch-logs
+  systemd:
+    name: journald-cloudwatch-logs
+    enabled: yes
+    daemon_reload: yes
+  become: yes
 
 # - name: install service logging publication config
 #   template: src=journald.conf.j2 dest={{ journald_cloudwatch_logs_config_file }} owner=root group=root mode=0644
@@ -70,8 +81,8 @@
 #   become: yes
 #   when: not ansible_check_mode
 
-# - name: start journald-cloudwatch-logs
-#   systemd:
-#     name: journald-cloudwatch-logs
-#     state: started
-#   become: yes
+- name: start journald-cloudwatch-logs
+  systemd:
+    name: journald-cloudwatch-logs
+    state: started
+  become: yes

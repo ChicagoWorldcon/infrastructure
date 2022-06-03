@@ -2,6 +2,15 @@
     - stage_dev
     - stage_staging
     - stage_prod
-  roles:
-    - role: heimdall
-      when: stage == 'staging'
+  vars:
+    journald_cloudwatch_logs_binary: /usr/local/bin/journald-to-cloudwatch
+  tasks:
+    - name: install journald-to-cloudwatch binary from my local build.
+      # Note that this requires you to have
+      # https://github.com/offbyone/journald-to-cloudwatch checked out beside
+      # infrastrcuture, and built with the release settings
+      copy:
+        src: ../../journald-to-cloudwatch/target/release/journald-to-cloudwatch
+        dest: "{{ journald_cloudwatch_logs_binary }}"
+        mode: 0755
+      become: yes
