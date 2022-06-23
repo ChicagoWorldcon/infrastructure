@@ -192,3 +192,49 @@ resource "aws_security_group_rule" "db-from-registration-prod" {
   protocol                 = "tcp"
   source_security_group_id = module.prod-site.security_group_id
 }
+
+module "guide" {
+  source = "./appserver"
+
+  project     = var.project
+  stage       = "prod"
+  application = "Conclar"
+  division    = "Program"
+
+  dns_zone_id = var.dns_zone_id
+
+  vpc_id            = var.vpc_id
+  security_group_id = var.security_group_id
+  public_subnet_id  = var.vpc_public_subnet_id
+
+  # instance distinguishers
+  instance_type = "t2.medium"
+  volume_size   = 20
+
+  # instance access
+  ssh_key_id           = var.ssh_key_id
+  iam_instance_profile = module.registration-prod-identity.iam_instance_profile_id
+  iam_role_name        = module.registration-prod-identity.iam_role_name
+
+  # remote hosts
+  www_domain_name = "guide.${var.domain_name}"
+
+  # logging
+  log_retention = 60
+}
+
+resource "aws_route53_record" "conclar_staging_c" {
+  zone_id = var.dns_zone_id
+  type    = "CNAME"
+  name    = "guide-staging"
+  ttl     = 300
+  records = [module.guide.site_fqdn]
+}
+
+resource "aws_route53_record" "conclar_dev_c" {
+  zone_id = var.dns_zone_id
+  type    = "CNAME"
+  name    = "guide-dev"
+  ttl     = 300
+  records = [module.guide.site_fqdn]
+}

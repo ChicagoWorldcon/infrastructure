@@ -1,0 +1,23 @@
+admin_users:
+  - username: offby1
+    public_key: "{{ lookup('file', '~/.ssh/id_ed25519.pub') }}"
+    sudo: yes
+    extra_groups:
+      - docker
+      - chicago
+      - adm
+  - username: lverhulst
+    public_key: "{{ lookup('file', 'lverhulst.pub') }}"
+    sudo: yes
+    extra_groups:
+      - docker
+      - chicago
+      - adm
+
+ansible_user: ubuntu
+application_fqdn: "guide{{fqdn_suffix}}.chicon.org"
+journald_cloudwatch_logs_log_group: "Conclar/{{ stage }}"
+journald_cloudwatch_logs_units:
+  - caddy
+
+role_db_secret: BOGON
