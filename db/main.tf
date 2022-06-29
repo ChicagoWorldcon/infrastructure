@@ -18,13 +18,15 @@ module "db" {
 
   engine            = "postgres"
   engine_version    = var.db_engine_version
-  instance_class    = "db.t2.micro"
+  instance_class    = "db.m6g.large"
   allocated_storage = "100"
   storage_encrypted = false
 
   username = var.db_superuser_username
   password = var.db_superuser_password
   port     = "5432"
+
+  performance_insights_enabled = true
 
   vpc_security_group_ids = [aws_security_group.postgresql.id]
 
