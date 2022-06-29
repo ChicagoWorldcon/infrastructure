@@ -50,6 +50,11 @@ resource "aws_iam_group" "planorama" {
   path = "/people/it/"
 }
 
+resource "aws_iam_group" "dba" {
+  name = "dba"
+  path = "/people/it/"
+}
+
 resource "aws_iam_group_membership" "deployers" {
   name  = "chicon-deployers"
   group = aws_iam_group.deployers.name
@@ -85,6 +90,16 @@ resource "aws_iam_group_membership" "wellington" {
   ]
 }
 
+resource "aws_iam_group_membership" "dba" {
+  name  = "chicon-dba"
+  group = aws_iam_group.dba.name
+
+  users = [
+    data.aws_iam_user.chrisr.user_name,
+    aws_iam_user.henry.name,
+  ]
+}
+
 resource "aws_iam_group_policy" "planorama-access" {
   name  = "planorama-instance-access-policy"
   group = aws_iam_group.planorama.name
@@ -101,4 +116,13 @@ resource "aws_iam_group_policy" "wellington-access" {
   policy = templatefile("${path.module}/policies/instance-access.json", {
     application = "Registration"
   })
+}
+
+data "aws_iam_policy" "amazon_rds_performance_insights_ro" {
+  name = "AmazonRDSPerformanceInsightsReadOnly"
+}
+
+resource "aws_iam_group_policy_attachment" "dba-performance-insights" {
+  group      = aws_iam_group.dba.name
+  policy_arn = data.aws_iam_policy.amazon_rds_performance_insights_ro.arn
 }
