@@ -29,6 +29,12 @@ admin_users:
       - docker
       - chicago
       - adm
+  - username: lverhulst
+    public_key: "{{ lookup('file', 'lverhulst.pub') }}"
+    sudo: yes
+    extra_groups:
+      - docker
+      - chicago
 
 application_fqdn: "planorama{{fqdn_suffix}}.chicon.org"
 role_db_secret: "{{ planorama_db_secret}}"
