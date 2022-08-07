@@ -217,6 +217,21 @@ resource "aws_ecr_repository" "planorama" {
   )
 }
 
+resource "aws_ecr_repository" "conclar" {
+  name                 = "conclar"
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+
+  tags = merge(
+    local.common_tags,
+    var.common_tags,
+    tomap({ "Application" = "Conclar" })
+  )
+}
+
 resource "aws_ecr_lifecycle_policy" "registration" {
   repository = aws_ecr_repository.registration.name
   policy     = data.template_file.policy_ecr.rendered
