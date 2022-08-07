@@ -1,0 +1,6 @@
+- hosts:
+    - stage_dev
+    - stage_staging
+    - stage_prod
+  roles:
+    - role: caddy
