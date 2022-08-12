@@ -1,15 +1,19 @@
 #!/usr/bin/env python
 from __future__ import annotations
+
 from datetime import datetime, timedelta
 from email import utils
+from pprint import pprint
+from textwrap import fill, indent, wrap
 from typing import Any, Dict
 from urllib.parse import urlencode
-from pprint import pprint
-from textwrap import indent, fill, wrap
 
 import attr
 import click
 import httpx
+from tenacity import RetryError, Retrying, retry
+from tenacity.retry import retry_if_exception_type
+from tenacity.stop import stop_after_attempt
 
 START_TIME = datetime.utcnow() - timedelta(days=4)
 
@@ -52,26 +56,28 @@ def get(mailgun: MailgunAPIConfig, start_date: datetime, end_date: datetime | No
     with httpx.Client(
         auth=("api", mailgun.api_key), headers={"Accept": "message/rfc2822"}
     ) as client:
-        resp = client.get(
-            mailgun.url(
-                "events",
-                limit=300,
-                begin=utils.format_datetime(end_date),
-                end=utils.format_datetime(start_date),
-                event="failed OR rejected OR complained",
-            )
-        )
-        resp.raise_for_status()
+        for attempt in Retrying(stop=stop_after_attempt(2), retry=retry_if_exception_type(httpx.NetworkError)):
+            with attempt:
+                resp = client.get(
+                    mailgun.url(
+                        "events",
+                        limit=300,
+                        begin=utils.format_datetime(end_date),
+                        end=utils.format_datetime(start_date),
+                        event="failed OR rejected OR complained OR unsubscribed",
+                    )
+                )
+                resp.raise_for_status()
 
-    print(resp.url)
-    events = resp.json()["items"]
-    print(f"{len(events)} items")
-    for event in events:
-        {
-            "failed": handle_failed,
-            "rejected": handle_rejected,
-            "complained": handle_complained,
-        }[event["event"]](event)
+            print(resp.url)
+            events = resp.json()["items"]
+            print(f"{len(events)} items")
+            for event in events:
+                {
+                    "failed": handle_failed,
+                    "rejected": handle_rejected,
+                    "complained": handle_complained,
+                }[event["event"]](event)
 
 
 @events.command()
@@ -96,12 +102,17 @@ def recipient_events(mailgun: MailgunAPIConfig, address_search: str):
 
     events = resp.json()["items"]
     print(f"{len(events)} items")
+    unhandled_events = set()
     for event in events:
         handler = {
             "failed": handle_failed,
             "rejected": handle_rejected,
             "complained": handle_complained,
-        }.get(event["event"], handle_delivered)
+        }.get(event["event"], None)
+
+        if not handler:
+            unhandled_events.add(event["event"])
+            continue
         try:
             handler(event)
         except Exception as e:
@@ -109,12 +120,23 @@ def recipient_events(mailgun: MailgunAPIConfig, address_search: str):
             print(event)
             break
 
+    nl = "\n"
+    print(f"Unhandled event types: \n{nl.join(unhandled_events)}")
+
 
 def event_ts(event: Dict[str, Any]) -> datetime:
     return datetime.fromtimestamp(event["timestamp"])
 
+def event_sender(event: Dict[str, Any]) -> str:
+    try:
+        return event['message']['headers']['from']
+    except KeyError:
+        breakpoint()
+        return 'unknown'
+    
 
 def handle_delivered(event: Dict[str, Any]):
+    from_address = event_sender(event)
     print(f"{event['event']}: {event_ts(event)}\t{event['recipient']}")
 
 
@@ -130,17 +152,20 @@ def handle_failed(event: Dict[str, Any]):
     except KeyError:
         detail_text = ""
 
+    from_address = event_sender(event)
     print(
-        f"{event['event']}: {event_ts(event)}\t{event['recipient']}\t{event['severity']}{detail_text}"
+        f"{event['event']}: {event_ts(event)}\t{from_address} -> {event['recipient']}\t{event['severity']}{detail_text}"
     )
 
 
 def handle_rejected(event: Dict[str, Any]):
-    print(f"{event['event']}: {event_ts(event)}\t", event)
+    from_address = event_sender(event)
+    print(f"{event['event']}: {event_ts(event)}\t{from_address} -> ", event)
 
 
 def handle_complained(event: Dict[str, Any]):
-    print(f"{event['event']}: {event_ts(event)}\t{event['recipient']}\t{event['']}")
+    from_address = event_sender(event)
+    print(f"{event['event']}: {event_ts(event)}\t{from_address} -> {event['recipient']}\t{event['event']}")
 
 
 if __name__ == "__main__":
