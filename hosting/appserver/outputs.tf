@@ -23,5 +23,5 @@ output "security_group_id" {
 }
 
 output "cloud_init_script" {
-  value = data.template_file.script.rendered
+  value = local.cloud_init_script
 }

@@ -1,4 +1,4 @@
-nodejs 14.17.1
+nodejs 20.1.0
 terraform 1.0.4
 python 3.9.13
-gam 6.21
+gam 6.23

@@ -115,60 +115,37 @@ module "planorama" {
   ]
 }
 
-
-data "template_file" "policy_push" {
-  template = file("${path.module}/policies/ecr-push.json")
-}
-
-data "template_file" "policy_pull" {
-  template = file("${path.module}/policies/ecr-pull.json")
-}
-
-data "template_file" "policy_cleanup" {
-  template = file("${path.module}/policies/ecr-cleanup.json")
-}
-
-data "template_file" "policy_ecr" {
-  template = file("${path.module}/policies/ecr-lifecycle.json")
-}
-
-data "template_file" "policy_codedeploy" {
-  template = file("${path.module}/policies/codedeploy-deploy.json")
-
-  vars = {
-    bucket_name                 = aws_s3_bucket.build_artifact_bucket.bucket
-    codedeploy_service_role_arn = aws_iam_role.codedeploy_role.arn
-    aws_region                  = data.aws_region.current.name
-    account_id                  = data.aws_caller_identity.current.account_id
-  }
-}
-
 resource "aws_iam_policy" "push" {
   name_prefix = "ecr-push"
   path        = "/it/docker/"
 
-  policy = data.template_file.policy_push.rendered
+  policy = templatefile("${path.module}/policies/ecr-push.json", {})
 }
 
 resource "aws_iam_policy" "pull" {
   name_prefix = "ecr-pull"
   path        = "/it/docker/"
 
-  policy = data.template_file.policy_pull.rendered
+  policy = templatefile("${path.module}/policies/ecr-pull.json", {})
 }
 
 resource "aws_iam_policy" "cleanup" {
   name_prefix = "ecr-cleanup"
   path        = "/it/docker/"
 
-  policy = data.template_file.policy_cleanup.rendered
+  policy = templatefile("${path.module}/policies/ecr-cleanup.json", {})
 }
 
 resource "aws_iam_policy" "deploy" {
   name_prefix = "codedeploy"
   path        = "/it/deploy/"
 
-  policy = data.template_file.policy_codedeploy.rendered
+  policy = templatefile("${path.module}/policies/codedeploy-deploy.json", {
+    bucket_name                 = aws_s3_bucket.build_artifact_bucket.bucket
+    codedeploy_service_role_arn = aws_iam_role.codedeploy_role.arn
+    aws_region                  = data.aws_region.current.name
+    account_id                  = data.aws_caller_identity.current.account_id
+  })
 }
 
 # user deployment
@@ -234,5 +211,5 @@ resource "aws_ecr_repository" "conclar" {
 
 resource "aws_ecr_lifecycle_policy" "registration" {
   repository = aws_ecr_repository.registration.name
-  policy     = data.template_file.policy_ecr.rendered
+  policy     = templatefile("${path.module}/policies/ecr-lifecycle.json", {})
 }

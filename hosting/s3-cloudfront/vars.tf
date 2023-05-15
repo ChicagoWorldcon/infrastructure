@@ -1,7 +1,7 @@
 // Provider vars for authentication
 variable "aliases" {
   description = "List of hostnames to serve site on. E.g. with and without www"
-  type        = list
+  type        = list(any)
 }
 
 variable "aws_region" {

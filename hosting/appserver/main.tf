@@ -12,7 +12,7 @@ resource "aws_instance" "web" {
     ignore_changes = [user_data, ]
   }
 
-  ami           = data.aws_ami.alinux.id
+  ami           = "ami-043505d1b57b5d3e3"
   instance_type = var.instance_type
 
   subnet_id                   = var.public_subnet_id
@@ -21,7 +21,7 @@ resource "aws_instance" "web" {
 
   key_name = aws_key_pair.reg_system_key.key_name
 
-  user_data = data.template_cloudinit_config.config.rendered
+  user_data = data.cloudinit_config.config.rendered
 
   iam_instance_profile = var.iam_instance_profile
 
@@ -58,7 +58,7 @@ resource "aws_eip" "web" {
   tags = merge(
     local.common_tags,
     tomap({
-      "Name" = "${var.stage} API server"
+      "Name" = "${var.stage} ${var.application} server"
     })
   )
 }

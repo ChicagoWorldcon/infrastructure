@@ -2,18 +2,12 @@ locals {
   tags = var.common_tags
 }
 
-data "template_file" "bucket_policy" {
-  template = file("${path.module}/templates/bucket-policy.json")
-
-  vars = {
-    bucket_name = var.bucket_name
-  }
-}
-
 resource "aws_s3_bucket" "site" {
-  bucket        = var.bucket_name
-  acl           = "public-read"
-  policy        = data.template_file.bucket_policy.rendered
+  bucket = var.bucket_name
+  acl    = "public-read"
+  policy = templatefile("${path.module}/templates/bucket-policy.json", {
+    bucket_name = var.bucket_name
+  })
   force_destroy = true
 
   website {

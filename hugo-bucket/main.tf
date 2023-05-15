@@ -16,10 +16,10 @@ locals {
   }
 }
 
-resource "digitalocean_spaces_bucket" "hugo-host" {
-  name   = "chicon8-hugo-content"
-  region = "nyc3"
-}
+# resource "digitalocean_spaces_bucket" "hugo-host" {
+#   name   = "chicon8-hugo-content"
+#   region = "nyc3"
+# }
 
 resource "aws_secretsmanager_secret" "spaces_api_token_staging" {
   name = "${var.project}/storage/staging"

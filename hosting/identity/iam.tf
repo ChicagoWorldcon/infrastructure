@@ -22,22 +22,16 @@ resource "aws_iam_instance_profile" "instance" {
   role = aws_iam_role.instance.name
 }
 
-data "template_file" "hosting-role-policy" {
-  template = file("${path.module}/policies/instance-policy.json")
-
-  vars = {
+resource "aws_iam_role_policy" "instance" {
+  name = "${var.project}-${lower(var.application)}-policy-${lower(var.stage)}"
+  role = aws_iam_role.instance.name
+  policy = templatefile("${path.module}/policies/instance-policy.json", {
     stage               = lower(var.stage)
     zone_id             = var.route53_zone_id
     codepipeline_bucket = var.codepipeline_bucket
     codedeploy_bucket   = var.codedeploy_bucket
     allow_global_access = var.allow_global_access
-  }
-}
-
-resource "aws_iam_role_policy" "instance" {
-  name   = "${var.project}-${lower(var.application)}-policy-${lower(var.stage)}"
-  role   = aws_iam_role.instance.name
-  policy = data.template_file.hosting-role-policy.rendered
+  })
 }
 
 resource "aws_iam_role_policy" "deployment" {
