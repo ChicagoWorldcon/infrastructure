@@ -2,12 +2,10 @@ locals {
   tags = var.common_tags
 }
 
+data "aws_caller_identity" "current" {}
+
 resource "aws_s3_bucket" "site" {
-  bucket = var.bucket_name
-  acl    = "public-read"
-  policy = templatefile("${path.module}/templates/bucket-policy.json", {
-    bucket_name = var.bucket_name
-  })
+  bucket        = var.bucket_name
   force_destroy = true
 
   website {
@@ -18,25 +16,22 @@ resource "aws_s3_bucket" "site" {
   tags = local.tags
 }
 
+resource "aws_s3_bucket_acl" "site" {
+  bucket = aws_s3_bucket.site.id
+  acl    = "private"
+}
+
 resource "aws_cloudfront_distribution" "site" {
   depends_on = [aws_s3_bucket.site]
   comment    = var.cf_distribution_comment
 
   origin {
-    custom_origin_config {
-      http_port              = 80
-      https_port             = 443
-      origin_protocol_policy = "http-only"
-      origin_ssl_protocols   = ["SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2"]
-    }
-
     // Important to use this format of origin domain name, it is the only format that
     // supports S3 redirects with CloudFront
-    domain_name = aws_s3_bucket.site.bucket_regional_domain_name
-    // domain_name = "${var.bucket_name}.s3-website-${var.aws_region}.amazonaws.com"
-
-    origin_id   = var.s3_origin_id
-    origin_path = var.origin_path
+    domain_name              = aws_s3_bucket.site.bucket_regional_domain_name
+    origin_id                = aws_s3_bucket.site.bucket_regional_domain_name
+    origin_access_control_id = aws_cloudfront_origin_access_control.site.id
+    origin_path              = var.origin_path
   }
 
   custom_error_response {
@@ -55,7 +50,7 @@ resource "aws_cloudfront_distribution" "site" {
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = var.s3_origin_id
+    target_origin_id = aws_s3_bucket.site.bucket_regional_domain_name
 
     forwarded_values {
       query_string = false
@@ -88,6 +83,31 @@ resource "aws_cloudfront_distribution" "site" {
   }
 
   tags = local.tags
+}
+
+resource "aws_cloudfront_origin_access_control" "site" {
+  name                              = "access-${var.bucket_name}"
+  description                       = "Access to ${var.bucket_name}"
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
+}
+
+resource "aws_s3_bucket_policy" "policy" {
+  bucket = aws_s3_bucket.site.id
+  policy = templatefile("${path.module}/templates/bucket-policy.json", {
+    bucket_name                 = var.bucket_name
+    cloudfront_distribution_arn = aws_cloudfront_distribution.site.arn
+  })
+}
+
+resource "aws_s3_bucket_public_access_block" "site" {
+  bucket = aws_s3_bucket.site.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
 resource "aws_route53_record" "bucket_cname" {
