@@ -107,7 +107,7 @@ module "registration-host-alarm" {
   project     = var.project
   application = "Registration"
   instance_map = {
-    prod    = module.prod-site.id
+    prod = module.prod-site.id
   }
   sns_topic_arn = module.registration-chatbot.sns_topic_arn
 }

@@ -42,24 +42,6 @@ variable "prod_db_site_username" {
   default = "registration_admin"
 }
 
-# Planorama DBs
-variable "planorama_prod_db_name" {
-  default = "planorama_prod"
-}
-
-# Planorama DBs
-variable "planorama_staging_db_name" {
-  default = "planorama_staging"
-}
-
-variable "planorama_prod_db_site_username" {
-  default = "planorama_prod"
-}
-
-variable "planorama_staging_db_site_username" {
-  default = "planorama_staging"
-}
-
 variable "chicon_org_A_records" {
   default = ["192.0.78.150", "192.0.78.229"]
 }
