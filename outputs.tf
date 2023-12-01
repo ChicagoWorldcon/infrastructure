@@ -76,19 +76,6 @@ output "rds_site_user" {
   }
 }
 
-output "planorama_site_user" {
-  value = {
-    staging = {
-      username    = var.planorama_staging_db_site_username
-      secret_name = module.staging-planorama-creds.db_site_password.name
-    }
-    prod = {
-      username    = var.planorama_prod_db_site_username
-      secret_name = module.prod-planorama-creds.db_site_password.name
-    }
-  }
-}
-
 output "hugo_packet_secrets" {
   value = module.hugo-packet.api_secrets
 }

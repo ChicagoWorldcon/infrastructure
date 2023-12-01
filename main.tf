@@ -169,21 +169,6 @@ module "global" {
 }
 
 # This is ugly af, but it sorta makes sense?
-resource "aws_iam_role_policy_attachment" "instance-pull-planorama-dev" {
-  role       = module.hosting.planorama-dev.instance_role_name
-  policy_arn = module.global.ecr_pull_policy
-}
-
-resource "aws_iam_role_policy_attachment" "instance-pull-planorama-staging" {
-  role       = module.hosting.planorama-staging.instance_role_name
-  policy_arn = module.global.ecr_pull_policy
-}
-
-resource "aws_iam_role_policy_attachment" "instance-pull-planorama-prod" {
-  role       = module.hosting.planorama-prod.instance_role_name
-  policy_arn = module.global.ecr_pull_policy
-}
-
 resource "aws_iam_role_policy_attachment" "instance-pull-staging" {
   role       = module.hosting.registration-staging.instance_role_name
   policy_arn = module.global.ecr_pull_policy
@@ -214,26 +199,6 @@ module "prod-creds" {
   )
 }
 
-module "prod-planorama-creds" {
-  source  = "./identity"
-  db_name = var.planorama_prod_db_name
-  project = var.project
-  stage   = "prod"
-
-  db_site_username      = var.planorama_prod_db_site_username
-  db_superuser_username = var.db_superuser_username
-
-  route53_zone_id = data.aws_route53_zone.chicon.zone_id
-
-  common_tags = merge(
-    local.common_tags,
-    {
-      Division    = "Program"
-      Environment = "prod"
-    }
-  )
-}
-
 module "staging-creds" {
   source  = "./identity"
   db_name = var.registration_staging_db_name
@@ -249,26 +214,6 @@ module "staging-creds" {
     local.common_tags,
     {
       Division    = "IT"
-      Environment = "staging"
-    }
-  )
-}
-
-module "staging-planorama-creds" {
-  source  = "./identity"
-  db_name = var.planorama_staging_db_name
-  project = var.project
-  stage   = "staging"
-
-  db_site_username      = var.planorama_staging_db_site_username
-  db_superuser_username = var.db_superuser_username
-
-  route53_zone_id = data.aws_route53_zone.chicon.zone_id
-
-  common_tags = merge(
-    local.common_tags,
-    {
-      Division    = "Program"
       Environment = "staging"
     }
   )
