@@ -90,18 +90,6 @@ module "registration" {
 }
 
 
-module "conclar" {
-  source  = "./github/"
-  service = "conclar"
-  tags    = merge(var.common_tags, local.common_tags)
-  policies = [
-    aws_iam_policy.push.arn,
-    aws_iam_policy.pull.arn,
-    aws_iam_policy.cleanup.arn,
-    aws_iam_policy.deploy.arn,
-  ]
-}
-
 
 module "planorama" {
   source  = "./github/"

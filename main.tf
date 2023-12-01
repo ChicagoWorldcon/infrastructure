@@ -32,12 +32,10 @@ module "hosting" {
   db_hostname           = module.chicondb.db_instance_address
   db_superuser_username = var.db_superuser_username
 
-  staging_db_site_username = var.staging_db_site_username
   prod_db_site_username    = var.prod_db_site_username
 
-  db_site_secret               = module.staging-creds.db_site_password.name
+  db_site_secret               = module.prod-creds.db_site_password.name
   db_superuser_secret_name     = module.global.db_superuser_password.name
-  staging_db_site_password_arn = module.staging-creds.db_site_password.arn
   prod_db_site_password_arn    = module.prod-creds.db_site_password.arn
 
   codedeploy_bucket = module.global.artifact_bucket
@@ -181,11 +179,6 @@ resource "aws_iam_role_policy_attachment" "instance-pull-planorama-staging" {
 
 resource "aws_iam_role_policy_attachment" "instance-pull-planorama-prod" {
   role       = module.hosting.planorama-prod.instance_role_name
-  policy_arn = module.global.ecr_pull_policy
-}
-
-resource "aws_iam_role_policy_attachment" "instance-pull-staging" {
-  role       = module.hosting.registration-staging.instance_role_name
   policy_arn = module.global.ecr_pull_policy
 }
 
