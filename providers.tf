@@ -20,14 +20,12 @@ terraform {
 }
 
 provider "aws" {
-  profile = "chicago"
-  region  = "us-west-2"
+  region = "us-west-2"
 }
 
 provider "aws" {
-  profile = "chicago"
-  region  = "us-east-1"
-  alias   = "us-east-1"
+  region = "us-east-1"
+  alias  = "us-east-1"
 }
 
 variable "do_token" {}

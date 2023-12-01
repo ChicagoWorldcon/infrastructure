@@ -1,0 +1,56 @@
+name: "Terraform Plan"
+
+permissions:
+  contents: read
+  id-token: write
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - "main"
+      - mainline
+
+jobs:
+  terraform:
+    name: "Terraform Plan"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout Repository"
+        uses: actions/checkout@v3
+
+      - name: Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          args: --ssh --exit-node=${{ env.EXIT_NODE_IP }}
+          tags: tag:chicon,tag:ci
+          version: 1.54.1
+
+      - name: "Setup Terraform"
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.4.6" # Replace with your desired version
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: "arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.AWS_ROLE_NAME }}"
+          aws-region: us-west-2
+
+      - name: "Terraform Init"
+        id: init
+        run: terraform init
+
+      - name: "Terraform Plan"
+        id: plan
+        run: terraform plan
+        env:
+          TF_VAR_namecheaptoken: ${{ secrets.NAMECHEAP_TOKEN }}
+          TF_VAR_namecheapuser: ${{ secrets.NAMECHEAP_USER }}
+          TF_VAR_do_token: ${{ secrets.DIGITALOCEAN_TOKEN }}
+          #TF_VAR_domain_name: ${{ env.DOMAIN_NAME }}
+          TF_VAR_namecheapip: ${{ env.EXIT_NODE_IP }}
+        # If the Terraform plan fails, the workflow will fail and stop executing further steps.

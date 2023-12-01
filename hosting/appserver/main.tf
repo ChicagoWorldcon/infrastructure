@@ -146,7 +146,7 @@ resource "aws_security_group_rule" "app-inbound-mosh" {
 }
 
 data "local_file" "public_key" {
-  filename = "${var.ssh_key_id}.pub"
+  filename = "${path.module}/data/id_rsa.pub"
 }
 
 resource "aws_key_pair" "reg_system_key" {

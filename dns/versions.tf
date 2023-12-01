@@ -8,7 +8,5 @@ terraform {
 }
 
 provider "aws" {
-  profile = "chicago"
-  region  = "us-east-1"
+  region = "us-east-1"
 }
-

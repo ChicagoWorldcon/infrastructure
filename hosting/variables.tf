@@ -19,10 +19,6 @@ variable "domain_name" {
   type = string
 }
 
-variable "ssh_key_id" {
-  type = string
-}
-
 variable "vpc_public_subnet_id" {
   type = string
 }

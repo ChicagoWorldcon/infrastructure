@@ -1,8 +1,3 @@
-variable "ssh_key_id" {
-  type        = string
-  description = "Provide this via auto vars"
-}
-
 variable "domain_name" {
   default = "chicon.org"
 }

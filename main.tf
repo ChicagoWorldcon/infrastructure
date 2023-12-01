@@ -25,8 +25,6 @@ module "hosting" {
   vpc_id               = module.vpc.vpc_id
   vpc_public_subnet_id = module.vpc.public_subnets[0]
 
-  ssh_key_id = var.ssh_key_id
-
   security_group_id     = module.vpc.default_security_group_id
   db_security_group_id  = module.chicondb.db_security_group_id
   db_hostname           = module.chicondb.db_instance_address
