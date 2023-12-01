@@ -89,32 +89,6 @@ module "registration" {
   ]
 }
 
-
-module "conclar" {
-  source  = "./github/"
-  service = "conclar"
-  tags    = merge(var.common_tags, local.common_tags)
-  policies = [
-    aws_iam_policy.push.arn,
-    aws_iam_policy.pull.arn,
-    aws_iam_policy.cleanup.arn,
-    aws_iam_policy.deploy.arn,
-  ]
-}
-
-
-module "planorama" {
-  source  = "./github/"
-  service = "planorama"
-  tags    = merge(var.common_tags, local.common_tags)
-  policies = [
-    aws_iam_policy.push.arn,
-    aws_iam_policy.pull.arn,
-    aws_iam_policy.cleanup.arn,
-    aws_iam_policy.deploy.arn,
-  ]
-}
-
 resource "aws_iam_policy" "push" {
   name_prefix = "ecr-push"
   path        = "/it/docker/"
@@ -176,36 +150,6 @@ resource "aws_ecr_repository" "registration" {
     local.common_tags,
     var.common_tags,
     tomap({ "Application" = "Registration" })
-  )
-}
-
-resource "aws_ecr_repository" "planorama" {
-  name                 = "planorama"
-  image_tag_mutability = "MUTABLE"
-
-  image_scanning_configuration {
-    scan_on_push = true
-  }
-
-  tags = merge(
-    local.common_tags,
-    var.common_tags,
-    tomap({ "Application" = "Planorama" })
-  )
-}
-
-resource "aws_ecr_repository" "conclar" {
-  name                 = "conclar"
-  image_tag_mutability = "MUTABLE"
-
-  image_scanning_configuration {
-    scan_on_push = true
-  }
-
-  tags = merge(
-    local.common_tags,
-    var.common_tags,
-    tomap({ "Application" = "Conclar" })
   )
 }
 
