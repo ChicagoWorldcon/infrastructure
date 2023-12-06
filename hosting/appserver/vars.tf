@@ -13,7 +13,6 @@ variable "www_domain_name" { type = string }
 variable "instance_type" { type = string }
 variable "iam_instance_profile" { type = string }
 variable "iam_role_name" { type = string }
-variable "ssh_key_id" { type = string }
 variable "volume_size" {
   type    = number
   default = 8

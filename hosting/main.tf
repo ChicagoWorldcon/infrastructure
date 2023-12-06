@@ -99,7 +99,6 @@ module "staging-site" {
   volume_size   = 20
 
   # instance access
-  ssh_key_id           = var.ssh_key_id
   iam_instance_profile = module.registration-staging-identity.iam_instance_profile_id
   iam_role_name        = module.registration-staging-identity.iam_role_name
 
@@ -140,7 +139,6 @@ module "prod-site" {
   volume_size   = 20
 
   # instance access
-  ssh_key_id           = var.ssh_key_id
   iam_instance_profile = module.registration-prod-identity.iam_instance_profile_id
   iam_role_name        = module.registration-prod-identity.iam_role_name
 
@@ -212,7 +210,6 @@ module "guide" {
   volume_size   = 20
 
   # instance access
-  ssh_key_id           = var.ssh_key_id
   iam_instance_profile = module.registration-prod-identity.iam_instance_profile_id
   iam_role_name        = module.registration-prod-identity.iam_role_name
 

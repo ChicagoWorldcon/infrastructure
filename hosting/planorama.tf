@@ -33,7 +33,6 @@ module "planorama-dev" {
   instance_type = "t2.medium"
   volume_size   = 20
 
-  ssh_key_id           = var.ssh_key_id
   iam_instance_profile = module.planorama-dev-identity.iam_instance_profile_id
   iam_role_name        = module.planorama-dev-identity.iam_role_name
 
@@ -86,7 +85,6 @@ module "planorama-staging" {
   instance_type = "t2.medium"
   volume_size   = 20
 
-  ssh_key_id           = var.ssh_key_id
   iam_instance_profile = module.planorama-staging-identity.iam_instance_profile_id
   iam_role_name        = module.planorama-staging-identity.iam_role_name
 
@@ -139,7 +137,6 @@ module "planorama-prod" {
   instance_type = "t2.medium"
   volume_size   = 20
 
-  ssh_key_id           = var.ssh_key_id
   iam_instance_profile = module.planorama-prod-identity.iam_instance_profile_id
   iam_role_name        = module.planorama-prod-identity.iam_role_name
 
