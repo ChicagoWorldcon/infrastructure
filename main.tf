@@ -2,24 +2,6 @@
 # site hosts are in registration.tf
 # DB is in db.tf
 
-module "hosting" {
-  source      = "./hosting/"
-  project     = var.project
-  region      = var.region
-  dns_zone_id = data.aws_route53_zone.chicon.zone_id
-  domain_name = var.domain_name
-
-  vpc_id               = module.vpc.vpc_id
-  vpc_public_subnet_id = module.vpc.public_subnets[0]
-
-  ssh_key_id = var.ssh_key_id
-
-  security_group_id = module.vpc.default_security_group_id
-
-  codedeploy_bucket = module.global.artifact_bucket
-
-}
-
 module "hugo-packet" {
   source  = "./hugo-bucket/"
   project = var.project
