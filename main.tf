@@ -142,14 +142,6 @@ module "prod-creds" {
   )
 }
 
-module "bid-domain-redirects" {
-  source             = "./site-redirect/"
-  project            = var.project
-  domain_name        = "chicagoworldconbid.org"
-  target_a_records   = var.chicon_org_A_records
-  target_domain_name = var.domain_name
-}
-
 module "chicon8_org" {
   source             = "./site-redirect/"
   project            = var.project
@@ -164,40 +156,6 @@ module "chicon8_com" {
   domain_name        = "chicon8.com"
   target_a_records   = var.chicon_org_A_records
   target_domain_name = var.domain_name
-}
-
-module "worldcon80_org" {
-  source             = "./site-redirect/"
-  project            = var.project
-  domain_name        = "worldcon80.org"
-  target_a_records   = var.chicon_org_A_records
-  target_domain_name = var.domain_name
-}
-
-module "bid-site-email" {
-  source      = "./email/"
-  domain_name = "chicagoworldconbid.org"
-  dns_zone_id = module.bid-domain-redirects.this_zone_id
-}
-
-module "blog-mx" {
-  source = "./gsuite/"
-
-  dns_zone_id    = module.bid-domain-redirects.this_zone_id
-  dns_validation = "2qv7hpi7tzfqzcwnjq77zd6qyt5uq43ovh4sg42lh4ixnl6c7bua.mx-verification.google.com."
-}
-
-module "dashboard" {
-  source  = "./dashboard/"
-  project = var.project
-}
-
-resource "aws_route53_record" "gsuite-txt" {
-  zone_id = module.bid-domain-redirects.this_zone_id
-  name    = "chicagoworldconbid.org"
-  type    = "TXT"
-  ttl     = "300"
-  records = ["google-site-verification=MvUZPt3UXJHTY_cMjARPhtxyaJd_4aH5KAWZrywfHRA"]
 }
 
 resource "aws_route53_record" "gsuite-txt-chicon8-org" {
