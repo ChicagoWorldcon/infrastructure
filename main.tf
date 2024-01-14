@@ -142,14 +142,6 @@ module "prod-creds" {
   )
 }
 
-data "aws_secretsmanager_secret" "db_superuser_password_secret" {
-  arn = module.global.db_superuser_password.arn
-}
-
-data "aws_secretsmanager_secret_version" "db_superuser_password" {
-  secret_id = data.aws_secretsmanager_secret.db_superuser_password_secret.id
-}
-
 module "bid-domain-redirects" {
   source             = "./site-redirect/"
   project            = var.project

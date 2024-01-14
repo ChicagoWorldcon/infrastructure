@@ -9,20 +9,6 @@ locals {
 data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
 
-# Create the resources that all stages need.
-resource "aws_secretsmanager_secret" "db_superuser_password" {
-  name = "${var.project}/db/db_superuser_password"
-
-  tags = merge(
-    var.common_tags,
-    local.common_tags,
-    tomap({
-      "Name"        = "DB Superuser",
-      "ServiceName" = "ChicagoAdmin"
-    })
-  )
-}
-
 // Use the AWS Certificate Manager to create an SSL cert for our domain.
 resource "aws_acm_certificate" "certificate" {
   provider = aws.acm
@@ -77,83 +63,3 @@ resource "aws_acm_certificate_validation" "cert" {
   validation_record_fqdns = [aws_route53_record.cert_validation[var.domain_name].fqdn]
 }
 
-module "registration" {
-  source  = "./github/"
-  service = "registration"
-  tags    = merge(var.common_tags, local.common_tags)
-  policies = [
-    aws_iam_policy.push.arn,
-    aws_iam_policy.pull.arn,
-    aws_iam_policy.cleanup.arn,
-    aws_iam_policy.deploy.arn,
-  ]
-}
-
-resource "aws_iam_policy" "push" {
-  name_prefix = "ecr-push"
-  path        = "/it/docker/"
-
-  policy = templatefile("${path.module}/policies/ecr-push.json", {})
-}
-
-resource "aws_iam_policy" "pull" {
-  name_prefix = "ecr-pull"
-  path        = "/it/docker/"
-
-  policy = templatefile("${path.module}/policies/ecr-pull.json", {})
-}
-
-resource "aws_iam_policy" "cleanup" {
-  name_prefix = "ecr-cleanup"
-  path        = "/it/docker/"
-
-  policy = templatefile("${path.module}/policies/ecr-cleanup.json", {})
-}
-
-resource "aws_iam_policy" "deploy" {
-  name_prefix = "codedeploy"
-  path        = "/it/deploy/"
-
-  policy = templatefile("${path.module}/policies/codedeploy-deploy.json", {
-    bucket_name                 = aws_s3_bucket.build_artifact_bucket.bucket
-    codedeploy_service_role_arn = aws_iam_role.codedeploy_role.arn
-    aws_region                  = data.aws_region.current.name
-    account_id                  = data.aws_caller_identity.current.account_id
-  })
-}
-
-# user deployment
-resource "aws_iam_group_policy_attachment" "developer-push" {
-  group      = var.developer_group_name
-  policy_arn = aws_iam_policy.push.arn
-}
-
-resource "aws_iam_group_policy_attachment" "developer-pull" {
-  group      = var.developer_group_name
-  policy_arn = aws_iam_policy.pull.arn
-}
-
-resource "aws_iam_group_policy_attachment" "developer-deploy" {
-  group      = var.developer_group_name
-  policy_arn = aws_iam_policy.deploy.arn
-}
-
-resource "aws_ecr_repository" "registration" {
-  name                 = "wellington"
-  image_tag_mutability = "MUTABLE"
-
-  image_scanning_configuration {
-    scan_on_push = true
-  }
-
-  tags = merge(
-    local.common_tags,
-    var.common_tags,
-    tomap({ "Application" = "Registration" })
-  )
-}
-
-resource "aws_ecr_lifecycle_policy" "registration" {
-  repository = aws_ecr_repository.registration.name
-  policy     = templatefile("${path.module}/policies/ecr-lifecycle.json", {})
-}
