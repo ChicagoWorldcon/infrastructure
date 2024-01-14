@@ -1,15 +1,3 @@
-output "db_endpoint" {
-  value = module.chicondb.db_instance_endpoint
-}
-
-output "db_hostname" {
-  value = module.chicondb.db_instance_address
-}
-
-output "db_instance_id" {
-  value = module.chicondb.db_instance_id
-}
-
 output "global_ns" {
   value = data.aws_route53_zone.chicon.name_servers
 }

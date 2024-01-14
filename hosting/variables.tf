@@ -31,35 +31,6 @@ variable "security_group_id" {
   type = string
 }
 
-variable "db_security_group_id" {
-  type        = string
-  description = "the DB security group to use for egress rules to the DB"
-}
-
-variable "db_hostname" {
-  type = string
-}
-
-variable "db_superuser_username" {
-  type = string
-}
-
-variable "db_site_secret" {
-  type = string
-}
-
-variable "prod_db_site_password_arn" {
-  type = string
-}
-
-variable "db_superuser_secret_name" {
-  type = string
-}
-
-variable "prod_db_site_username" {
-  type = string
-}
-
 variable "staging_deployment_group" {
   type    = string
   default = "ChicagoRegistration-Dev"

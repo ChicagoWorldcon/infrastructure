@@ -2,19 +2,6 @@
 # site hosts are in registration.tf
 # DB is in db.tf
 
-module "chicondb" {
-  source = "./db/"
-
-  project                 = var.project
-  vpc_id                  = module.vpc.vpc_id
-  tags                    = local.common_tags
-  db_superuser_username   = var.db_superuser_username
-  db_superuser_password   = data.aws_secretsmanager_secret_version.db_superuser_password.secret_string
-  db_subnet_group_name    = module.vpc.database_subnet_group
-  db_engine_major_version = "12"
-  db_engine_version       = "12.14"
-}
-
 module "hosting" {
   source      = "./hosting/"
   project     = var.project
@@ -27,16 +14,7 @@ module "hosting" {
 
   ssh_key_id = var.ssh_key_id
 
-  security_group_id     = module.vpc.default_security_group_id
-  db_security_group_id  = module.chicondb.db_security_group_id
-  db_hostname           = module.chicondb.db_instance_address
-  db_superuser_username = var.db_superuser_username
-
-  prod_db_site_username = var.prod_db_site_username
-
-  db_site_secret            = module.prod-creds.db_site_password.name
-  db_superuser_secret_name  = module.global.db_superuser_password.name
-  prod_db_site_password_arn = module.prod-creds.db_site_password.arn
+  security_group_id = module.vpc.default_security_group_id
 
   codedeploy_bucket = module.global.artifact_bucket
 
