@@ -2,11 +2,6 @@
 # site hosts are in registration.tf
 # DB is in db.tf
 
-module "hugo-packet" {
-  source  = "./hugo-bucket/"
-  project = var.project
-}
-
 data "aws_route53_zone" "chicon" {
   name = var.domain_name
 }
