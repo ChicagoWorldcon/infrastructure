@@ -122,26 +122,6 @@ module "global" {
   developer_group_name = module.users.deploy_group_name
 }
 
-module "prod-creds" {
-  source  = "./identity"
-  db_name = var.registration_db_name
-  project = var.project
-  stage   = "prod"
-
-  db_site_username      = var.prod_db_site_username
-  db_superuser_username = var.db_superuser_username
-
-  route53_zone_id = data.aws_route53_zone.chicon.zone_id
-
-  common_tags = merge(
-    local.common_tags,
-    {
-      Division    = "IT"
-      Environment = "prod"
-    }
-  )
-}
-
 module "chicon8_org" {
   source             = "./site-redirect/"
   project            = var.project
