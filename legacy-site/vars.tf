@@ -7,6 +7,12 @@ variable "aliases" {
   type        = list(any)
 }
 
+variable "use_bucket_acl" {
+  description = "Whether to use a bucket ACL or not. If false, the bucket will be private and only accessible via CloudFront"
+  type        = bool
+  default     = true
+}
+
 variable "bucket_name" {
   description = "Name of bucket to be created in S3. Must be globally unique."
   type        = string

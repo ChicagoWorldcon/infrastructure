@@ -140,6 +140,7 @@ module "chicon-8-site" {
   bucket_name         = "8.chicon.org"
   aliases             = ["8.chicon.org"]
   acm_certificate_arn = module.global.acm_certificate_arn
+  use_bucket_acl      = false
   common_tags = merge(
     local.common_tags,
     {
