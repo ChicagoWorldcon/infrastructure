@@ -10,44 +10,8 @@ output "db_instance_id" {
   value = module.chicondb.db_instance_id
 }
 
-output "reg_hostname" {
-  value = {
-    prod = module.hosting.registration-prod.public_dns
-  }
-}
-
-output "reg_private_ip" {
-  value = {
-    prod = module.hosting.registration-prod.private_ip
-  }
-}
-
-output "reg_public_ip" {
-  value = {
-    prod = module.hosting.registration-prod.public_ip
-  }
-}
-
-output "reg_public_dns" {
-  value = {
-    prod = module.hosting.registration-prod.public_dns
-  }
-}
-
-output "reg_instance_id" {
-  value = {
-    prod = module.hosting.registration-prod.instance_id
-  }
-}
-
 output "global_ns" {
   value = data.aws_route53_zone.chicon.name_servers
-}
-
-output "site" {
-  value = {
-    prod = module.hosting.registration-prod.www_fqdn
-  }
 }
 
 output "rds_superuser" {
@@ -74,8 +38,3 @@ output "ecr_urls" {
   value = module.global.ecr_urls
 }
 
-output "cloud-init" {
-  value = {
-    registration-prod = module.hosting.registration-prod.instance_cloud_init_script
-  }
-}

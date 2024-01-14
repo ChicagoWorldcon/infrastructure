@@ -166,11 +166,6 @@ module "global" {
   developer_group_name = module.users.deploy_group_name
 }
 
-resource "aws_iam_role_policy_attachment" "instance-pull-prod" {
-  role       = module.hosting.registration-prod.instance_role_name
-  policy_arn = module.global.ecr_pull_policy
-}
-
 module "prod-creds" {
   source  = "./identity"
   db_name = var.registration_db_name
