@@ -63,7 +63,7 @@ module "chicon-2000-site" {
   source              = "./legacy-site/"
   dns_zone_id         = data.aws_route53_zone.chicon.zone_id
   bucket_name         = "2000.chicon.org"
-  aliases             = ["2000.chicon.org"]
+  subdomains          = ["2000.chicon.org"]
   acm_certificate_arn = module.global.acm_certificate_arn
   common_tags = merge(
     local.common_tags,
@@ -78,7 +78,7 @@ module "chicon-7-site" {
   source              = "./legacy-site/"
   dns_zone_id         = data.aws_route53_zone.chicon.zone_id
   bucket_name         = "7.chicon.org"
-  aliases             = ["7.chicon.org"]
+  subdomains          = ["7.chicon.org"]
   acm_certificate_arn = module.global.acm_certificate_arn
   common_tags = merge(
     local.common_tags,
@@ -90,10 +90,14 @@ module "chicon-7-site" {
 }
 
 module "chicon-8-site" {
-  source              = "./legacy-site/"
-  dns_zone_id         = data.aws_route53_zone.chicon.zone_id
-  bucket_name         = "8.chicon.org"
-  aliases             = ["8.chicon.org"]
+  source      = "./main-site/"
+  dns_zone_id = data.aws_route53_zone.chicon.zone_id
+  bucket_name = "8.chicon.org"
+  aliases     = ["chicon8.org", "chicon8.com"]
+  apex_aliases = {
+    "chicon.org" : data.aws_route53_zone.chicon.zone_id
+  }
+  subdomains          = ["8.chicon.org"]
   acm_certificate_arn = module.global.acm_certificate_arn
   use_bucket_acl      = false
   common_tags = merge(
@@ -112,24 +116,29 @@ module "global" {
   providers = {
     aws.acm = aws.us-east-1
   }
-  project     = var.project
-  domain_name = var.domain_name
+  project                   = var.project
+  domain_name               = var.domain_name
+  subject_alternative_names = ["8.chicon.org", "chicon8.org", "chicon8.com"]
+  san_zone_mapping = {
+    "chicon8.org" : module.chicon8_org.this_zone_id,
+    "chicon8.com" : module.chicon8_com.this_zone_id,
+  }
 }
 
 module "chicon8_org" {
   source             = "./site-redirect/"
   project            = var.project
   domain_name        = "chicon8.org"
-  target_a_records   = var.chicon_org_A_records
-  target_domain_name = var.domain_name
+  target_domain_name = module.chicon-8-site.cloudfront_hostname
+  target_zone_id     = module.chicon-8-site.cloudfront_hosted_zone_id
 }
 
 module "chicon8_com" {
   source             = "./site-redirect/"
   project            = var.project
   domain_name        = "chicon8.com"
-  target_a_records   = var.chicon_org_A_records
-  target_domain_name = var.domain_name
+  target_domain_name = module.chicon-8-site.cloudfront_hostname
+  target_zone_id     = module.chicon-8-site.cloudfront_hosted_zone_id
 }
 
 resource "aws_route53_record" "gsuite-txt-chicon8-org" {
