@@ -19,6 +19,7 @@ resource "aws_s3_bucket" "site" {
 resource "aws_s3_bucket_acl" "site" {
   bucket = aws_s3_bucket.site.id
   acl    = "private"
+  count  = var.use_bucket_acl ? 1 : 0
 }
 
 resource "aws_cloudfront_distribution" "site" {
