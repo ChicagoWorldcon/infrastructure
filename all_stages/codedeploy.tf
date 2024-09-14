@@ -2,10 +2,6 @@ resource "aws_codedeploy_app" "registration" {
   name = "Wellington"
 }
 
-resource "aws_codedeploy_app" "planorama" {
-  name = "Planorama"
-}
-
 resource "aws_s3_bucket" "build_artifact_bucket" {
   bucket = "deploy.${var.domain_name}"
   acl    = "private"
@@ -45,13 +41,5 @@ module "registration-group" {
   app_name     = aws_codedeploy_app.registration.name
   service_role = aws_iam_role.codedeploy_role.arn
   app_tag      = "Registration"
-  project      = var.project
-}
-
-module "planorama-group" {
-  source       = "./deployment-groups/"
-  app_name     = aws_codedeploy_app.planorama.name
-  service_role = aws_iam_role.codedeploy_role.arn
-  app_tag      = "Planorama"
   project      = var.project
 }

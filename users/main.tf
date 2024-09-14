@@ -45,11 +45,6 @@ resource "aws_iam_group" "wellington" {
   path = "/people/it/"
 }
 
-resource "aws_iam_group" "planorama" {
-  name = "planorama"
-  path = "/people/it/"
-}
-
 resource "aws_iam_group" "dba" {
   name = "dba"
   path = "/people/it/"
@@ -62,18 +57,6 @@ resource "aws_iam_group_membership" "deployers" {
   users = [
     data.aws_iam_user.chrisr.user_name,
     data.aws_iam_user.victoria.user_name,
-    aws_iam_user.gail.name,
-    aws_iam_user.henry.name,
-    aws_iam_user.mike.name,
-    aws_iam_user.leane.name,
-  ]
-}
-
-resource "aws_iam_group_membership" "planorama" {
-  name  = "chicon-planorama"
-  group = aws_iam_group.planorama.name
-
-  users = [
     aws_iam_user.gail.name,
     aws_iam_user.henry.name,
     aws_iam_user.mike.name,
@@ -98,15 +81,6 @@ resource "aws_iam_group_membership" "dba" {
     data.aws_iam_user.chrisr.user_name,
     aws_iam_user.henry.name,
   ]
-}
-
-resource "aws_iam_group_policy" "planorama-access" {
-  name  = "planorama-instance-access-policy"
-  group = aws_iam_group.planorama.name
-
-  policy = templatefile("${path.module}/policies/instance-access.json", {
-    application = "Planorama"
-  })
 }
 
 resource "aws_iam_group_policy" "wellington-access" {
