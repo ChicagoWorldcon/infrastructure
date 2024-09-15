@@ -53,10 +53,10 @@ resource "aws_route53_record" "cert_validation" {
 
 }
 
-resource "aws_acm_certificate_validation" "cert" {
-  provider        = aws.acm
-  certificate_arn = aws_acm_certificate.certificate.arn
-  # We're narrow here because we don't actually need a validation for every
-  # fqdn, just the main one
-  validation_record_fqdns = [aws_route53_record.cert_validation[var.domain_name].fqdn]
-}
+# resource "aws_acm_certificate_validation" "cert" {
+#   provider        = aws.acm
+#   certificate_arn = aws_acm_certificate.certificate.arn
+#   # Get all the fqdns from the validation records
+#   validation_record_fqdns = [for record in aws_route53_record.cert_validation : record.fqdn]
+#   # validation_record_fqdns = [aws_route53_record.cert_validation[var.domain_name].fqdn]
+# }
